@@ -64,30 +64,37 @@ namespace Queue.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_GroupHoraryDetail,Day,HourFrom,HourUntil,Type,Id_GroupHorary")] Agent_GroupHoraryDetail agent_GroupHoraryDetail)
+        public ActionResult Create(Agent_GroupHoraryDetail agent_GroupHoraryDetail)
         {
             if (ModelState.IsValid)
             {
                 if (agent_GroupHoraryDetail.Type != EnumType.Seleccione)
                 {
-                    if ((agent_GroupHoraryDetail.HourFrom < agent_GroupHoraryDetail.HourUntil))
+                    if (agent_GroupHoraryDetail.Day != EnumDays.Seleccione)
                     {
-                        string message = _validateHours(agent_GroupHoraryDetail.HourFrom, agent_GroupHoraryDetail.HourUntil, db.Agent_GroupHoraryDetail.Where(x => x.Day == agent_GroupHoraryDetail.Day).ToList());
-                        if (string.IsNullOrEmpty(message))
+                        if ((agent_GroupHoraryDetail.HourFrom < agent_GroupHoraryDetail.HourUntil))
                         {
-                            agent_GroupHoraryDetail.Id_GroupHoraryDetail = Guid.NewGuid();
-                            db.Agent_GroupHoraryDetail.Add(agent_GroupHoraryDetail);
-                            db.SaveChanges();
-                            return RedirectToAction(nameof(Index), new { id = agent_GroupHoraryDetail.Id_GroupHorary });
+                            string message = _validateHours(agent_GroupHoraryDetail.HourFrom, agent_GroupHoraryDetail.HourUntil, db.Agent_GroupHoraryDetail.Where(x => x.Day == agent_GroupHoraryDetail.Day && x.Id_GroupHorary == agent_GroupHoraryDetail.Id_GroupHorary).ToList(), Guid.Empty);
+                            if (string.IsNullOrEmpty(message))
+                            {
+                                agent_GroupHoraryDetail.Id_GroupHoraryDetail = Guid.NewGuid();
+                                db.Agent_GroupHoraryDetail.Add(agent_GroupHoraryDetail);
+                                db.SaveChanges();
+                                return RedirectToAction(nameof(Index), new { id = agent_GroupHoraryDetail.Id_GroupHorary });
+                            }
+                            else
+                            {
+                                Warning(message, string.Empty);
+                            }
                         }
                         else
                         {
-                            Warning(message, string.Empty);
+                            Warning("Hora hasta no puede ser mayor a la hora desde", string.Empty);
                         }
                     }
                     else
                     {
-                        Warning("Hora hasta no puede ser mayor a la hora desde", string.Empty);
+                        Warning("Debe seleccionar un dia", string.Empty);
                     }
                 }
                 else
@@ -130,22 +137,29 @@ namespace Queue.Controllers
                 {
                     if (!(agent_GroupHoraryDetail.HourUntil < agent_GroupHoraryDetail.HourFrom))
                     {
-                        //si es un dia diferente a este que no permita actualizar 
-                        if (!(db.Agent_GroupHoraryDetail.Where(x => x.Id_GroupHorary == agent_GroupHoraryDetail.Id_GroupHorary && x.Id_GroupHoraryDetail != agent_GroupHoraryDetail.Id_GroupHoraryDetail && x.Day == agent_GroupHoraryDetail.Day).Count() > 0))
+                        if (agent_GroupHoraryDetail.Day != EnumDays.Seleccione)
                         {
-                            Agent_GroupHoraryDetail agent_GroupHoraryDetail1 = db.Agent_GroupHoraryDetail.Where(d => d.Id_GroupHoraryDetail == agent_GroupHoraryDetail.Id_GroupHoraryDetail).SingleOrDefault();
-                            // db.Entry(agent_GroupHoraryDetail1).CurrentValues.SetValues(agent_GroupHoraryDetail);
-                            agent_GroupHoraryDetail1.HourUntil = agent_GroupHoraryDetail.HourUntil;
-                            agent_GroupHoraryDetail1.HourFrom = agent_GroupHoraryDetail.HourFrom;
-                            agent_GroupHoraryDetail1.Day = agent_GroupHoraryDetail.Day;
 
-                            db.SaveChanges();
-                            return RedirectToAction(nameof(Index), new { id = agent_GroupHoraryDetail.Id_GroupHorary });
+                            string message = _validateHours(agent_GroupHoraryDetail.HourFrom, agent_GroupHoraryDetail.HourUntil, db.Agent_GroupHoraryDetail.Where(x => x.Day == agent_GroupHoraryDetail.Day && x.Id_GroupHorary == agent_GroupHoraryDetail.Id_GroupHorary).ToList(), agent_GroupHoraryDetail.Id_GroupHoraryDetail);
+                            if (string.IsNullOrEmpty(message))
+                            {
+                                Agent_GroupHoraryDetail agent_GroupHoraryDetail1 = db.Agent_GroupHoraryDetail.Where(d => d.Id_GroupHoraryDetail == agent_GroupHoraryDetail.Id_GroupHoraryDetail).SingleOrDefault();
+                                // db.Entry(agent_GroupHoraryDetail1).CurrentValues.SetValues(agent_GroupHoraryDetail);
+                                agent_GroupHoraryDetail1.HourUntil = agent_GroupHoraryDetail.HourUntil;
+                                agent_GroupHoraryDetail1.HourFrom = agent_GroupHoraryDetail.HourFrom;
+                                agent_GroupHoraryDetail1.Day = agent_GroupHoraryDetail.Day;
+
+                                db.SaveChanges();
+                                return RedirectToAction(nameof(Index), new { id = agent_GroupHoraryDetail.Id_GroupHorary });
+                            }
+                            else
+                            {
+                                Warning(message, string.Empty);
+                            }
                         }
                         else
                         {
-                            string message = " Ya existe un horario con los datos registrados para el "+ agent_GroupHoraryDetail.Day;
-                            Warning(message, string.Empty);
+                            Warning("Debe seleccionar un dia", string.Empty);
                         }
                     }
                     else
@@ -163,21 +177,88 @@ namespace Queue.Controllers
             return View(agent_GroupHoraryDetail);
         }
 
-        public string _validateHours(DateTime HourFrom, DateTime HourUntil, List<Agent_GroupHoraryDetail> lstAgent_GroupHoraryDetail)
+        public string _validateHours(DateTime HourFrom, DateTime HourUntil, List<Agent_GroupHoraryDetail> lstAgent_GroupHoraryDetail, Guid iddetail)
         {
             string _message = string.Empty;
 
-            if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom >= HourFrom && x.HourUntil <= HourUntil).Count() > 0)
-            {
-                _message = "Ya existe un rango de horario con los datos registrados";
-            }
-            if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom <= HourFrom && x.HourUntil <= HourUntil).Count() > 0)
+            //si enviamos un guis es porque estamos editando y necesitamos validar fechas que sean diferentes a mi
+            if (iddetail != Guid.Empty)
+                lstAgent_GroupHoraryDetail = lstAgent_GroupHoraryDetail.Where(d => d.Id_GroupHoraryDetail != iddetail).ToList();
+
+            TimeSpan hd = HourFrom.TimeOfDay, hh = HourUntil.TimeOfDay;
+            //caso 1
+            //   |------|
+            // |----|
+            if (lstAgent_GroupHoraryDetail.Where(x => ((x.HourFrom.TimeOfDay >= hd && x.HourFrom.TimeOfDay <= hh) && (x.HourUntil.TimeOfDay >= hd && x.HourUntil.TimeOfDay >= hh))).Count() > 0)
             {
                 _message = "Ya existe un rango de horario con los datos registrados";
             }
 
+            //caso 2
+            //  |------|
+            //      |----|
+            if (lstAgent_GroupHoraryDetail.Where(x => ((x.HourFrom.TimeOfDay <= hd && x.HourFrom.TimeOfDay <= hh) && (x.HourUntil.TimeOfDay >= hd && x.HourUntil.TimeOfDay <= hh))).Count() > 0)
+            {
+                _message = "Ya existe un rango de horario con los datos registrados";
+            }
+
+            //caso 3
+            //  |--------|
+            //    |----|
+            if (lstAgent_GroupHoraryDetail.Where(x => ((x.HourFrom.TimeOfDay <= hd && x.HourFrom.TimeOfDay <= hh) && (x.HourUntil.TimeOfDay >= hd && x.HourUntil.TimeOfDay >= hh))).Count() > 0)
+            {
+                _message = "Ya existe un rango de horario con los datos registrados";
+            }
+
+            //caso 4
+            //   |----|
+            // |--------|
+            if (lstAgent_GroupHoraryDetail.Where(x => ((x.HourFrom.TimeOfDay >= hd && x.HourFrom.TimeOfDay <= hh) && (x.HourUntil.TimeOfDay >= hd && x.HourUntil.TimeOfDay <= hh))).Count() > 0)
+            {
+                _message = "Ya existe un rango de horario con los datos registrados";
+            }
+
+
+
+            ////caso 1: que la hora desde sea menor al dato y la hora hasta sea mayor al dato
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay <= hd && x.HourUntil.TimeOfDay >= hd).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay >= hd && x.HourUntil.TimeOfDay <= hd).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay <= hh && x.HourUntil.TimeOfDay >= hh).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay <= hh && x.HourUntil.TimeOfDay >= hh).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay >= hd && x.HourUntil.TimeOfDay >= hh).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay <= hd && x.HourUntil.TimeOfDay <= hh).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
+            //if (lstAgent_GroupHoraryDetail.Where(x => x.HourFrom.TimeOfDay >= hd && x.HourUntil.TimeOfDay <= hh).Count() > 0)
+            //{
+            //    _message = "Ya existe un rango de horario con los datos registrados";
+            //}
+
             return _message;
         }
+
 
         // GET: Agent_GroupHoraryDetail/Delete/5
         public ActionResult Delete(Guid? id)
@@ -187,6 +268,7 @@ namespace Queue.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Agent_GroupHoraryDetail agent_GroupHoraryDetail = db.Agent_GroupHoraryDetail.Find(id);
+            ViewBag.IdGroupHorary = agent_GroupHoraryDetail.Id_GroupHorary;
             if (agent_GroupHoraryDetail == null)
             {
                 return HttpNotFound();
@@ -199,10 +281,15 @@ namespace Queue.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(Guid id)
         {
+
             Agent_GroupHoraryDetail agent_GroupHoraryDetail = db.Agent_GroupHoraryDetail.Find(id);
+
+            Guid idgroup = agent_GroupHoraryDetail.Id_GroupHorary;
+
             db.Agent_GroupHoraryDetail.Remove(agent_GroupHoraryDetail);
+            Success("Horario Eliminado con Exito");
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { id = idgroup });
         }
 
         protected override void Dispose(bool disposing)

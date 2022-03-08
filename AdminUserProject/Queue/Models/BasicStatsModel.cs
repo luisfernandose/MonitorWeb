@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
 
 namespace Queue.Models
 {
@@ -11,8 +13,9 @@ namespace Queue.Models
         public List<double?> data = new List<double?>();
         public List<string> DateTime = new List<string>();
     }
-    public class BasicStatsDate    {
-        
+    public class BasicStatsDate
+    {
+
         public List<string> DateTime = new List<string>();
     }
 
@@ -48,4 +51,168 @@ namespace Queue.Models
         public string Application;
         public double Time;
     }
+
+    public class BasicStatsDashboard
+    {
+        public string User { get; set; }
+        public string Application { get; set; }
+        public int Clasification { get; set; }
+        public double? Time { get; set; }
+        public string Date { get; set; }
+        public string ProductiveTime { get; set; }
+        public string ImproductiveTime { get; set; }
+        public string NeutralTime { get; set; }
+        public string UnclasifyTime { get; set; }
+    }
+
+    public class Resume
+    {
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal ProductiveTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal ImproductiveTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal NeutralTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal UnclasifyTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal Total
+        {
+            get
+            {
+                return ProductiveTime + ImproductiveTime + NeutralTime + UnclasifyTime;
+            }
+        }
+    }
+
+    public class AppResume
+    {
+        [DisplayName("Aplicación")]
+        public string appname { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal Time { get; set; }
+    }
+
+    public class UsersReportGanttModel
+    {
+        public static string GetNameTimes(double Seconds)
+        {
+            TimeSpan timeSpan = new TimeSpan(0, 0, Convert.ToInt32(Math.Round(Seconds)));
+
+            double _Seconds = timeSpan.Seconds;
+            double _Minutes = timeSpan.Minutes;
+            double _Hours = timeSpan.Hours;
+            string clasification = string.Empty;
+
+            //double _Seconds = Seconds;
+            //double _Minutes = _Seconds / 60;
+            //double _Hours = _Minutes / 60;
+
+            //string diff_show = Math.Round(_Seconds) + " segundos";
+            //if (_Seconds >= 60)
+            //{
+            //    var _SecondsDiff = Math.Round((_Minutes * 60) - _Seconds);
+            //    diff_show = Math.Round(_Minutes) + " minuto(s) " + (_SecondsDiff > 0 ? _SecondsDiff + " segundos" : string.Empty);
+            //    if (_Minutes >= 60)
+            //    {
+            //        var _MinutesDiff = Math.Round((_Hours * 60) - _Minutes);
+            //        diff_show = Math.Round(_Hours) + " hora(s) " + (_MinutesDiff > 0 ? _MinutesDiff + " minuto(s)" : string.Empty);
+            //    }
+            //}
+
+            string diff_show = _Seconds + " segundos";
+            if (_Hours > 0)
+            {
+                diff_show = _Hours + " hora(s) " + (_Minutes > 0 ? _Minutes + " minuto(s) " + (_Seconds > 0 ? _Seconds + " segundos" : string.Empty) : string.Empty);
+            }
+            else
+            {
+                if (_Minutes > 0)
+                {
+                    diff_show = _Minutes + " minuto(s) " + (_Seconds > 0 ? _Seconds + " segundos" : string.Empty);
+                }
+            }
+
+            return diff_show;
+
+
+        }
+
+        public static string GetNameTimesApps(string Application, double Seconds)
+        {
+            return "<b>" + Application + ":</b> " + GetNameTimes(Seconds);
+        }
+
+        private readonly string[] ColorClassification = { "#CEBAB6", "#7E72FA", "#FF0000", "#96989A" };
+        public string UserName { get; set; }
+        public List<string> GroupApps { get { return ReportSytems.Select(x => x.Application).Distinct().ToList(); } }
+        public List<ReportTime> ReportSytems { get; set; } = new List<ReportTime>();
+
+        public class ReportTime
+        {
+            public string Application { get; set; }
+            public string ApplicationT
+            {
+                get
+                {
+                    List<string> AppsShow = new List<string>();
+                    var grouping = GroupApplication.GroupBy(x => x.AppImproName).OrderBy(x => x.Key);
+                    foreach (var item in grouping)
+                    {
+                        List<string> _Apps = new List<string>();
+                        var AppsImproClassify = GroupApplication.Where(x => x.AppImproName == item.Key);
+                        foreach (var itemApps in AppsImproClassify.Select(x => x.Application).Distinct())
+                        {
+                            _Apps.Add(GetNameTimesApps(itemApps, AppsImproClassify.Where(x => x.Application == itemApps).Sum(x => x.Activity)));
+                        }
+
+                        AppsShow.Add("<u>" + item.Key + "</u> </br>" + string.Join("</br>", _Apps));
+                    }
+
+                    return string.Join("</br>", AppsShow);
+                }
+            }
+            public string MessageDuration => GetNameTimes(Activity);
+            public DateTime FocusTime { get; set; }
+            public DateTime FocusTimeEnd => FocusTime.AddSeconds(Activity);
+            public string FocusTimeT => FocusTime.ToString("yyyy-MM-dd HH:mm:ss");
+            public double Activity { get; set; }
+            public string AppImproName { get; set; }
+            public int AppsImproClassify { get; set; }
+            public string DateEnd => FocusTimeEnd.ToString("yyyy-MM-dd HH:mm:ss");
+
+            public List<ReportTimeGroupApps> GroupApplication { get; set; } = new List<ReportTimeGroupApps>();
+            public string Suma => GetNameTimes(GroupApplication.Sum(x => x.Activity));
+            public int GetAppsImproClassifyMoreUse
+            {
+                get
+                {
+                    var groupAppsImproClassify = GroupApplication.GroupBy(x => x.AppsImproClassify).Select(x => new { x1 = x.Key, x2 = x.Sum(xs => xs.Activity) }).OrderByDescending(xss => xss.x2);
+                    if (groupAppsImproClassify.Any()) { return groupAppsImproClassify.First().x1; }
+                    else { return 0; }
+                }
+            }
+        }
+
+        public class ReportTimeGroupApps
+        {
+            public int AppsImproClassify { get; set; }
+            public string AppImproName { get; set; }
+            public string Application { get; set; }
+            public double Activity { get; set; }
+        }
+
+    }
+
 }

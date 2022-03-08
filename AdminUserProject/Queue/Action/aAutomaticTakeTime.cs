@@ -30,14 +30,12 @@ namespace Queue.Action
             {
                 cp = tvh.getprincipal(Convert.ToString(o.token));
                 if (cp != null)
-                {
-                    string empresa = cp.Claims.Where(c => c.Type == ClaimTypes.GroupSid).Select(c => c.Value).SingleOrDefault();
+                {                    
                     List<TrakerBase> ltb = new List<TrakerBase>();
 
                     foreach (var i in o.AutomaticTakeTimeModel)
                     {
                         TrakerBase tb = new TrakerBase();
-                        i.IdEmpresa = empresa;
                         Copier.CopyPropertiesTo(i, tb);
                         ltb.Add(tb);
                     }
@@ -77,9 +75,7 @@ namespace Queue.Action
                 cp = tvh.getprincipal(Convert.ToString(o.token));
                 if (cp != null)
                 {
-                    string empresa = cp.Claims.Where(c => c.Type == ClaimTypes.GroupSid).Select(c => c.Value).SingleOrDefault();
                     CaptureBase cb = new CaptureBase();
-                    o.IdCompany = empresa;
                     Copier.CopyPropertiesTo(o, cb);
                     if (cb != null)
                     {
@@ -89,7 +85,7 @@ namespace Queue.Action
                         else
                             rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);
 
-                        List<CaptureBase> getimage = opc.GeImage(empresa);
+                        List<CaptureBase> getimage = opc.GeImage(o.IdCompany);
                     }
 
                 }
@@ -112,15 +108,14 @@ namespace Queue.Action
                 cp = tvh.getprincipal(Convert.ToString(o.token));
                 if (cp != null)
                 {
-                    string empresa = cp.Claims.Where(c => c.Type == ClaimTypes.GroupSid).Select(c => c.Value).SingleOrDefault();
+                    string empresa = string.Empty;
 
                     List<InstalledProgramsViewModel> livm = new List<InstalledProgramsViewModel>();
-
                     foreach (var i in o.InstalledProgramsViewModel)
                     {
                         InstalledProgramsViewModel ivm = new InstalledProgramsViewModel();
-                        i.IdCompany = empresa.ToString();
                         Copier.CopyPropertiesTo(i, ivm);
+                        empresa = i.IdCompany;
                         livm.Add(ivm);
                     };
 
@@ -174,14 +169,14 @@ namespace Queue.Action
                 cp = tvh.getprincipal(Convert.ToString(model.token));
                 if (cp != null)
                 {
-                    string empresa = cp.Claims.Where(c => c.Type == ClaimTypes.GroupSid).Select(c => c.Value).FirstOrDefault();
+                    string empresa = string.Empty;
 
                     List<InstalledHardwareViewModel> livm = new List<InstalledHardwareViewModel>();
 
                     foreach (var i in model.InstalledHardwareViewModel)
                     {
                         InstalledHardwareViewModel ivm = new InstalledHardwareViewModel();
-                        i.IdCompany = empresa.ToString();
+                        empresa = i.IdCompany;
                         Copier.CopyPropertiesTo(i, ivm);
                         livm.Add(ivm);
                     };
@@ -254,5 +249,25 @@ namespace Queue.Action
             }
         }
 
+        //public object GetHorary(string user, string idempresa)
+        //{
+        //    Response rp = new Response();
+        //    try
+        //    {
+        //        bool response = opc.AddLog(o);
+        //        if (response)
+        //            rp.response_code = GenericErrors.SaveOk.ToString();
+        //        else
+        //            rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);
+
+        //        return rp;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //error general
+        //        rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, ex.Message + " " + ex.InnerException, null, HttpStatusCode.InternalServerError);
+        //        return rp;
+        //    }
+        //}
     }
 }

@@ -10,6 +10,7 @@ using System.Web;
 using System.Globalization;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using System.Threading.Tasks;
 
 namespace Queue.Controllers
 {
@@ -24,14 +25,22 @@ namespace Queue.Controllers
                 ViewBag.DateFrom = DateTime.Now.AddDays(-2);
                 ViewBag.DateTo = DateTime.Now;
 
+                var company = Request.RequestContext.HttpContext.Session["Company"].ToString();
+                OperationController opc = new OperationController();
+                ViewBag.DataUser = opc.GetActivityUser(company).ToList();
 
                 return View();
             }
             catch (Exception err)
             {
-
-                throw err;
+                return RedirectToAction("Login", "Account", null);
+                //throw err;
             }
+        }
+
+        private object MultiSelectList(List<SelectListItem> selectListItems)
+        {
+            throw new NotImplementedException();
         }
 
         // GET: ReportGantt/Details/5
@@ -90,175 +99,34 @@ namespace Queue.Controllers
             return View();
         }
 
-
-        public JsonResult NewChart(string dateFrom, string dateTo)
+        public async Task<JsonResult> NewChart(DateTime? dateFrom, DateTime? dateTo, int periods, string[] user)
         {
-            try
-            {
-                var company = Request.RequestContext.HttpContext.Session["Company"].ToString();
-                OperationController opc = new OperationController();
-                DateTime fromdate = Convert.ToDateTime(dateFrom);
-                DateTime todate = Convert.ToDateTime(dateFrom);
-                DateTime horasEnd = todate.AddHours(23).AddMinutes(59).AddSeconds(59);
-                BasicStatsModel bm = opc.ImproductiveUsedApp(company, fromdate, horasEnd);
-                BasicUserModel user = opc.GetUsers(company, fromdate, horasEnd);
-                //BasicStatsModel bm = opc.MoreUsedApp(company, fromdate, todate);
-                var UserByDeparment = db.Agent_Employee.Select(c => c.Usuario).Distinct().ToList();
-
-                List<object> iDataImpro = new List<object>();
-
-                var programs = db.Agent_ProgramClasification.Where(t => t.Agent_Empresa.IdCompany.ToString() == company).ToList();
-
-                Agent_ProgramClasification p = new Agent_ProgramClasification();
-
-                TimesUser entities = new TimesUser();
-
-                DataTable dt = new DataTable();
-
-                dt.Columns.Add("Aplicaciones", System.Type.GetType("System.String"));
-                dt.Columns.Add("Tiempo", System.Type.GetType("System.Int32"));
-
-
-
-                for (var i = 0; i < bm.labels.Count; i++)
-                {
-                    foreach (var n in programs)
-                    {
-                        p.name = n.name;
-                        p.clasification = n.clasification;
-
-                        if (bm.labels[i] == p.name)
-                        {
-                            if (p.clasification == 2)
-                            {
-                                //Creating sample data  
-                                DataRow dr = dt.NewRow();
-                                dr["Aplicaciones"] = bm.labels[i].ToString();
-                                dr["Tiempo"] = bm.data[i];
-                                dt.Rows.Add(dr);
-                            }
-                        }
-
-                    }
-                }
-
-                foreach (DataColumn dc in dt.Columns)
-                {
-                    List<object> x = new List<object>();
-                    x = (from DataRow drr in dt.Rows select drr[dc.ColumnName]).ToList();
-                    iDataImpro.Add(x);
-                }
-
-
-                var nomApp = iDataImpro.ToList();
-                var resultadolist = ((IList)nomApp[0]);
-
-
-
-
-                var UserDist = user.User.Distinct().ToList();
-
-                List<string> UserFilter = new List<string>();
-
-                for (var contUser = 0; contUser < UserByDeparment.Count; contUser++)
-                {
-                    for (var distinct = 0; distinct < UserDist.Count; distinct++)
-                    {
-                        if (UserByDeparment[contUser] == UserDist[distinct])
-                        {
-                            UserFilter.Add(UserDist[distinct]);
-                        }
-                    }
-                }
-
-
-                var ApplicationDist = user.Application.Distinct().ToList();
-                var DateHours = user.DateTime.Cast<DateTime>().OrderBy(x => x).ToList();
-
-
-
-
-
-                List<object> iData = new List<object>();
-                //ArrayUsersModel UserModel = new ArrayUsersModel();
-                Random rnd = new Random();
-                string[] ResultApp = new string[UserFilter.Count];
-                double SumTime = 0;
-                //string UpdateHours = "";
-
-
-                for (var i = 0; i < UserFilter.Count; i++)
-                {
-                    ArrayUsersModelGantt UserModel = new ArrayUsersModelGantt();
-                    UserModel.User = UserFilter[i];
-
-                    for (var k = 0; k < ApplicationDist.Count; k++)
-                    {
-                        for (var a = 0; a < resultadolist.Count; a++)
-                        {
-                            if (ApplicationDist[k] == resultadolist[a].ToString())
-                            {
-
-                                UserModel.AppImpro.Add(ApplicationDist[k]);
-                                for (int ap = 0; ap < bm.labels.Count; ap++)
-                                {
-                                    if (resultadolist[a].ToString() == bm.labels[ap].ToString())
-                                    {
-                                        BasicStatsDate date = opc.DateUsedApp(bm.labels[ap], fromdate, horasEnd);
-                                        for (int t = 0; t < date.DateTime.Count; t++)
-                                        {
-                                            UserModel.TimeImpro.Add(date.DateTime[t]);
-                                        }
-                                    }
-                                }
-
-
-                            }
-                        }
-
-                        UserModel.Application.Add(ApplicationDist[k]);
-                        for (var cont = 0; cont < user.User.Count; cont++)
-                        {
-                            if (user.User[cont] == UserFilter[i] && user.Application[cont] == ApplicationDist[k])
-                            {
-                                SumTime = SumTime + user.Time[cont];
-                                UserModel.Date.Add(DateHours[cont].ToString("H:mm:ss"));
-                            }
-                        }
-                        var round = SumTime / 3600;
-                        UserModel.Time.Add(round);
-
-                        SumTime = 0;
-                        //UserModel.Time.Add(rnd.Next(1, 50));
-                    }
-
-                    ResultApp[i] = JsonConvert.SerializeObject(UserModel);
-
-                    iData.Add(ResultApp[i]);
-
-                }
-
-
-                //}
-
-                return Json(iData, JsonRequestBehavior.AllowGet);
-
-
-
-
-
-            }
-            catch (Exception err)
-            {
-                throw err;
-            }
+            //try
+            //{
+            var company = Request.RequestContext.HttpContext.Session["Company"].ToString();
+            OperationController opc = new OperationController();
+            var result = await opc.GetactivityData(company, dateFrom.Value, dateTo.Value, periods, user);
+            return Json(result, JsonRequestBehavior.AllowGet);
+            //}
+            //catch (Exception err)
+            //{
+            //    throw err;
+            //}
 
         }
+
+        public async Task<JsonResult> NewChartUserSelected(DateTime? dateFrom, DateTime? dateTo, string user)
+        {
+            var company = Request.RequestContext.HttpContext.Session["Company"].ToString();
+            OperationController opc = new OperationController();
+            var result = await opc.GetactivityDataUserSelected(company, dateFrom.Value, dateTo.Value, user);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+              
         public JsonResult UserbyDepartamentData(string dateFrom, string dateTo, string idUser, string idDeparment)
         {
             try
             {
-
                 var company = Request.RequestContext.HttpContext.Session["Company"].ToString();
                 OperationController opc = new OperationController();
                 DateTime fromdate = Convert.ToDateTime(dateFrom);
@@ -292,11 +160,6 @@ namespace Queue.Controllers
                     SumTime = 0;
                     UserModel.User = User.User[0];
                 };
-                //if (User.User[0].ToString()== idUser)
-                //{
-                //    UserModel.User = idUser;
-                //}
-
 
                 UpdateDate = JsonConvert.SerializeObject(UserModel);
 

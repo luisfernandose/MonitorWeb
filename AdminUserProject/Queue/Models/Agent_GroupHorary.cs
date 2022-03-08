@@ -18,6 +18,6 @@ namespace Queue.Models
         [Required]
         public string NameGroup { get; set; }
 
-        
+        public Guid IdCompany { get; set; }
     }
 }

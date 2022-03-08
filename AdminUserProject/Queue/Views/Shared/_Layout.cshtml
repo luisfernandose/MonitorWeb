@@ -17,7 +17,9 @@
     <link href="~/Content/css/Spiner.css" rel="stylesheet" />
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">
     <script src="~/assets/vendor_components/chart-js/chart.js"></script>
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
 
     @*@Styles.Render("~/css")*@
 </head>
@@ -162,7 +164,7 @@
                     <li class="">
                         <a href="@Url.Action("Index", "Agent_GroupHorary")">
                             <i class="fa fa-clock-o"></i>
-                            <span>Group Horary</span>
+                            <span>Groupos Horarios</span>
                         </a>
                     </li>
 
@@ -176,10 +178,10 @@
                         </a>
                         <ul class="treeview-menu">
                             @*<li><a href="@Url.Action("Index", "UserReport")">Por Empleado</a></li>
-                            <li><a href="@Url.Action("Index", "ReportApplications")">Aplicaciones mas usadas</a></li>
-                            <li><a href="@Url.Action("Index", "MainApplicationsAndSites")">Principales Sitios Web y Aplicaciones</a></li>*@
+                                <li><a href="@Url.Action("Index", "ReportApplications")">Aplicaciones mas usadas</a></li>
+                                <li><a href="@Url.Action("Index", "MainApplicationsAndSites")">Principales Sitios Web y Aplicaciones</a></li>*@
                             <li><a href="@Url.Action("Index", "ReportGantt")">Reporte Actividades</a></li>
-                        </ul>  
+                        </ul>
                     </li>
                 </ul>
             </section>
@@ -245,53 +247,56 @@
     <script src="~/js/template.js"></script>
     <script src="~/js/iframeheight.js"></script>
     <script src="~/js/Common.js?01"></script>
+    <script src="~/Scripts/select2.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
- 
+
+
+
 
     @if (TempData.ContainsKey(Queue.Utils.Alerts.SUCCESS))
     {
         foreach (var value in TempData.Values)
         {
             <script>
-            swal("Exitoso!", "@value.ToString()", "success");            
-    </script>
-}
-TempData.Remove(Queue.Utils.Alerts.SUCCESS);
-}
+            swal("Exitoso!", "@value.ToString()", "success");
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.SUCCESS);
+    }
 
-@if (TempData.ContainsKey(Queue.Utils.Alerts.ERROR))
-{
-    foreach (var value in TempData.Values)
+    @if (TempData.ContainsKey(Queue.Utils.Alerts.ERROR))
     {
-<script>
+        foreach (var value in TempData.Values)
+        {
+            <script>
         swal("Atención!", "@value.ToString()", "error");
-</script>
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.ERROR);
     }
-    TempData.Remove(Queue.Utils.Alerts.ERROR);
-}
 
-@if (TempData.ContainsKey(Queue.Utils.Alerts.INFORMATION))
-{
-    foreach (var value in TempData.Values)
+    @if (TempData.ContainsKey(Queue.Utils.Alerts.INFORMATION))
     {
-<script>
+        foreach (var value in TempData.Values)
+        {
+            <script>
         swal("Atención!", "@value.ToString()", "info");
-</script>
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.INFORMATION);
     }
-    TempData.Remove(Queue.Utils.Alerts.INFORMATION);
-}
 
-@if (TempData.ContainsKey(Queue.Utils.Alerts.WARNING))
-{
-    foreach (var value in TempData.Values)
+    @if (TempData.ContainsKey(Queue.Utils.Alerts.WARNING))
     {
-<script>
+        foreach (var value in TempData.Values)
+        {
+            <script>
         swal("Atención!", "@value.ToString()", "warning");
-</script>
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.WARNING);
     }
-    TempData.Remove(Queue.Utils.Alerts.WARNING);
-}
 
 </body>
 

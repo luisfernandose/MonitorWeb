@@ -18,22 +18,8 @@ namespace Queue.Controllers
         // GET: Agent_GroupHorary
         public ActionResult Index()
         {
-            return View(db.Agent_GroupHorary.ToList());
-        }
-
-        // GET: Agent_GroupHorary/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Agent_GroupHorary agent_GroupHorary = db.Agent_GroupHorary.Find(id);
-            if (agent_GroupHorary == null)
-            {
-                return HttpNotFound();
-            }
-            return View(agent_GroupHorary);
+            var idcompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+            return View(db.Agent_GroupHorary.Where(t => t.IdCompany == idcompany).ToList());
         }
 
         // GET: Agent_GroupHorary/Create
@@ -47,21 +33,24 @@ namespace Queue.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_GroupHorary,NameGroup")] Agent_GroupHorary agent_GroupHorary)
+        public ActionResult Create(Agent_GroupHorary agent_GroupHorary)
         {
             if (ModelState.IsValid)
             {
-                if (db.Agent_GroupHorary.Where(d => d.NameGroup == agent_GroupHorary.NameGroup).ToList().Count == 0)
+                var idcompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+                if (db.Agent_GroupHorary.Where(d => d.NameGroup == agent_GroupHorary.NameGroup && d.IdCompany == idcompany).Count() == 0)
                 {
                     agent_GroupHorary.Id_GroupHorary = Guid.NewGuid();
+                    agent_GroupHorary.IdCompany = idcompany;
                     db.Agent_GroupHorary.Add(agent_GroupHorary);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                else {
+                else
+                {
                     Warning("Grupo de horario ya existe", string.Empty);
                 }
-                
+
             }
 
             return View(agent_GroupHorary);
@@ -87,17 +76,19 @@ namespace Queue.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_GroupHorary,NameGroup")] Agent_GroupHorary agent_GroupHorary)
+        public ActionResult Edit(Agent_GroupHorary agent_GroupHorary)
         {
             if (ModelState.IsValid)
             {
-                if (db.Agent_GroupHorary.Where(d => d.NameGroup == agent_GroupHorary.NameGroup).ToList().Count == 0)
+                var idcompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+                if (db.Agent_GroupHorary.Where(d => d.NameGroup == agent_GroupHorary.NameGroup && d.IdCompany == idcompany && d.Id_GroupHorary != agent_GroupHorary.Id_GroupHorary).Count() == 0)
                 {
                     db.Entry(agent_GroupHorary).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                else {
+                else
+                {
                     Warning("Grupo de horario ya existe", string.Empty);
                 }
             }
@@ -131,7 +122,8 @@ namespace Queue.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            else {
+            else
+            {
                 Warning("Grupo de horario tiene detalle de horarios", string.Empty);
             }
             return View();

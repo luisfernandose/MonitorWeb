@@ -344,6 +344,7 @@
     <Compile Include="Controllers\Agent_GroupHoraryDetailController.cs" />
     <Compile Include="Controllers\Agent_JobController.cs" />
     <Compile Include="Controllers\Agent_ProgramClasificationController.cs" />
+    <Compile Include="Controllers\apiHoraryController.cs" />
     <Compile Include="Controllers\AuditController.cs" />
     <Compile Include="Controllers\BaseController\BaseController.cs" />
     <Compile Include="Controllers\CaptureController.cs" />
@@ -436,6 +437,10 @@
     <Compile Include="Migrations\202109250225189_deleteIdDepartment.Designer.cs">
       <DependentUpon>202109250225189_deleteIdDepartment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203061501277_idcompany grupo horario.cs" />
+    <Compile Include="Migrations\202203061501277_idcompany grupo horario.Designer.cs">
+      <DependentUpon>202203061501277_idcompany grupo horario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -453,6 +458,7 @@
     <Compile Include="Models\Agent_ProgramClasification.cs" />
     <Compile Include="Models\Agent_User.cs" />
     <Compile Include="Models\Agent_UserCompanies.cs" />
+    <Compile Include="Models\apiHoraryModel.cs" />
     <Compile Include="Models\Audit.cs" />
     <Compile Include="Models\AuditAction.cs" />
     <Compile Include="Models\Basic.cs" />
@@ -460,6 +466,7 @@
     <Compile Include="Models\CaptureBase.cs" />
     <Compile Include="Models\CaptureModel.cs" />
     <Compile Include="Models\ConfigurationModel.cs" />
+    <Compile Include="Models\DashBoardStats.cs" />
     <Compile Include="Models\ErrorFields.cs" />
     <Compile Include="Models\HardwareModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -9214,6 +9221,7 @@
     <Content Include="Content\c3.css" />
     <Content Include="Content\c3.min.css" />
     <Content Include="Content\css\Collapse.css" />
+    <Content Include="Content\css\select2.min.css" />
     <Content Include="Content\css\Spiner.css" />
     <Content Include="Content\email\Forgot.html" />
     <Content Include="Content\email\Welcome.html" />
@@ -10338,6 +10346,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\select2.js" />
     <Content Include="Sounds\the-calling.mp3" />
     <Content Include="TemplateAssets\assets\images\Back3.jpg" />
     <Content Include="TemplateAssets\assets\images\alert\alert.png" />
@@ -14508,6 +14518,7 @@
     <Folder Include="TemplateAssets\assets\images\gallery\" />
     <Folder Include="TemplateAssets\WuQueue\js\desktop\" />
     <Folder Include="UploadedFiles\advertisement\" />
+    <Folder Include="Views\apiHorary\" />
     <Folder Include="Views\Capture\" />
     <Folder Include="Views\Email\" />
     <Folder Include="Views\Logs\" />
@@ -14587,6 +14598,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202109250225189_deleteIdDepartment.resx">
       <DependentUpon>202109250225189_deleteIdDepartment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203061501277_idcompany grupo horario.resx">
+      <DependentUpon>202203061501277_idcompany grupo horario.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

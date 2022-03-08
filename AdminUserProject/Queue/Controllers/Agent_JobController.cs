@@ -74,7 +74,7 @@ namespace Queue.Controllers
             {
                 int exists = db.Agent_Job.Where(t => t.IdCompany == company && t.Cargo == agent_Job.Cargo && t.idJob != agent_Job.idJob).Count();
 
-                if (exists <= 0)
+                if (exists == 0)
                 {
                     agent_Job.IdCompany = company;
                     db.Entry(agent_Job).State = EntityState.Modified;
