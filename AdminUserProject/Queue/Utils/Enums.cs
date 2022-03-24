@@ -14,10 +14,10 @@ namespace Queue.Utils
             Seleccione,
             Lunes,
             Martes,
-            Miercoles,
+            Miércoles,
             Jueves,
             Viernes,
-            Sabado,
+            Sábado,
             Domingo
         }
 
@@ -27,9 +27,7 @@ namespace Queue.Utils
             Seleccione,
             Laboral,
             [Display(Name = "No Laboral")]
-            NoLaboral,
-            Almuerzo,
-            Desayuno
+            NoLaboral
         }
     }
 }

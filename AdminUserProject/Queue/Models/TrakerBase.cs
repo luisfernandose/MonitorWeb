@@ -19,7 +19,9 @@ namespace Queue.Models
         public double Activity { get; set; }
         public DateTime Date { get; set; }
         public DateTime FocusTime { get; set; }
-        
+        public string StringDate { get; set; }
+        public string StringFocusTime { get; set; }
+
         public string IdEmpresa { get; set; }
     }
 }

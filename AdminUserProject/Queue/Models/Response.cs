@@ -13,6 +13,7 @@ namespace Queue.Models
         public string rute { get; set; }
 
         public object data = new object();
+        public HoraryModel HoraryModel = new HoraryModel();
         public List<object> error = new List<object>();
     }
 }

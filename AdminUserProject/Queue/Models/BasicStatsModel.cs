@@ -59,10 +59,33 @@ namespace Queue.Models
         public int Clasification { get; set; }
         public double? Time { get; set; }
         public string Date { get; set; }
-        public string ProductiveTime { get; set; }
-        public string ImproductiveTime { get; set; }
-        public string NeutralTime { get; set; }
-        public string UnclasifyTime { get; set; }
+        public DateTime Date_ { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal ProductiveTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal ImproductiveTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal NeutralTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal UnclasifyTime { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal TotalHours
+        {
+            get
+            {
+                return ProductiveTime + ImproductiveTime + NeutralTime + UnclasifyTime;
+            }
+        }
     }
 
     public class Resume
@@ -102,6 +125,10 @@ namespace Queue.Models
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
         public decimal Time { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
+        public decimal PercentajeUsed { get; set; }
     }
 
     public class UsersReportGanttModel
@@ -113,7 +140,6 @@ namespace Queue.Models
             double _Seconds = timeSpan.Seconds;
             double _Minutes = timeSpan.Minutes;
             double _Hours = timeSpan.Hours;
-            string clasification = string.Empty;
 
             //double _Seconds = Seconds;
             //double _Minutes = _Seconds / 60;
@@ -149,9 +175,9 @@ namespace Queue.Models
 
         }
 
-        public static string GetNameTimesApps(string Application, double Seconds)
+        public static string GetNameTimesApps(string Application, double Seconds, double SecondsIna)
         {
-            return "<b>" + Application + ":</b> " + GetNameTimes(Seconds);
+            return "<b>" + Application + ":</b> " + GetNameTimes(Seconds) + (SecondsIna > 0 ? " [Inactivo: " + GetNameTimes(SecondsIna) + " ]" : string.Empty);
         }
 
         private readonly string[] ColorClassification = { "#CEBAB6", "#7E72FA", "#FF0000", "#96989A" };
@@ -174,7 +200,7 @@ namespace Queue.Models
                         var AppsImproClassify = GroupApplication.Where(x => x.AppImproName == item.Key);
                         foreach (var itemApps in AppsImproClassify.Select(x => x.Application).Distinct())
                         {
-                            _Apps.Add(GetNameTimesApps(itemApps, AppsImproClassify.Where(x => x.Application == itemApps).Sum(x => x.Activity)));
+                            _Apps.Add(GetNameTimesApps(itemApps, AppsImproClassify.Where(x => x.Application == itemApps).Sum(x => x.Activity), AppsImproClassify.Where(x => x.Application == itemApps).Sum(x => x.InActivity)));
                         }
 
                         AppsShow.Add("<u>" + item.Key + "</u> </br>" + string.Join("</br>", _Apps));
@@ -183,17 +209,39 @@ namespace Queue.Models
                     return string.Join("</br>", AppsShow);
                 }
             }
-            public string MessageDuration => GetNameTimes(Activity);
-            public DateTime FocusTime { get; set; }
-            public DateTime FocusTimeEnd => FocusTime.AddSeconds(Activity);
+            public string MessageDuration => GetNameTimes(TotalActivity);
+            //public DateTime FocusTime { get; set; }
+
+            public DateTime setdate
+            {
+                get
+                {
+                    return DateTime.Parse(StringFocusTime);
+                }
+                set { }
+            }
+
+            public DateTime FocusTime
+            {
+                get { return setdate; }
+                set { setdate = value; }
+            }
+
+
+            public DateTime FocusTimeEnd => FocusTime.AddSeconds(TotalActivity);
             public string FocusTimeT => FocusTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+            public string StringDate { get; set; }
+            public string StringFocusTime { get; set; }
+
             public double Activity { get; set; }
+            public double InActivity { get; set; }
+            public double TotalActivity { get { return Activity + InActivity; } }
             public string AppImproName { get; set; }
             public int AppsImproClassify { get; set; }
             public string DateEnd => FocusTimeEnd.ToString("yyyy-MM-dd HH:mm:ss");
 
             public List<ReportTimeGroupApps> GroupApplication { get; set; } = new List<ReportTimeGroupApps>();
-            public string Suma => GetNameTimes(GroupApplication.Sum(x => x.Activity));
             public int GetAppsImproClassifyMoreUse
             {
                 get
@@ -211,6 +259,7 @@ namespace Queue.Models
             public string AppImproName { get; set; }
             public string Application { get; set; }
             public double Activity { get; set; }
+            public double InActivity { get; set; }
         }
 
     }

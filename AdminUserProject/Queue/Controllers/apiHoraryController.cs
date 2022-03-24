@@ -13,10 +13,10 @@ namespace Queue.Controllers
 
         [HttpPost]
         [Route("GetHorary")]
-        public HttpResponseMessage CreateTracker(TrackerModel t)
+        public HttpResponseMessage CreateTracker(HoraryModel t)
         {
             aAutomaticTakeTime s = new aAutomaticTakeTime();
-            return ut.ReturnResponse(s.CreateAutomaticTakeTime(t));
+            return ut.ReturnResponse(s.GetHorary(t));
         }
     }
 }

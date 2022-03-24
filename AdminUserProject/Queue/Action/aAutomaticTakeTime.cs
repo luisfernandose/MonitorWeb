@@ -30,7 +30,7 @@ namespace Queue.Action
             {
                 cp = tvh.getprincipal(Convert.ToString(o.token));
                 if (cp != null)
-                {                    
+                {
                     List<TrakerBase> ltb = new List<TrakerBase>();
 
                     foreach (var i in o.AutomaticTakeTimeModel)
@@ -45,8 +45,8 @@ namespace Queue.Action
                         bool response = opc.AddTracker(ltb);
                         if (response)
                             rp.response_code = GenericErrors.SaveOk.ToString();
-                        else
-                            rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);
+                        else                            
+                            rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);                        
                     }
                 }
                 else
@@ -249,25 +249,48 @@ namespace Queue.Action
             }
         }
 
-        //public object GetHorary(string user, string idempresa)
-        //{
-        //    Response rp = new Response();
-        //    try
-        //    {
-        //        bool response = opc.AddLog(o);
-        //        if (response)
-        //            rp.response_code = GenericErrors.SaveOk.ToString();
-        //        else
-        //            rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);
+        public object GetHorary(HoraryModel hm)
+        {
+            Response rp = new Response();
+            try
+            {
+                cp = tvh.getprincipal(Convert.ToString(hm.token));
+                if (cp != null)
+                {
+                    using (QueueContext ent = new QueueContext())
+                    {
+                        Guid IdEmpresa = Guid.Parse(hm.idempresa);
 
-        //        return rp;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //error general
-        //        rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, ex.Message + " " + ex.InnerException, null, HttpStatusCode.InternalServerError);
-        //        return rp;
-        //    }
-        //}
+                        Agent_Employee ege = ent.Agent_Employee.Where(r => r.IdCompany == IdEmpresa && r.Usuario == hm.user).Include(g => g.Agent_GroupHorary).SingleOrDefault();
+
+                        if (ege.Agent_GroupHorary != null)
+                        {
+                            rp.HoraryModel.Agent_GroupHoraryDetail = ent.Agent_GroupHoraryDetail
+                                                                    .Where(d => d.Agent_GroupHorary.Id_GroupHorary == ege.Agent_GroupHorary.Id_GroupHorary)
+                                                                    .Select(p => new HoraryDetail
+                                                                    {
+                                                                        Day = p.Day,
+                                                                        HourFrom = p.HourFrom,
+                                                                        HourUntil = p.HourUntil,
+                                                                        Type = p.Type
+                                                                    }).ToList();
+                        }
+                    }
+                    //retorna un response, con el campo data lleno con la respuesta.               
+                    return autil.ReturnMesagge(ref rp, (int)GenericErrors.OK, null, null, HttpStatusCode.OK);
+                }
+                else
+                {
+                    //token invalido
+                    rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.InvalidToken, string.Empty, null, HttpStatusCode.OK);
+                    return rp;
+                }
+            }
+            catch (Exception ex)
+            {
+                //error general               
+                return autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

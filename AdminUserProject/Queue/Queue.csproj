@@ -442,7 +442,9 @@
       <DependentUpon>202203061501277_idcompany grupo horario.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\.cs" />
+    <Compile Include="Models\HoraryDetail.cs" />
+    <Compile Include="Models\HoraryModel.cs" />
+    <Compile Include="Models\schedule.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Agent_AutomaticTakeTime.cs" />
     <Compile Include="Models\Agent_CompanyDepartment.cs" />
@@ -468,6 +470,7 @@
     <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Models\DashBoardStats.cs" />
     <Compile Include="Models\ErrorFields.cs" />
+    <Compile Include="Models\GraphData.cs" />
     <Compile Include="Models\HardwareModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\InstalledModel.cs" />

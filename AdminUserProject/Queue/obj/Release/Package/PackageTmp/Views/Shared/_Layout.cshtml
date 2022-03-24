@@ -119,34 +119,52 @@
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="">
-                            <a href="@Url.Action("UserList", "Manage")">
-                                <i class="mdi mdi-account-circle"></i>
-                                <span>Usuarios</span>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="mdi mdi-apps"></i>
+                                <span>Administración</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-right pull-right"></i>
+                                </span>
                             </a>
-                        </li>
+                            <ul class="treeview-menu">
+                                <li class="">
+                                    <a href="@Url.Action("UserList", "Manage")">
+                                        <i class="mdi mdi-account-circle"></i>
+                                        <span>Usuarios</span>
+                                    </a>
+                                </li>
 
-                        <li class="">
-                            <a href="@Url.Action("Index", "Agent_Employee")">
-                                <i class="fa fa-users"></i>
-                                <span>Empleados</span>
-                            </a>
-                        </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_Employee")">
+                                        <i class="fa fa-users"></i>
+                                        <span>Empleados</span>
+                                    </a>
+                                </li>
 
-                        <li class="">
-                            <a href="@Url.Action("Index", "Agent_Job")">
-                                <i class="fa fa-calendar"></i>
-                                <span>Cargos & Horarios</span>
-                            </a>
-                        </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_Job")">
+                                        <i class="mdi mdi-clipboard-account"></i>
+                                        <span>Cargos</span>
+                                    </a>
+                                </li>
 
-                        <li class="">
-                            <a href="@Url.Action("Index", "Agent_ProgramClasification")">
-                                <i class="fa fa-microchip"></i>
-                                <span>Clasificación de programas</span>
-                            </a>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_ProgramClasification")">
+                                        <i class="mdi mdi-format-list-numbers"></i>
+                                        <span>Clasificación de programas</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_GroupHorary")">
+                                        <i class="fa fa-clock-o"></i>
+                                        <span>Groupos Horarios</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     }
+
                     @if (User.IsInRole("SAdmin"))
                     {
                         <li class="">
@@ -161,28 +179,44 @@
 
                     }
 
-                    <li class="">
-                        <a href="@Url.Action("Index", "Agent_GroupHorary")">
-                            <i class="fa fa-clock-o"></i>
-                            <span>Groupos Horarios</span>
-                        </a>
-                    </li>
+
 
                     <li class="treeview">
                         <a href="#">
                             <i class="mdi mdi-notification-clear-all"></i>
-                            <span>Reportes</span>
+                            <span>Informes</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-right pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
                             @*<li><a href="@Url.Action("Index", "UserReport")">Por Empleado</a></li>
-                                <li><a href="@Url.Action("Index", "ReportApplications")">Aplicaciones mas usadas</a></li>
-                                <li><a href="@Url.Action("Index", "MainApplicationsAndSites")">Principales Sitios Web y Aplicaciones</a></li>*@
-                            <li><a href="@Url.Action("Index", "ReportGantt")">Reporte Actividades</a></li>
+                <li><a href="@Url.Action("Index", "ReportApplications")">Aplicaciones mas usadas</a></li>
+                <li><a href="@Url.Action("Index", "MainApplicationsAndSites")">Principales Sitios Web y Aplicaciones</a></li>*@
+                            <li>
+                                <a href="@Url.Action("Index", "ReportGantt")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Actividades</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
+
+                    <li class="">
+                        <a href="#">
+                            <i class="mdi mdi-help-circle-outline"></i>
+                            <span>Ayuda</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="#">
+                            <i class="mdi mdi-monitor"></i>
+                            <span>Asistencia Técnica</span>
+                        </a>
+                    </li>
+
+
                 </ul>
             </section>
         </aside>
@@ -197,7 +231,7 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            &copy; @DateTime.Now.Year - MonitorTracker - ALL GROUP TECHNOLOGY
+            &copy; @DateTime.Now.Year - MonitorTracker - ALL GROUP TECH
         </footer>
         <div class="control-sidebar-bg"></div>
 
@@ -246,7 +280,7 @@
     <script src="~/assets/vendor_components/select2/dist/js/select2.full.js"></script>
     <script src="~/js/template.js"></script>
     <script src="~/js/iframeheight.js"></script>
-    <script src="~/js/Common.js?01"></script>
+    <script src="~/js/Common.js?02"></script>
     <script src="~/Scripts/select2.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 

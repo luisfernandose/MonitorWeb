@@ -19,7 +19,29 @@
     }
 
 }
+<style>
 
+    .modal.fade {
+        z-index: 999999 !important;
+    }
+
+    .modal {
+        top: 49px !important;
+    }
+
+    .modal-backdrop {
+        z-index: -10 !important;
+        display: none !important;
+    }
+
+
+    .modal-dialog {
+        max-width: 65%;
+        width: 65% !important;
+        /*margin: auto !important;
+        margin-top: 10px !important;*/
+    }
+</style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script src="~/Scripts/moment-with-locales.js"></script>
@@ -32,7 +54,6 @@
                 <h4 class="card-title">Selecciones rango de fechas a visualizar en las graficas</h4>
                 <div class="card-body">
                     <div class="row">
-
                         <div class="col-3">
                             <label>Fecha</label>
                             <div class="input-group">
@@ -50,7 +71,7 @@
                         <div class=" col-3">
                             <label>Empleados</label>
                             <div class="input-group">
-                                @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;",multiple = "true", required = "required" })
+                                @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;", multiple = "true", required = "required" })
                             </div>
                         </div>
 
@@ -58,11 +79,27 @@
                             <br />
                             <button id="btnProcesarConsulta" class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
                                 <strong>Buscar</strong>
-                                <span class="fa fa-plus-square"></span>
                             </button>
                         </div>
+                    </div>
+                    <div class="row">
+                        <h4>Mapa de Colores</h4>
+                    </div>
+                    <div class="row">
+                        @*['#55cbcd', '#ff968a', '#96b3c2', '#445a67'];*@
 
-
+                        <table class="form-control">
+                            <tr>
+                                <td>Productivas </td>
+                                <td style="background-color: #55cbcd;width:80px"></td>
+                                <td>Impoductivas </td>
+                                <td style="background-color: #ff968a; width: 80px"></td>
+                                <td>Neutrales </td>
+                                <td style="background-color: #96b3c2; width: 80px"></td>
+                                <td>Inactivo </td>
+                                <td style="background-color: #445a67; width: 80px"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
 
@@ -80,55 +117,62 @@
             <div class="card-body">
                 <h4 class="card-title">Aplicaciones</h4>
                 <div class="card-body">
-                    <p>Mapa de Colores</p>
-                    <hr />
-                    <div class="col-md-12">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td>Productivas:</td>
-                                            <td style="background-color: #b2e2f2;width:100px"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Improductivas:</td>
-                                            <td style="background-color: #fabfb7"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Neutrales</td>
-                                            <td style="background-color: #ffda9e"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sin Clasificar</td>
-                                            <td style="background-color: #fdf9c4"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="divWait" style="display:none"> <i class="fa fa-spin fa-spinner"></i> Un momento por favor...</p>
+
+                            <div class="row">
+                                <div id="sin_Data" style="display:none" class="col-12">
+                                    <div class="alert alert-danger">
+                                        <strong>Sin registros!</strong> No hay datos disponibles para la fecha seleccionada
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row col-12">
+                    <div id="oneuser" class="row">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <select class="form-control select2" style="width:100% !important" id='ddl_users_apps'></select>
+                        </div>
+                        <div class="col-3" style="text-align:center !important">
+                            <button id="btnProcesarConsultaApps" class="btn-sm btn-info btn-block" type="button">
+                                <strong>Mostrar aplicaciones</strong>
+                            </button>
+                        </div>
+                        <div class="col-3"></div>
 
+                    </div>
+                    <br />
+                    <br />
+                    <div class="row">
                         <div class="col-12">
 
-                            <p id="divWait" style="display:none"> <i class="fa fa-spin fa-spinner"></i> Un momento por favor...</p>
-
-                            <div id="sin_Data" style="display:none">
-
-                                <div class="alert alert-danger">
-                                    <strong>Sin registros!</strong> No hay datos disponibles para la fecha seleccionada
+                            <div class="row">
+                                <div id="chart_div_0" class="col-12">
                                 </div>
                             </div>
-                            <div id="chart_div_0"></div>
+                            <!-- Button trigger modal -->
+                            <!-- Modal -->
+                            <div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1">
+                                <div style="margin-left:25%" class="modal-dialog ">
+                                    <div class="modal-content">
 
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="user_show"></h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="chart_div_2" class="col-12"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
 </div>
@@ -136,10 +180,14 @@
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 
 <script>
-    //#43EBEB
+
     jQuery(document).ready(async function () {
-       // $("#btnProcesarConsulta").click();
+        $("#oneuser").hide();
+
         $('#ddlUsers').select2({
+            theme: "classic"
+        });
+        $('#ddl_users_apps').select2({
             theme: "classic"
         });
     });
@@ -149,125 +197,226 @@
             ReportGantt()
         });
 
-   
+        $("#btnProcesarConsultaApps").click(function () {
+            //$("#myModal").on("shown.bs.modal", function () {
+            //    $("#chart_div_2").html(null);
+            //    ReportGanttUserSelected($('#ddl_users_apps').val());
+            //}).modal('show');
+
+            ReportGanttUserSelected($('#ddl_users_apps').val());
+
+            $("#myModal").on("hidden.bs.modal", function () {
+                $("#chart_div_2").html(null);
+                $("#user_show").html(null);
+            }).modal('show');
+        });
+
+
 
     function ReportGantt() {
+        var params = new Object();
+        params.dateFrom = $("#DateFrom").val();
+        params.dateTo = $("#DateFrom").val();
+        params.periods = $("#ddlPeriods").val();
+        params.user = $("#ddlUsers").val();
+        params = JSON.stringify(params);
 
-            var params = new Object();
-            params.dateFrom = $("#DateFrom").val();
-            params.dateTo = $("#DateFrom").val();
-            params.periods = $("#ddlPeriods").val();
-            params.user = $("#ddlUsers").val();
-            params = JSON.stringify(params);
+        $("#sin_Data").hide();
 
-            $("#sin_Data").hide();
+        //$("#chart_div_2").html(null);
+        //$("#user_show").html(null);
+        //$('#ddl_users_apps').empty();
+
+        $("#sin_Data").hide();
+        $("#chart_div_user").hide();
+        //$("#chart_div_user").html(null);
+        $("#chart_div_2").html(null);
+        $("#user_show").html(null);
+        $('#ddl_users_apps').empty();
 
 
-            google.charts.load("current", { packages: ["timeline"] });
-            google.charts.setOnLoadCallback(drawChart);
 
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("NewChart", "ReportGantt")",
-                data: params,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                async: true,
-                success: function (data) {
-                    drawChart(data)
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(XMLHttpRequest, textStatus, errorThrown);
-                },
-                beforeSend: function () {
-                    $("#divWait").show();
-                },
-                complete: function () {
-                    $("#divWait").hide();
-                }
-            });
+        google.charts.load("current", { packages: ["timeline"] }); google.charts.setOnLoadCallback(drawChart);
 
-        }
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NewChart", "ReportGantt")",
+            data: params,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                drawChart(data)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest, textStatus, errorThrown);
+            },
+            beforeSend: function () {
+                $("#divWait").show();
+            },
+            complete: function () {
+                $("#divWait").hide();
+            }
+        });
+
+    }
+
+
+     function ReportGanttUserSelected(usuario) {
+        var params = new Object();
+        params.dateFrom = $("#DateFrom").val();
+        params.dateTo = $("#DateFrom").val();
+         params.user = usuario;
+        params = JSON.stringify(params);
+
+
+
+        google.charts.load("current", { packages: ["timeline"] }); google.charts.setOnLoadCallback(drawChart);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NewChartUserSelected", "ReportGantt")",
+            data: params,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                drawChartUsersSelected(data, usuario)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest, textStatus, errorThrown);
+            },
+            beforeSend: function () {
+                $("#divWait").show();
+            },
+            complete: function () {
+                $("#divWait").hide();
+                $("#sin_Data").hide();
+            }
+        });
+
+    }
+
 
     function drawChart(data) {
-
-
-        if (jQuery.isEmptyObject(data)){
+        if (jQuery.isEmptyObject(data)) {
             $("#sin_Data").show();
         } else {
             $("#sin_Data").hide();
+            $("#oneuser").show();
         }
-        //                      sin clasificar              impro
-        var item_classifityColor = ['#fdf9c4', '#b2e2f2', '#fabfb7', '#ffda9e'];
+        ///                          impro       prod      impro
+        var item_classifityColor = ['#96b3c2', '#55cbcd', '#ff968a', '#445a67'];
+        //var item_classifityColor = ['#55cbcd', '#7E72FA', '#FF0000', '#96989A'];
 
         var dataTable = new google.visualization.DataTable();
-        dataTable.addColumn({ type: 'string', id: 'UsuarioX' });
+        dataTable.addColumn({ type: 'string', id: 'Usuario' });
         dataTable.addColumn({ type: 'string', id: 'Aplicación' });
-        dataTable.addColumn({ type: 'string', role: 'tooltip' });
-        dataTable.addColumn({ type: 'string', role: 'style' });
+        dataTable.addColumn({ type: 'string', role: 'tooltip' }); dataTable.addColumn({ type: 'string', role: 'style' });
         dataTable.addColumn({ type: 'date', id: 'Start' });
         dataTable.addColumn({ type: 'date', id: 'End' });
-        //esta columna la usaremos para el tooltip
+
 
 
 
         $.each(data, function (keyData, valueData) {
             var NameUserLocal = valueData.UserName;
 
+            $('#ddl_users_apps').append($('<option>', { value: NameUserLocal, text: NameUserLocal}));
+
             $.each(valueData.ReportSytems, function (keyReport, valueReport) {
-                    var date1 = moment(valueReport.FocusTimeT, 'YYYY-MM-DD HH:mm:ss');
-                    var date2 = moment(valueReport.DateEnd, 'YYYY-MM-DD HH:mm:ss');
+                var date1 = moment(valueReport.FocusTimeT, 'YYYY-MM-DD HH:mm:ss');
+                var date2 = moment(valueReport.DateEnd, 'YYYY-MM-DD HH:mm:ss');
 
-                    var show_info = '<div class=\"google-visualization-tooltip\" style=\"width: 240px;\"><ul class=\"google-visualization-tooltip-item-list\"><li class=\"google-visualization-tooltip-item\"><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;\">' +
-                        //'<u>' + (valueReport.AppImproName + "</u> </br> " + valueReport.ApplicationT) + '</span></li></ul><div class=\"google-visualization-tooltip-separator\"></div><ul class=\"google-visualization-tooltip-action-list\"><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
-                        valueReport.ApplicationT + '</span></li></ul><div class=\"google-visualization-tooltip-separator\"></div><ul class=\"google-visualization-tooltip-action-list\"><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
-                        '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Desde: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date1.format('LTS')+'</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
-                        '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Hasta: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date2.format('LTS')+'</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
-                        '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Duración:</span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + valueReport.MessageDuration+' </span></li></ul></div>';
-                    //este es para tratar de personalizar el tooltip pero no agarra
-                    //no agarra y se descuadra los colores para pintar segun si es productiva o improductiova
+                var show_info = '<div class=\"google-visualization-tooltip\" style=\"width: 240px;\"><ul class=\"google-visualization-tooltip-item-list\"><li class=\"google-visualization-tooltip-item\"><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;\">' +
+                    valueReport.ApplicationT + '</span></li></ul><div class=\"google-visualization-tooltip-separator\"></div><ul class=\"google-visualization-tooltip-action-list\"><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Desde: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date1.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Hasta: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date2.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Duración:</span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + valueReport.MessageDuration + ' </span></li></ul></div>';
 
-                    //No, este de duration es predeterminada de la libreria
-
-                    dataTable.addRows([
-                        [valueData.UserName, (valueReport.AppImproName + " | " + valueReport.Application), show_info, item_classifityColor[valueReport.GetAppsImproClassifyMoreUse], date1.toDate(), date2.toDate()]
-                    ]);
-                });
+                dataTable.addRows([
+                    [valueData.UserName, (valueReport.AppImproName + " | " + valueReport.Application), show_info, item_classifityColor[valueReport.GetAppsImproClassifyMoreUse], date1.toDate(), date2.toDate()]
+                ]);
             });
-
-            var paddingHeight = 50;
-
-            // the natural height of all rows combined
-            var rowHeight = dataTable.getNumberOfRows() * 12;
-
-            // set the total chart height
-            var chartHeight = rowHeight + paddingHeight;
-
-            var options = {
-                height: /*chartHeight*/350,
-                //timeline: { colorByRowLabel: false, showBarLabels: false, showRowLabels: false },
-                timeline: {  showBarLabels: false},
-                //colors: ['#CEBAB6', '#7E72FA', '#FF0000', '#96989A'],
-                tooltip: { isHtml: true },
-            };
-
-            var container = document.getElementById('chart_div_0');
-            var chart = new google.visualization.Timeline(container);
-
-            if ((dataTable.getNumberOfRows() <= 0)) {
-            } else {
-                //$("#sin_Data").hide();
-                chart.draw(dataTable, options);
-            }
+        });
 
 
 
-            //$("#divWait").hide();
+        var paddingHeight = 50;
 
+        // the natural height of all rows combined
+        var rowHeight = dataTable.getNumberOfRows() * 12;
+        // set the total chart height        var chartHeight = rowHeight + paddingHeight;
 
+        var options = {
+            height: /*chartHeight*/350,
+                                        //timeline: { colorByRowLabel: false, showBarLabels: false, showRowLabels: false },
+            timeline: { showBarLabels: false },
+            //colors: ['#CEBAB6', '#7E72FA', '#FF0000', '#96989A'],
+            tooltip: { isHtml: true },
+        };
 
+        var container = document.getElementById('chart_div_0');
+        var chart = new google.visualization.Timeline(container);
 
+        if ((dataTable.getNumberOfRows() <= 0)) { } else {                //$("#sin_Data").hide();
+            chart.draw(dataTable, options);
         }
+    }
+
+    function drawChartUsersSelected(data, usas) {
+        var item_classifityColor = ['#96b3c2', '#55cbcd', '#ff968a', '#445a67'];
+
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Usuario' });
+        dataTable.addColumn({ type: 'string', id: 'Aplicación' });
+        dataTable.addColumn({ type: 'string', role: 'tooltip' }); dataTable.addColumn({ type: 'string', role: 'style' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+
+
+        $.each(data, function (keyData, valueData) {
+            var NameUserLocal = valueData.UserName;
+
+            $("#user_show").html(usas);
+
+            $.each(valueData.ReportSytems, function (keyReport, valueReport) {
+                var date1 = moment(valueReport.FocusTimeT, 'YYYY-MM-DD HH:mm:ss');
+                var date2 = moment(valueReport.DateEnd, 'YYYY-MM-DD HH:mm:ss');
+
+                var show_info = '<div class=\"google-visualization-tooltip\" style=\"width: 240px;\"><ul class=\"google-visualization-tooltip-item-list\"><li class=\"google-visualization-tooltip-item\"><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;\">' +
+                    valueReport.ApplicationT + '</span></li></ul><div class=\"google-visualization-tooltip-separator\"></div><ul class=\"google-visualization-tooltip-action-list\"><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Desde: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date1.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Hasta: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date2.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Duración:</span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + valueReport.MessageDuration + ' </span></li></ul></div>';
+
+                dataTable.addRows([
+                    [valueData.UserName, (valueReport.AppImproName + " | " + valueReport.Application), show_info, item_classifityColor[valueReport.GetAppsImproClassifyMoreUse], date1.toDate(), date2.toDate()]
+                ]);
+            });
+        });
+
+
+
+        var paddingHeight = 60;
+
+        // the natural height of all rows combined
+        var rowHeight = dataTable.getNumberOfRows() * 12;
+        // set the total chart height        var chartHeight = rowHeight + paddingHeight;
+
+        var options = {
+            height: /*chartHeight*/350,
+            //timeline: { colorByRowLabel: false, showBarLabels: false, showRowLabels: false },
+            timeline: { showBarLabels: false },
+            //colors: ['#CEBAB6', '#7E72FA', '#FF0000', '#96989A'],
+            tooltip: { isHtml: true },
+        };
+
+        var container = document.getElementById('chart_div_2');
+        var chart = new google.visualization.Timeline(container);
+
+        if ((dataTable.getNumberOfRows() <= 0)) { } else {                  chart.draw(dataTable, options);        }
+    }
 
 </script>
 

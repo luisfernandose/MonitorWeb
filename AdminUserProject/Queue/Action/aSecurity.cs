@@ -43,7 +43,8 @@ namespace Queue.Action
                                                                                  UploadFrecuency = c.UploadFrecuency,
                                                                                  CaptureFrecuency = c.CaptureFrecuency,
                                                                                  token = token,
-                                                                                 IsLogged = true
+                                                                                 IsLogged = true,
+                                                                                 Id_Empresa = ae.IdCompany
                                                                              }).FirstOrDefault();
                         
                         rp.data = responseConfigurationDTO;

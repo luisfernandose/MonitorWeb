@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <History>True|2022-03-07T16:44:16.4431837Z;False|2022-02-21T13:44:18.2283435-05:00;</History>
+    <History>True|2022-03-18T19:54:25.1991201Z;True|2022-03-07T11:44:16.4431837-05:00;False|2022-02-21T13:44:18.2283435-05:00;</History>
     <_PublishTargetUrl>D:\Proyectos\Personales\Monitor\Publicacion</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
@@ -29319,10 +29319,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:45:22</publishTime>
     </File>
     <File Include="bin/Queue.dll">
-      <publishTime>03/07/2022 12:52:10</publishTime>
+      <publishTime>03/23/2022 14:34:04</publishTime>
     </File>
     <File Include="bin/Queue.pdb">
-      <publishTime>03/07/2022 12:52:10</publishTime>
+      <publishTime>03/23/2022 14:34:04</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>07/11/2021 16:45:20</publishTime>
@@ -29865,13 +29865,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:43:27</publishTime>
     </File>
     <File Include="Content/css/select2.min.css">
-      <publishTime>11/01/2021 16:31:41</publishTime>
+      <publishTime>01/11/2021 16:31:41</publishTime>
     </File>
     <File Include="Content/css/skins/_all-skins.css">
       <publishTime>07/11/2021 16:43:27</publishTime>
     </File>
     <File Include="Content/css/Spiner.css">
-      <publishTime>10/07/2021 16:44:51</publishTime>
+      <publishTime>07/10/2021 16:44:51</publishTime>
     </File>
     <File Include="Content/email/Forgot.html">
       <publishTime>07/11/2021 16:43:27</publishTime>
@@ -42582,7 +42582,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:43:38</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>02/11/2022 10:41:33</publishTime>
+      <publishTime>03/12/2022 16:43:23</publishTime>
     </File>
     <File Include="Views/MainApplicationsAndSites/Index.cshtml">
       <publishTime>09/18/2021 17:22:34</publishTime>
@@ -42618,7 +42618,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>11/17/2021 19:16:19</publishTime>
     </File>
     <File Include="Views/ReportGantt/Index.cshtml">
-      <publishTime>03/07/2022 12:31:36</publishTime>
+      <publishTime>03/23/2022 10:52:44</publishTime>
     </File>
     <File Include="Views/Role/Create.cshtml">
       <publishTime>07/11/2021 16:43:38</publishTime>
@@ -42639,13 +42639,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:43:38</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
-      <publishTime>10/07/2021 16:44:51</publishTime>
+      <publishTime>07/10/2021 16:44:51</publishTime>
     </File>
     <File Include="Views/Shared/Lockout.cshtml">
       <publishTime>07/11/2021 16:43:38</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>03/07/2022 12:03:12</publishTime>
+      <publishTime>03/14/2022 16:57:15</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutElement.cshtml">
       <publishTime>07/11/2021 16:43:38</publishTime>
@@ -42672,7 +42672,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:43:38</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>03/07/2022 11:42:12</publishTime>
+      <publishTime>03/18/2022 14:49:38</publishTime>
     </File>
   </ItemGroup>
 </Project>
