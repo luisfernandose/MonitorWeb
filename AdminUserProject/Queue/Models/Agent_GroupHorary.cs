@@ -14,7 +14,7 @@ namespace Queue.Models
         [Key]
 
         public Guid Id_GroupHorary { get; set; }
-        [DisplayName("Nombre Grupo")]
+        [DisplayName("Nombre Jornada")]
         [Required]
         public string NameGroup { get; set; }
 

@@ -9,6 +9,7 @@ namespace Queue.Models
         public static IMongoClient client { get; set; }
         public static IMongoDatabase database { get; set; }
 
+        //public static string MongoConnection = "mongodb+srv://monitor:Abc123456+@cluster0.24sb3.mongodb.net/MonitorTracker?retryWrites=true&w=majority";
         public static string MongoConnection = "mongodb://localhost:27017";        
         public static string MongoDatabase = "MonitorTracker";
 

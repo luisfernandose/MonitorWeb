@@ -246,6 +246,8 @@
             dataType: "json",
             async: true,
             success: function (data) {
+                console.log("******************************************");
+                console.log(data)
                 drawChart(data)
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {

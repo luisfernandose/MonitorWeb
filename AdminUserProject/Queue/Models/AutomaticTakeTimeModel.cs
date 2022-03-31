@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,36 +25,14 @@ namespace Queue.Models
 
         public double Activity { get; set; }
 
-        //public DateTime Date { get; set; }
-        //public DateTime FocusTime { get; set; }
+        [BsonElement]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+        public DateTime Date { get; set; }
 
-        public DateTime Date
-        {
-            get { return setdate; }
-            set { setdate = value; }
-        }
-        public DateTime FocusTime
-        {
-            get { return setfocusdate; }
-            set { setfocusdate = value; }
-        }
-
-        [NotMapped]
-        public DateTime setdate
-        {
-            get { return DateTime.Parse(StringDate.Replace("/","-").Trim()); }
-            set { }
-        }
-
-        [NotMapped]
-        public DateTime setfocusdate
-        {
-            get { return DateTime.Parse(StringFocusTime.Replace("/", "-").Trim()); }
-            set { }
-        }
-
-        public string StringDate { get; set; }
-        public string StringFocusTime { get; set; }
+        [BsonElement]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime FocusTime { get; set; }     
+     
 
         [Display(Name = "token")]
         [JsonProperty("token")]

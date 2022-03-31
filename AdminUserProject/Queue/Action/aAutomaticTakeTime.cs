@@ -12,6 +12,8 @@ using Queue.DAL;
 using Queue.ViewModels;
 using Queue.Controllers;
 using System.Threading.Tasks;
+using System.Globalization;
+using System.Threading;
 
 namespace Queue.Action
 {
@@ -26,6 +28,8 @@ namespace Queue.Action
         public object CreateAutomaticTakeTime(TrackerModel o)
         {
             Response rp = new Response();
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
             try
             {
                 cp = tvh.getprincipal(Convert.ToString(o.token));

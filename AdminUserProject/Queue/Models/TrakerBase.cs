@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,15 @@ namespace Queue.Models
         public string Pc { get; set; }
         public string UserName { get; set; }
         public double Activity { get; set; }
+
+        public TimeSpan DateSpam { get; set; }
+
+        [BsonElement]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]        
         public DateTime Date { get; set; }
+
+        [BsonElement]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime FocusTime { get; set; }
         public string StringDate { get; set; }
         public string StringFocusTime { get; set; }

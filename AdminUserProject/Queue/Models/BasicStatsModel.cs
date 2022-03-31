@@ -212,27 +212,13 @@ namespace Queue.Models
             public string MessageDuration => GetNameTimes(TotalActivity);
             //public DateTime FocusTime { get; set; }
 
-            public DateTime setdate
-            {
-                get
-                {
-                    return DateTime.Parse(StringFocusTime);
-                }
-                set { }
-            }
 
-            public DateTime FocusTime
-            {
-                get { return setdate; }
-                set { setdate = value; }
-            }
+
+            public DateTime FocusTime { get; set; }
 
 
             public DateTime FocusTimeEnd => FocusTime.AddSeconds(TotalActivity);
             public string FocusTimeT => FocusTime.ToString("yyyy-MM-dd HH:mm:ss");
-
-            public string StringDate { get; set; }
-            public string StringFocusTime { get; set; }
 
             public double Activity { get; set; }
             public double InActivity { get; set; }
