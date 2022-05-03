@@ -11,6 +11,7 @@ using System.Web.Script.Serialization;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class MoreUsedApplicationsController : Controller
     {
         private QueueContext db = new QueueContext();

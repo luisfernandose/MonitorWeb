@@ -250,4 +250,28 @@ namespace Queue.Models
 
     }
 
+    public class SoftwareReport
+    {
+        public string program { get; set; }
+        public int quantity { get; set; }
+        public string agrupation { get; set; }
+        public DateTime instalationday { get; set; }
+        public DateTime uninstalday { get; set; }
+
+        public Guid idgroup { get; set; }
+        public string user { get; set; }
+    }
+
+    public class HardwareReport
+    {
+        public string type { get; set; }
+        public string hardware { get; set; }
+        public int quantity { get; set; }
+        public string agrupation { get; set; }
+        public DateTime instalationday { get; set; }
+        public DateTime uninstalday { get; set; }
+
+        public Guid idgroup { get; set; }
+        public string user { get; set; }
+    }
 }

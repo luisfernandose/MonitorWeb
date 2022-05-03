@@ -40,11 +40,17 @@ namespace Queue.Controllers
             {
                 var company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
 
-                agent_Job.idJob = Guid.NewGuid();
-                agent_Job.IdCompany = company;
-                db.Agent_Job.Add(agent_Job);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (db.Agent_Job.Where(t => t.IdCompany == company && t.Cargo == agent_Job.Cargo).Count() == 0)
+                {
+                    agent_Job.idJob = Guid.NewGuid();
+                    agent_Job.IdCompany = company;
+                    db.Agent_Job.Add(agent_Job);
+                    db.SaveChanges();
+                    Success("Registro creado con exito");
+                    return RedirectToAction("Index");
+                }
+                else
+                    Warning("Cargo ya existe", string.Empty);
             }
 
             return View(agent_Job);

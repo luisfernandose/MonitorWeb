@@ -46,5 +46,11 @@ namespace Queue.DAL
         public DbSet<Agent_GroupHoraryDetail> Agent_GroupHoraryDetail { get; set; }
         public DbSet<Agent_CompanyDepartment> Agent_CompanyDepartment { get; set; }
 
+        public DbSet<Agent_EmployeesGroups> Agent_EmployeesGroups { get; set; }
+
+        public DbSet<Agent_EmployeeGroupsEmployee> Agent_EmployeeGroupsEmployee { get; set; }
+
+        
+
     }
 }

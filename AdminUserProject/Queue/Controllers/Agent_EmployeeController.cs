@@ -38,8 +38,10 @@ namespace Queue.Controllers
         [Authorize(Roles = "SAdmin,Admin")]
         public ActionResult Create()
         {
-            ViewBag.Jobs = db.Agent_Job.ToList();
-            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
+            Guid idcompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+            ViewBag.Jobs = db.Agent_Job.Where(t=> t.IdCompany == idcompany).ToList();
+            
+            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Where(i=> i.Agent_GroupHorary.IdCompany == idcompany).Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
             return View();
         }
 
@@ -72,8 +74,8 @@ namespace Queue.Controllers
                 else
                     Warning("La identificación del Usuario ya existe", string.Empty);
             }
-            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
-            ViewBag.Jobs = db.Agent_Job.ToList();
+            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Where(i => i.Agent_GroupHorary.IdCompany == idcompany).Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
+            ViewBag.Jobs = db.Agent_Job.Where(t => t.IdCompany == idcompany).ToList();
 
 
             return View(agent_Employee);
@@ -143,7 +145,7 @@ namespace Queue.Controllers
                 try
                 {
                     string[] lines = System.IO.File.ReadAllLines(FilePath);
-                    for (int i = 1; i < lines.Count(); i++)
+                    for (int i = 0; i < lines.Count(); i++)
                     {
                         bool error = false;
                         string posibleerror = string.Empty;
@@ -245,6 +247,8 @@ namespace Queue.Controllers
 
         public ActionResult Edit(Guid? id)
         {
+            Guid idcompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -255,8 +259,8 @@ namespace Queue.Controllers
                 return HttpNotFound();
             }
             ViewBag.status = agent_Employee.status;
-            ViewBag.Jobs = db.Agent_Job.ToList();
-            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
+            ViewBag.Jobs = db.Agent_Job.Where(t => t.IdCompany == idcompany).ToList();
+            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Where(i => i.Agent_GroupHorary.IdCompany == idcompany).Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
             return View(agent_Employee);
         }
 
@@ -290,8 +294,8 @@ namespace Queue.Controllers
             }
 
             ViewBag.status = agent_Employee.status;
-            ViewBag.Jobs = db.Agent_Job.ToList();
-            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
+            ViewBag.Jobs = db.Agent_Job.Where(t => t.IdCompany == idcompany).ToList();
+            ViewBag.Horarys = db.Agent_GroupHoraryDetail.Where(i => i.Agent_GroupHorary.IdCompany == idcompany).Include(x => x.Agent_GroupHorary).Select(g => g.Agent_GroupHorary).Distinct().OrderBy(d => d.NameGroup).ToList();
             return View(agent_Employee);
         }
 

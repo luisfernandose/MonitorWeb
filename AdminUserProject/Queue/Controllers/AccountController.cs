@@ -212,12 +212,12 @@ namespace Queue.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            Guid idcompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
             model.Password = System.Web.Security.Membership.GeneratePassword(8, 1);
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-
                 var Role = db.Roles.Where(r => r.Id == model.RoleID).SingleOrDefault();
                 await UserManager.AddToRoleAsync(user.Id, Role.Name);
 
@@ -229,10 +229,17 @@ namespace Queue.Controllers
                 //model.Email = "luisfernandose@gmail.com";
                 //model.Email = "info@madworksglobal.com";
 
+                Agent_UserCompanies auc = new Agent_UserCompanies();
+
+                auc.IdCompany = idcompany;
+                auc.idUser = Guid.Parse(oUser.Id);
+                db.Agent_UserCompany.Add(auc);
+
+                await db.SaveChangesAsync();
+
                 EmailController ec = new EmailController();
                 ec.SendInvitation(model.Email, model.Email, model.Password);
 
-                await db.SaveChangesAsync();
 
                 //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
@@ -273,7 +280,7 @@ namespace Queue.Controllers
                 oUser.LockoutEnabled = false;
 
                 db.Entry(oUser).State = EntityState.Modified;
-                
+
                 EmailController ec = new EmailController();
                 ec.SendInvitation(model.Email, model.Email, model.Password);
 

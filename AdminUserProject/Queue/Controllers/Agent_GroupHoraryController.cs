@@ -11,6 +11,7 @@ using Queue.Models;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class Agent_GroupHoraryController : BaseController
     {
         private QueueContext db = new QueueContext();

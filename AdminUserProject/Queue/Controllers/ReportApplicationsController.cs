@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class ReportApplicationsController : Controller
     {
         private QueueContext db = new QueueContext();

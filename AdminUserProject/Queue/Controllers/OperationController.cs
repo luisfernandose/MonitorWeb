@@ -10,9 +10,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Queue.Controllers;
+using System.Reflection;
+using System.Collections;
+using System.IO;
+using System.Drawing;
+using System.Data.Entity;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class OperationController : Controller
     {
         private QueueContext db = new QueueContext();
@@ -57,14 +63,14 @@ namespace Queue.Controllers
             try
             {
                 MongoHelper.TrakerBase = MongoHelper.database.GetCollection<TrakerBase>("TrackerTime");
-                
+
                 //sele restan 5 horas porque no se que pasa con el servidor de mkongo que le suma 5 horas, no se como configurar una UTC acorde con mongo para que ponga
                 //la hora que es.
-                foreach (var j in tb)
-                {
-                    j.Date = j.Date.AddHours(-5);
-                    j.FocusTime = j.FocusTime.AddHours(-5);
-                }
+                //foreach (var j in tb)
+                //{
+                //    j.Date = j.Date.AddHours(-5);
+                //    j.FocusTime = j.FocusTime.AddHours(-5);
+                //}
                 MongoHelper.TrakerBase.InsertMany(tb);
 
                 return true;
@@ -75,7 +81,7 @@ namespace Queue.Controllers
                 lvm.datelog = DateTime.Now;
                 lvm.LogRegister = ex.Message + "-" + ex.InnerException.Message;
                 lvm.Module = "AddTracker";
-                AddLog(lvm); 
+                AddLog(lvm);
 
                 return false;
             }
@@ -442,7 +448,7 @@ namespace Queue.Controllers
                 //_endTest = _endTest.Add(new TimeSpan(23, 59, 59));
                 List<BasicStatsDashboard> queryPrincipal = new List<BasicStatsDashboard>();
 
-                if (user == "Todos")
+                if (user == "Todos" || user == null)
                 {
                     queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
                     Where(e => e.IdEmpresa == idcompany
@@ -1356,7 +1362,7 @@ namespace Queue.Controllers
                                UserName = e.Key,
                                ReportSytems = e.Select(x => new UsersReportGanttModel.ReportTime()
                                {
-                                   Application = x.Application,                                  
+                                   Application = x.Application,
                                    FocusTime = x.FocusTime,
                                    Activity = x.Activity,
                                    InActivity = x.Inactivity ?? 0 //Se agrega acá el parametro adicional
@@ -1411,7 +1417,7 @@ namespace Queue.Controllers
                         Activity = Item2.Activity,
                         InActivity = Item2.InActivity,
                         AppsImproClassify = IdClassication,
-                        AppImproName = NameClassication                        
+                        AppImproName = NameClassication
                     };
 
                     _ReportSytemsParallel.Enqueue(NewReportTimes);
@@ -1471,7 +1477,7 @@ namespace Queue.Controllers
                             Activity = itemReportTimes.Activity,
                             InActivity = itemReportTimes.InActivity,
                             AppsImproClassify = itemReportTimes.AppsImproClassify,
-                            AppImproName = itemReportTimes.AppImproName                           
+                            AppImproName = itemReportTimes.AppImproName
 
                         };
 
@@ -1574,7 +1580,7 @@ namespace Queue.Controllers
                                 AppImproName = foundRecordTimes.AppImproName,
                                 AppsImproClassify = foundRecordTimes.AppsImproClassify,
                                 Activity = foundRecordTimes.Activity,
-                                InActivity = foundRecordTimes.InActivity                                
+                                InActivity = foundRecordTimes.InActivity
                             });
 
 
@@ -2006,7 +2012,237 @@ namespace Queue.Controllers
 
 
 
-        #region Dasboard Stats
+        #region Reports      
+        public ActionResult SoftwareReport(string user, Guid? idgroup)
+        {
+            List<SoftwareReport> srlist = new List<SoftwareReport>();
+            Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+
+            if (IdCompany != Guid.Empty)
+            {
+                if (!string.IsNullOrEmpty(user) || idgroup != null)
+                {
+                    MongoHelper.SoftWareList = MongoHelper.database.GetCollection<InstalledProgramsViewModel>("Software");
+                    var builder = Builders<InstalledProgramsViewModel>.Filter;
+                    var filter = builder.Eq("IdCompany", IdCompany) & builder.Eq("Status", true);
+
+                    List<InstalledProgramsViewModel> results = MongoHelper.SoftWareList.Find(filter).ToList();
+
+                    if (idgroup != null && idgroup != Guid.Empty)
+                    {
+                        List<Agent_Employee> users_ = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_Employee.IdCompany == IdCompany).Select(t => t.Agent_Employee).ToList();
+                        List<string> _users = users_.Select(s => s.Usuario).ToList();
+
+                        results = results.Where(u => _users.Contains(u.User)).ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(user) && user != Guid.Empty.ToString())
+                    {
+                        results = results.Where(u => u.User == user).ToList();
+                    }
+
+                    SoftwareReport sr;
+                    foreach (var i in results.GroupBy(g => g.Name))
+                    {
+                        sr = new SoftwareReport();
+                        sr.program = i.Key;
+                        sr.quantity = i.Count();
+                        srlist.Add(sr);
+                    }
+                }
+            }
+
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgroup = sli;
+
+
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
+            sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sle;
+
+
+            return View(srlist);
+        }
+
+        public ActionResult HardwareReport(string user, Guid? idgroup)
+        {
+            List<HardwareReport> srlist = new List<HardwareReport>();
+            Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+            if (IdCompany != Guid.Empty)
+            {
+                if (!string.IsNullOrEmpty(user) || idgroup != null)
+                {
+                    MongoHelper.HardWareList = MongoHelper.database.GetCollection<InstalledHardwareViewModel>("Hardware");
+                    var builder = Builders<InstalledHardwareViewModel>.Filter;
+                    var filter = builder.Eq("IdCompany", IdCompany) & builder.Eq("status", true);
+
+                    List<InstalledHardwareViewModel> results = MongoHelper.HardWareList.Find(filter).ToList();
+
+                    if (idgroup != null && idgroup != Guid.Empty)
+                    {
+                        List<Agent_Employee> users_ = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_Employee.IdCompany == IdCompany).Select(t => t.Agent_Employee).ToList();
+                        List<string> _users = users_.Select(s => s.Usuario).ToList();
+
+                        results = results.Where(u => _users.Contains(u.User)).ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(user) && user != Guid.Empty.ToString())
+                    {
+                        results = results.Where(u => u.User == user).ToList();
+                    }
+
+                    HardwareReport sr;
+                    foreach (var i in results.GroupBy(g => new { g.Type, g.Hardware }))
+                    {
+                        sr = new HardwareReport();
+                        sr.type = i.Key.Type;
+                        sr.hardware = i.Key.Hardware;
+                        sr.quantity = i.Count();
+                        srlist.Add(sr);
+                    }
+                }
+            }
+
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgroup = sli;
+
+
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
+            sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sle;
+
+
+            return View(srlist);
+        }
+
+
+        public ActionResult CapturesReport(string user, Guid? idgroup, DateTime? Datefrom, DateTime? Dateto)
+        {          
+            Guid IdCompany = Guid.Empty;
+            string IdCompany_ = IdCompany.ToString();
+            try
+            {
+                IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+                IdCompany_ = Request.RequestContext.HttpContext.Session["Company"].ToString();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            List<CapturesViewModel> ListCapturesViewModel = new List<CapturesViewModel>();
+            if (Datefrom != null && Dateto != null && (!string.IsNullOrEmpty(user) || idgroup != Guid.Empty))
+            {
+                Dateto = Dateto.Value.AddHours(23).AddMinutes(59);
+
+                List<string> users = new List<string>();
+
+                if (!string.IsNullOrEmpty(user))
+                {
+                    users.Add(user);
+                }
+
+                if (idgroup != Guid.Empty)
+                {
+                    users = new List<string>();
+                    users = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_EmployeesGroups.idemployeesGroup == idgroup).Select(g => g.Agent_Employee.Usuario).ToList();
+                }
+
+                ListCapturesViewModel = (from e in MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture").AsQueryable<CaptureBase>()
+                                         where e.IdCompany == IdCompany_
+                                         && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)
+                                         select new CapturesViewModel
+                                         {
+                                             idrecord = e.idrecord,
+                                             UserName = e.UserName,
+                                             Image = e.Image,
+                                             Date = e.Date
+                                         }).OrderByDescending(o => o.Date).Take(100).Distinct().ToList();
+
+                if (users.Count() > 0)
+                {
+                    ListCapturesViewModel = ListCapturesViewModel.Where(p => users.Contains(p.UserName)).ToList();
+                }
+
+                foreach (var i in ListCapturesViewModel)
+                {
+                    i.image = Convert.ToBase64String(i.Image);
+                    i.Date = i.Date.AddHours(-5);
+                }
+
+                ViewBag.Datefrom = Datefrom.Value.ToString("yyyy-MM-dd");
+                ViewBag.Dateto = Dateto.Value.ToString("yyyy-MM-dd");
+            }
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgroup = sli;
+
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
+            sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sle;
+
+
+
+
+            return View(ListCapturesViewModel.OrderByDescending(o => o.Date));
+        }
+        [HttpGet]
+        public JsonResult GetCapturesReport(string id_)
+        {
+            try
+            {
+                Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+                MongoHelper.UserCapture = MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture");
+                var builder = Builders<CaptureBase>.Filter;
+                var filter = builder.Eq("idrecord", id_);
+
+                CaptureBase Capturelist = new CaptureBase();
+                Capturelist = MongoHelper.UserCapture.Find(filter).SingleOrDefault();
+
+                CapturesViewModel cvm = new CapturesViewModel();
+                if (Capturelist != null)
+                {
+                    cvm._id = Capturelist._id.ToString();
+                    cvm.UserName = Capturelist.UserName;
+                    cvm.idrecord = Capturelist.idrecord;
+                    cvm.image = Convert.ToBase64String(Capturelist.Image);
+                    cvm.Date = Capturelist.Date.AddHours(-5);
+                }
+                return Json(cvm, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<SelectListItem> CreateList(IEnumerable list, string dataValueField, string dataTextField, object selectedValue = null)
+        {
+            List<SelectListItem> sli = new List<SelectListItem>();
+            SelectListItem sl;
+            foreach (var i in list)
+            {
+                sl = new SelectListItem();
+                foreach (PropertyInfo p in i.GetType().GetProperties())
+                {
+                    if (p.Name == dataTextField)
+                        sl.Text = p.GetValue(i).ToString();
+
+                    if (p.Name == dataValueField)
+                    {
+                        sl.Value = p.GetValue(i).ToString();
+                        if (selectedValue != null)
+                            if (sl.Value == selectedValue.ToString())
+                                sl.Selected = true;
+                    }
+                }
+                sli.Add(sl);
+            }
+            return sli;
+        }
 
         #endregion
     }

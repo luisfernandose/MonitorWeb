@@ -12,6 +12,7 @@ using static Queue.Utils.Enums;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class Agent_GroupHoraryDetailController : BaseController
     {
         private QueueContext db = new QueueContext();

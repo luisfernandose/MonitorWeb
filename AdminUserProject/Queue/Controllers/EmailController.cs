@@ -87,7 +87,7 @@ namespace Queue.Controllers
             try
             {
                 var userCredentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["SMTPUserName"].ToString(), ConfigurationManager.AppSettings["SMTPPassword"]);
-
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
                 SmtpClient smtp = new SmtpClient
                 {
                     Host = Convert.ToString(ConfigurationManager.AppSettings["SMTPHost"]),
@@ -97,7 +97,8 @@ namespace Queue.Controllers
                     Timeout = Convert.ToInt32(ConfigurationManager.AppSettings["SMTPTimeout"])
                 };
                 smtp.Credentials = userCredentials;
-                //smtp.UseDefaultCredentials = false;
+                //smtp.UseDefaultCredentials = true;
+                smtp.EnableSsl = true;
 
                 MailMessage message = new MailMessage();
                 message.From = new MailAddress(ConfigurationManager.AppSettings["SenderEmailAddress"], ConfigurationManager.AppSettings["SenderDisplayName"]);

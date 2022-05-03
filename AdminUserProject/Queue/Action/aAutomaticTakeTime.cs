@@ -49,8 +49,8 @@ namespace Queue.Action
                         bool response = opc.AddTracker(ltb);
                         if (response)
                             rp.response_code = GenericErrors.SaveOk.ToString();
-                        else                            
-                            rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);                        
+                        else
+                            rp = autil.ReturnMesagge(ref rp, (int)GenericErrors.GeneralError, string.Empty, null, HttpStatusCode.InternalServerError);
                     }
                 }
                 else
@@ -265,19 +265,21 @@ namespace Queue.Action
                     {
                         Guid IdEmpresa = Guid.Parse(hm.idempresa);
 
-                        Agent_Employee ege = ent.Agent_Employee.Where(r => r.IdCompany == IdEmpresa && r.Usuario == hm.user).Include(g => g.Agent_GroupHorary).SingleOrDefault();
-
-                        if (ege.Agent_GroupHorary != null)
+                        Agent_Employee ege = ent.Agent_Employee.Where(r => r.IdCompany == IdEmpresa && r.Usuario.ToLower() == hm.user.ToLower()).Include(g => g.Agent_GroupHorary).SingleOrDefault();
+                        if (ege != null)
                         {
-                            rp.HoraryModel.Agent_GroupHoraryDetail = ent.Agent_GroupHoraryDetail
-                                                                    .Where(d => d.Agent_GroupHorary.Id_GroupHorary == ege.Agent_GroupHorary.Id_GroupHorary)
-                                                                    .Select(p => new HoraryDetail
-                                                                    {
-                                                                        Day = p.Day,
-                                                                        HourFrom = p.HourFrom,
-                                                                        HourUntil = p.HourUntil,
-                                                                        Type = p.Type
-                                                                    }).ToList();
+                            if (ege.Agent_GroupHorary != null)
+                            {
+                                rp.HoraryModel.Agent_GroupHoraryDetail = ent.Agent_GroupHoraryDetail
+                                                                        .Where(d => d.Agent_GroupHorary.Id_GroupHorary == ege.Agent_GroupHorary.Id_GroupHorary)
+                                                                        .Select(p => new HoraryDetail
+                                                                        {
+                                                                            Day = p.Day,
+                                                                            HourFrom = p.HourFrom,
+                                                                            HourUntil = p.HourUntil,
+                                                                            Type = p.Type
+                                                                        }).ToList();
+                            }
                         }
                     }
                     //retorna un response, con el campo data lleno con la respuesta.               

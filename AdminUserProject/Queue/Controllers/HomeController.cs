@@ -174,6 +174,9 @@ namespace Queue.Controllers
             return lrs;
         }
 
+       
+
+
         [SessionAuthorize]
         public ActionResult About()
         {

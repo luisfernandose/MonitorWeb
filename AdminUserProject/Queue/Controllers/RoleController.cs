@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class RoleController : Controller
     {
         private ApplicationRoleManager _roleManager;

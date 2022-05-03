@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class ReportGanttController : Controller
     {
         private QueueContext db = new QueueContext();

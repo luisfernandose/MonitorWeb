@@ -10,6 +10,7 @@ using System.Web.Http;
 
 namespace Queue.Controllers
 {
+    [Authorize]
     public class ScheduleController : ApiController
     {
         aUtilities ut = new aUtilities();

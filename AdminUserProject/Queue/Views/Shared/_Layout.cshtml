@@ -15,6 +15,7 @@
     <link href="~/Content/css/master_style.css" rel="stylesheet" />
     <link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
     <link href="~/Content/css/Spiner.css" rel="stylesheet" />
+    <link href="~/Content/jquery.fancybox.css" rel="stylesheet" />
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">
@@ -148,6 +149,12 @@
                                         <span>Cargos</span>
                                     </a>
                                 </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_EmployeesGroups")">
+                                        <i class="mdi mdi-clipboard-account"></i>
+                                        <span>Grupos Usuarios</span>
+                                    </a>
+                                </li>
 
                                 <li class="">
                                     <a href="@Url.Action("Index", "Agent_ProgramClasification")">
@@ -174,12 +181,6 @@
                             </a>
                         </li>
                     }
-                    @if (User.IsInRole("User"))
-                    {
-
-                    }
-
-
 
                     <li class="treeview">
                         <a href="#">
@@ -190,13 +191,28 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            @*<li><a href="@Url.Action("Index", "UserReport")">Por Empleado</a></li>
-                <li><a href="@Url.Action("Index", "ReportApplications")">Aplicaciones mas usadas</a></li>
-                <li><a href="@Url.Action("Index", "MainApplicationsAndSites")">Principales Sitios Web y Aplicaciones</a></li>*@
                             <li>
                                 <a href="@Url.Action("Index", "ReportGantt")">
                                     <i class="mdi mdi-gauge"></i>
                                     <span>Reporte Actividades</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("SoftwareReport", "Operation")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Software</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("HardwareReport", "Operation")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Hardware</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CapturesReport", "Operation")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Capturas</span>
                                 </a>
                             </li>
                         </ul>
@@ -226,12 +242,17 @@
             <!-- Main content -->
             <section class="content">
                 @RenderBody()
+                <div style="display: none;" id="hidden-content">
+                    <img id="large-image" src="" />
+                </div>
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             &copy; @DateTime.Now.Year - MonitorTracker - ALL GROUP TECH
+            <span id="siteseal">
+            @*<script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=7sy6EnKmQtilyicwT374CUUg1zSSb8vpuoxFrCpOhXpZtBapQHPrkBh0Tbb2"></script></span>*@
         </footer>
         <div class="control-sidebar-bg"></div>
 
@@ -283,9 +304,7 @@
     <script src="~/js/Common.js?02"></script>
     <script src="~/Scripts/select2.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
-
+    <script src="~/Scripts/jquery.fancybox.js"></script>
 
 
     @if (TempData.ContainsKey(Queue.Utils.Alerts.SUCCESS))

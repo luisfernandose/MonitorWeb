@@ -1093,3 +1093,5 @@ D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj
 D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.dll
 D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.pdb
 D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.csproj.AssemblyReference.cache
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.Migrations.agregandogruposdeempleasos.resources
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.Migrations.agregandogruposdeempleasosnan.resources

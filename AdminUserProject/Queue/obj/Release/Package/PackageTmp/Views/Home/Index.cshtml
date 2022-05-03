@@ -169,19 +169,21 @@
                                             <th>Horas Productivas</th>
                                             <th>Horas Improductivas</th>
                                             <th>Horas Neutrales</th>
+                                            <th>Horas No Clasificadas</th>
                                             <th>Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in Model.DataPerUser)
                                         {
-                                            <tr>
-                                                <td>@item.User</td>
-                                                <td>@item.ProductiveTime.ToString("0.0#")</td>
-                                                <td>@item.ImproductiveTime.ToString("0.0#")</td>
-                                                <td>@item.NeutralTime.ToString("0.0#")</td>
-                                                <td>@item.TotalHours.ToString("0.0#")</td>
-                                            </tr>
+                                        <tr>
+                                            <td>@item.User</td>
+                                            <td>@item.ProductiveTime.ToString("0.0#")</td>
+                                            <td>@item.ImproductiveTime.ToString("0.0#")</td>
+                                            <td>@item.NeutralTime.ToString("0.0#")</td>
+                                            <td>@item.UnclasifyTime.ToString("0.0#")</td>
+                                            <td>@item.TotalHours.ToString("0.0#")</td>
+                                        </tr>
                                         }
                                     </tbody>
                                 </table>
