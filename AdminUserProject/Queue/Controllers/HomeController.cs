@@ -141,7 +141,14 @@ namespace Queue.Controllers
 
                 foreach (var k in data.Where(d => d.User == j.Key).GroupBy(g => g.Clasification))
                 {
-                    decimal total = decimal.Parse(data.Where(f => f.Clasification == k.Key && f.User == j.Key).Sum(b => b.Time).ToString());
+                    string di = data.Where(f => f.Clasification == k.Key && f.User == j.Key).OrderBy(t => t.Date).Select(g => g.Date).FirstOrDefault();
+                    string df = data.Where(f => f.Clasification == k.Key && f.User == j.Key).OrderByDescending(t => t.Date).Select(g => g.Date).FirstOrDefault();
+
+
+                    double total = double.Parse(data.Where(f => f.Clasification == k.Key && f.User == j.Key).Sum(b => b.Time).ToString());
+                    TimeSpan time = TimeSpan.FromSeconds(total);
+                    string str = time.ToString(@"hh\:mm\:ss\:fff");
+
                     if (total > 0)
                     {
                         //para sacfar cantidad de minutos

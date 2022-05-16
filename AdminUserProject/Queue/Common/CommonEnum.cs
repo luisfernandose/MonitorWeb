@@ -14,7 +14,8 @@ namespace Queue.Common
             RequiredFields = 3,
             GeneralError = 4,
             SaveOk = 5,
-            InvalidToken = 6
+            InvalidToken = 6,
+            Licenceend = 7
         }
     }
 }

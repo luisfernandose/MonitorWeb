@@ -41,7 +41,7 @@
                 @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "frm_register" }))
                 {
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-lg-3">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label col-md-12" })
                                 <div class="col-md-10">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-lg-3">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.DateTo, htmlAttributes: new { @class = "control-label col-md-12" })
                                 <div class="col-md-10">
@@ -60,13 +60,13 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-3 col-md-3 col-3">
+                        <div class="col-lg-3">
                             <label>Empleados</label>
                             <div class="input-group">
                                 @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;" })
                             </div>
                         </div>
-                        <div class="col-xl-2 col-md-2 col-2">
+                        <div class="col-lg-2">
                             <br />
                             <div class="d-flex flex-row-reverse">
                                 <button id="add_Employee" name="add_dictionary" type="submit" value="Create" class="btn btn-info waves-effect waves-light btn-block">
@@ -88,7 +88,7 @@
                 <br />
                 <br />
                 <div class="row">
-                    <div class="col-xl-3 col-md-3 col-3">
+                    <div class="col-xl-3 col-md-3 col-lg-3">
                         <div style="background-color: #55CBCD !important" class="flexbox flex-justified text-center bg-success mb-30 pull-up">
                             <div class="no-shrink py-20">
                                 <span class="mdi mdi-clock-out font-size-50"></span>
@@ -101,7 +101,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-3 col-md-3 col-3">
+                    <div class="col-xl-3 col-md-3 col-lg-3">
                         <div style="background-color: #FF968A !important" class="flexbox flex-justified text-center bg-danger mb-30 pull-up">
                             <div class="no-shrink py-20">
                                 <span class="mdi mdi-clock-in font-size-50"></span>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-3 col-md-3 col-3">
+                    <div class="col-xl-3 col-md-3 col-lg-3">
                         <div style="background-color: #96B3C2 !important" class="flexbox flex-justified text-center bg-warning mb-30 pull-up">
                             <div class="no-shrink py-20">
                                 <span class="mdi mdi-clock-end font-size-50"></span>
@@ -127,7 +127,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-3 col-md-3 col-3">
+                    <div class="col-xl-3 col-md-3 col-lg-3">
                         <div style="background-color:gray !important" class="flexbox flex-justified text-center mb-30 pull-up">
                             <div class="no-shrink py-20">
                                 <span style="color:white" class="mdi mdi-cancel font-size-50"></span>
@@ -139,20 +139,9 @@
                             </div>
                         </div>
                     </div>
-                    <br />
-                    <hr />
-
-
-
                 </div>
-                <div class="row">
-                    <div id="columnchart_values"></div>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                </div>
+                <br />
+
 
                 <div class="col-12 col-lg-12">
                     <div class="box">
@@ -176,14 +165,14 @@
                                     <tbody>
                                         @foreach (var item in Model.DataPerUser)
                                         {
-                                        <tr>
-                                            <td>@item.User</td>
-                                            <td>@item.ProductiveTime.ToString("0.0#")</td>
-                                            <td>@item.ImproductiveTime.ToString("0.0#")</td>
-                                            <td>@item.NeutralTime.ToString("0.0#")</td>
-                                            <td>@item.UnclasifyTime.ToString("0.0#")</td>
-                                            <td>@item.TotalHours.ToString("0.0#")</td>
-                                        </tr>
+                                            <tr>
+                                                <td>@item.User</td>
+                                                <td>@item.ProductiveTime.ToString("0.0#")</td>
+                                                <td>@item.ImproductiveTime.ToString("0.0#")</td>
+                                                <td>@item.NeutralTime.ToString("0.0#")</td>
+                                                <td>@item.UnclasifyTime.ToString("0.0#")</td>
+                                                <td>@item.TotalHours.ToString("0.0#")</td>
+                                            </tr>
                                         }
                                     </tbody>
                                 </table>
@@ -191,6 +180,14 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div id="chart_wrap">
+                    <div id="columnchart_values"></div>
+                    <br />
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -202,17 +199,12 @@
     google.charts.load("current", { packages: ['corechart'] });
     google.charts.setOnLoadCallback(drawChartApp);
     jQuery(document).ready(function () {
-
         $('#ddlUsers').select2({
             theme: "classic"
         });
-
         drawChartApp();
-
     });
-
     var ChartImproductive = null;
-
     function employeFilter() {
         if (!$("#btnempfilter").hasClass("active")) {
             $("#listaempleados").show();
@@ -223,24 +215,18 @@
         MoreUsedApp();
     }
     function drawChartApp() {
-
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Aplicación');
         data.addColumn('number', 'Porcentaje de Uso');
         data.addColumn({ type: 'string', role: 'style' });
-
-
         var datArrary = [];
         var datArrarycolors = [];
          var data_ = @Html.Raw(Json.Encode(Model.graph));
         $.each(data_, function (index, value) {
-
             datArrary.push([value.element, value.decimalvalue, value.color])
             datArrarycolors.push(value.color);
         });
         data.addRows(datArrary);
-
-
         var options = {
             title: "5 aplicaciones más usadas",
             titleTextStyle: {
@@ -263,7 +249,6 @@
             url: "/Home/MoreUsedApp",
             success: function (d) {
                 var contador = 1;
-
                 $("div#statslist").append("<div id='preload" + contador + "'><h2></h2></div> <div class='table-responsive'> <canvas id='Chart" + contador + "' width='50' height='350'></canvas> </div>");
                 var divname = "div#preload" + contador + " h2";
                 var chartname = "Chart" + contador
@@ -274,7 +259,6 @@
                     var b = Math.floor(Math.random() * 255);
                     return "rgb(" + r + "," + g + "," + b + ")";
                 };
-
                 var i;
                 for (i = 0; i < d.data.length; i++) {
                     coloR.push(dynamicColors());
@@ -310,7 +294,6 @@
     }
     $("input:radio[name=contact]").click(function () {
         var variable = $("input:radio[name=contact]:checked").val();
-
         switch (variable) {
             case 'Productivo':
                 ReportSpedometer(variable)
@@ -335,7 +318,6 @@
                 successFunc(response);
             },
         });
-
         function successFunc(jsondata) {
             switch (variable) {
                 case 'Productivo':
@@ -526,12 +508,10 @@
     //        //idDeparment: $("#Id").val(),
     //        //idUser: $("#ddlUser").val()
     //    };
-
     //    /*ReportMoreApplications(parameter);*/
     //    //ReportWebApplications(parameter);
     //    await ReportImproductiveApplications(parameter);
     //});
-
     //$('#DateTo').change(async function () {
     //    var parameter = {
     //        dateFrom: $("#DateFrom").val(),
@@ -539,7 +519,6 @@
     //        //idDeparment: $("#Id").val(),
     //        //idUser: $("#ddlUser").val()
     //    };
-
     //    /* ReportMoreApplications(parameter);*/
     //    //ReportWebApplications(parameter);
     //    await ReportImproductiveApplications(parameter);

@@ -25,7 +25,7 @@
                 <div class="box-body">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-lg-4">
                                 @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
                                 @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
                                 <div class="input-group">
@@ -52,73 +52,74 @@
         {
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.idemployeesGroup)
-            <div class="box">
-                <div class="box-header with-border">
-                    <h4 class="box-title">Agregar Usuario</h4>
-                </div>
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-4">
-                                <label asp-for="idemployee" class="control-label"></label>
-                                <span asp-validation-for="idemployee" class="text-danger"></span>
-                                @Html.DropDownList("idemployee", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
-                            </div>
+    <div class="box">
+        <div class="box-header with-border">
+            <h4 class="box-title">Agregar Usuario</h4>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label asp-for="idemployee" class="control-label"></label>
+                        <span asp-validation-for="idemployee" class="text-danger"></span>
+                        @Html.DropDownList("idemployee", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
 
-                            <div class="col-2">
-                                <div class="p-2">
-
-                                    <button id="edit" name="add_dictionary" type="submit" value="Create" class="btn btn-info">
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="box-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="table-responsive">
-                                <table id="myTable" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Nombres
-                                            </th>
-                                            <th>
-                                                Usuario
-                                            </th>
-                                            <th>
-                                                Eliminar
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Agent_EmployeeGroupsEmployee_list)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Nombre)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Usuario)
-                                                </td>
-
-                                                <td style="text-align:center">
-                                                    <a class="btn btn-outline-secondary" href="@Url.Action("Deleteemployee", "Agent_EmployeesGroups", new { idEmployee = item.idEmployee, idAgent_EmployeeGroupsEmployee = Model.idemployeesGroup})"><i class="fa fa-trash"></i></a>
-                                                </td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="d-flex flex-row-reverse">
+                <div class="p-2">
+                    <button id="edit" name="add_dictionary" type="submit" value="Create" class="btn btn-info">
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="box-body">
+            <div class="form-group">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="myTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Nombres
+                                    </th>
+                                    <th>
+                                        Usuario
+                                    </th>
+                                    <th>
+                                        Eliminar
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Agent_EmployeeGroupsEmployee_list)
+                                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usuario)
+                    </td>
+
+                    <td style="text-align:center">
+                        <a class="btn btn-outline-secondary" href="@Url.Action("Deleteemployee", "Agent_EmployeesGroups", new { idEmployee = item.idEmployee, idAgent_EmployeeGroupsEmployee = Model.idemployeesGroup})"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         }
 
 

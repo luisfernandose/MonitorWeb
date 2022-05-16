@@ -81,6 +81,60 @@ namespace Queue.Controllers
 
         #endregion
 
+        #region Alerts
+        public async void SendAlert(string email, int type, List<string> users)
+        {
+            await SendMail(email, SeetAlertEmail(email, type, users), ConfigurationManager.AppSettings["EmailSubjec"]);
+        }
+
+        private AlternateView SeetAlertEmail(string email, int type, List<string> users)
+        {
+            try
+            {
+                //se arma el correo que se envia para el ambio de clave
+                string ruta = ConfigurationManager.AppSettings["AlertsTemplate"];
+
+                string plantilla = Path.Combine(HttpRuntime.AppDomainAppPath, ruta);
+
+                var html = System.IO.File.ReadAllText(plantilla);
+                string type_ = string.Empty;
+                switch (type)
+                {
+                    case 2:
+                        type_ = "APLIACIONES IMPRODUCTIVAS CON MAS DE 30 MIN DE USO";
+                        break;
+                    case 3:
+                        type_ = "MAS DE 30 MIN DE INACTIVIDAD ACUMULADA";
+                        break;
+                    case 4:
+                        type_ = "NO REPORTA DESDE HACE MAS DE 30 MIN";
+                        break;
+
+                    default:
+                        break;
+                }
+                html = html.Replace("{{type}}", type_);
+
+                string userlist = string.Empty;
+
+                foreach (var u in users)
+                {
+                    userlist = userlist + "<tr><td>" + u + "</td></tr>";
+                }
+
+                html = html.Replace("{{userlist}}", userlist);
+
+                AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
+
+                return av;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
 
         private async Task<bool> SendMail(string toAddress, AlternateView emailbody, string Subject)
         {

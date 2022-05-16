@@ -66,11 +66,21 @@ namespace Queue.Controllers
 
                 //sele restan 5 horas porque no se que pasa con el servidor de mkongo que le suma 5 horas, no se como configurar una UTC acorde con mongo para que ponga
                 //la hora que es.
-                //foreach (var j in tb)
-                //{
-                //    j.Date = j.Date.AddHours(-5);
-                //    j.FocusTime = j.FocusTime.AddHours(-5);
-                //}
+                foreach (var j in tb)
+                {
+                    j.Date = new DateTime(j.Date.Year, j.Date.Month, j.Date.Day, j.Date.Hour, j.Date.Minute, j.Date.Second, j.Date.Kind);
+                    j.FocusTime = new DateTime(j.FocusTime.Year, j.FocusTime.Month, j.FocusTime.Day, j.FocusTime.Hour, j.FocusTime.Minute, j.FocusTime.Second, j.FocusTime.Kind);
+
+                }
+
+
+                //MongoHelper.TrakerBase = MongoHelper.database.GetCollection<TrakerBase>("TrackerTime");
+                //var builder = Builders<TrakerBase>.Filter;
+
+                //var filter2 = builder.Gte("Date", DateTime.Today) & builder.Eq("Pc", Pc) & builder.Eq("status", true);
+
+                //var results2 = MongoHelper.TrakerBase.Find(filter2).ToList();
+
                 MongoHelper.TrakerBase.InsertMany(tb);
 
                 return true;
@@ -232,6 +242,8 @@ namespace Queue.Controllers
                 throw ex;
             }
         }
+
+
 
         #endregion
 
@@ -450,6 +462,21 @@ namespace Queue.Controllers
 
                 if (user == "Todos" || user == null)
                 {
+
+                    List<AutomaticTakeTimeModelViewModel> AutomaticTakeTimeModel_ = MongoHelper.database.GetCollection<AutomaticTakeTimeModelViewModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModelViewModel>().
+                       Where(e => e.IdEmpresa == idcompany
+                       && (e.FocusTime >= _startTest
+                       && e.FocusTime <= _endTest)).ToList();
+
+
+                    double actv_ = AutomaticTakeTimeModel_.Where(f => f.UserName == "AGTCO").Sum(a => a.Activity);
+                    TimeSpan time = TimeSpan.FromSeconds(actv_);
+                    string str = time.ToString(@"hh\:mm\:ss\:fff");
+
+
+                    DateTime di = AutomaticTakeTimeModel_.Where(f => f.UserName == "AGTCO").OrderBy(d => d.Date).Select(b => b.Date).FirstOrDefault();
+                    DateTime de = AutomaticTakeTimeModel_.Where(f => f.UserName == "AGTCO").OrderByDescending(d => d.Date).Select(b => b.Date).FirstOrDefault();
+
                     queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
                     Where(e => e.IdEmpresa == idcompany
                     && (e.FocusTime >= _startTest
@@ -467,15 +494,15 @@ namespace Queue.Controllers
                 else
                 {
                     queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
-                  Where(e => e.IdEmpresa == idcompany && (e.FocusTime >= _startTest && e.FocusTime <= _endTest) && e.UserName == user)
-                  .Select(e =>
-                             new BasicStatsDashboard
-                             {
-                                 User = e.UserName,
-                                 Application = e.Application,
-                                 Time = e.Activity,
-                                 Date_ = e.Date
-                             }).ToList();
+                    Where(e => e.IdEmpresa == idcompany && (e.FocusTime >= _startTest && e.FocusTime <= _endTest) && e.UserName == user)
+                    .Select(e =>
+                               new BasicStatsDashboard
+                               {
+                                   User = e.UserName,
+                                   Application = e.Application,
+                                   Time = e.Activity,
+                                   Date_ = e.Date
+                               }).ToList();
                 }
 
                 foreach (var j in queryPrincipal)
@@ -2119,7 +2146,7 @@ namespace Queue.Controllers
 
 
         public ActionResult CapturesReport(string user, Guid? idgroup, DateTime? Datefrom, DateTime? Dateto)
-        {          
+        {
             Guid IdCompany = Guid.Empty;
             string IdCompany_ = IdCompany.ToString();
             try
@@ -2242,6 +2269,159 @@ namespace Queue.Controllers
                 sli.Add(sl);
             }
             return sli;
+        }
+
+        #endregion
+
+
+        #region Alerts
+
+        public void alert()
+        {
+            //primero borramos las alertas del dia anterior
+            db.Alerts.RemoveRange(db.Alerts.Where(g => g.date < DateTime.Today).ToList());
+            db.SaveChanges();
+
+            MongoHelper.TrakerBase = MongoHelper.database.GetCollection<TrakerBase>("TrackerTime");
+            var builder = Builders<TrakerBase>.Filter;
+
+            //var filter = builder.Gte("Date", DateTime.Today.AddDays(-5));
+            var filter = builder.Gte("Date", DateTime.Today);
+
+            var results = MongoHelper.TrakerBase.Find(filter).ToList();
+
+            List<Agent_ProgramClasification> clasif = db.Agent_ProgramClasification.ToList();
+            List<AlertsDataViewModel> lavm = new List<AlertsDataViewModel>();
+
+            foreach (var i in results.GroupBy(g => g.IdEmpresa))
+            {
+                foreach (var j in results.Where(t => t.IdEmpresa == i.Key).GroupBy(g => g.UserName))
+                {
+                    foreach (var l in results.Where(t => t.IdEmpresa == i.Key && t.UserName == j.Key).GroupBy(a => a.Application))
+                    {
+                        AlertsDataViewModel avm = new AlertsDataViewModel();
+                        Guid idempresa = Guid.Parse(i.Key);
+                        avm.idempresa = i.Key;
+                        avm.username = j.Key;
+                        avm.application = l.Key;
+                        avm.activity = results.Where(t => t.IdEmpresa == i.Key && t.UserName == j.Key && t.Application == l.Key).Sum(r => r.Activity);
+                        avm.inactivity = results.Where(t => t.IdEmpresa == i.Key && t.UserName == j.Key && t.Application == l.Key).Sum(r => r.Inactivity).Value;
+                        avm.clasification = clasif.Where(c => c.Agent_Empresa.IdCompany == idempresa && c.name == l.Key).Select(v => v.clasification).FirstOrDefault();
+                        lavm.Add(avm);
+                    }
+                }
+            }
+
+            if (lavm.Count() > 0)
+            {
+                //clasificaciones
+                // 1 prodictivas
+                // 2 improductivas
+                // 3 neutrales
+                // 
+
+                // TIPOS DE ALERTAS
+                // 2: APLIACIONES IMPRODUCTIVAS CON MAS DE 30 MIN DE USO
+                // 3: MAS DE 30 MIN DE INACTIVIDAD ACUMULADA
+                // 4: NO REPORTA DESDE HACE MAS DE 30 MIN
+
+                foreach (var n in lavm.GroupBy(f => f.idempresa))
+                {
+                    foreach (var m in lavm.Where(t => t.idempresa == n.Key).GroupBy(u => u.username))
+                    {
+                        //sacamos la cantidad de tiempo de aplicaciones impoductivas de cada usuario
+                        double improductivity = lavm.Where(p => p.username == m.Key && p.clasification == 2).Sum(s => s.activity);
+                        Guid _idempresa = Guid.Parse(n.Key);
+
+                        //alerta de usuario con mas de 30 min de uso en aplicaciones improductivas
+                        if (improductivity >= 30 && db.Alerts.Where(r => r.tipo == 2 && r.Agent_Employee.Usuario == m.Key && r.Agent_Employee.IdCompany == _idempresa).Count() == 0)
+                        {
+                            Alerts a = new Alerts();
+                            a.IdAlerts = Guid.NewGuid();
+                            a.Agent_Employee = db.Agent_Employee.Where(d => d.IdCompany == _idempresa && d.Usuario == m.Key).SingleOrDefault();
+                            a.tipo = 2;
+                            a.status = false;
+                            a.date = DateTime.Now;
+                            db.Alerts.Add(a);
+                        }
+
+                        double inactivity = lavm.Where(p => p.username == m.Key).Sum(s => s.inactivity);
+
+                        //alerta de usuario con mas de 30 min de inactividad acumulada
+                        if (inactivity >= 30 && db.Alerts.Where(r => r.tipo == 3 && r.Agent_Employee.Usuario == m.Key && r.Agent_Employee.IdCompany == _idempresa).Count() == 0)
+                        {
+                            Alerts a = new Alerts();
+                            a.IdAlerts = Guid.NewGuid();
+                            a.Agent_Employee = db.Agent_Employee.Where(d => d.IdCompany == _idempresa && d.Usuario == m.Key).SingleOrDefault();
+                            a.tipo = 3;
+                            a.status = false;
+                            a.date = DateTime.Now;
+                            db.Alerts.Add(a);
+                        }
+
+
+                        // no reporta desde hace mas de 30 min
+
+                        //nos traemos la ultima vez que reporto
+                        DateTime lastreport = results.Where(p => p.UserName == m.Key && p.IdEmpresa == n.Key).OrderByDescending(o => o.Date).Select(f => f.Date).FirstOrDefault();
+
+                        //sacamos la cuenta de cuantos minutos han pasado desde su ultimo reporte
+                        var lastreportmin_ = (DateTime.Now - lastreport).TotalMinutes;
+
+                        //si mi ultimo reporte fue hace mas de 30 min, entonces alerto
+                        if (lastreportmin_ >= 30 && db.Alerts.Where(r => r.tipo == 4 && r.Agent_Employee.Usuario == m.Key && r.Agent_Employee.IdCompany == _idempresa).Count() == 0)
+                        {
+                            Alerts a = new Alerts();
+                            a.IdAlerts = Guid.NewGuid();
+                            a.Agent_Employee = db.Agent_Employee.Where(d => d.IdCompany == _idempresa && d.Usuario == m.Key).SingleOrDefault();
+                            a.tipo = 4;
+                            a.status = false;
+                            a.date = DateTime.Now;
+                            db.Alerts.Add(a);
+                        }
+                        else
+                        {
+                            //si no consigue nada tratamos de borrar ya que ahora si esta reportando
+                            db.Alerts.RemoveRange(db.Alerts.Where(r => r.tipo == 4 && r.Agent_Employee.Usuario == m.Key && r.Agent_Employee.IdCompany == _idempresa).ToList());
+                        }
+                    }
+
+                    db.SaveChanges();
+
+                    ///DESPUES QUE HACEMOS LAS VALIDACIONES, BUSCAMOS LO QUE HAY QUE REPORTAR PARA ENVIAR LOS CORREOS
+
+                    List<Alerts> Alerts_ = db.Alerts.Where(t => t.status == false).ToList();
+                    foreach (var c in Alerts_.GroupBy(g => g.Agent_Employee.IdCompany))
+                    {
+                        Agent_Empresa empr = db.Agent_Empresa.Where(e => e.IdCompany == c.Key).SingleOrDefault();
+                        List<string> users_ = new List<string>();
+                        foreach (var d in Alerts_.Where(t => t.Agent_Employee.IdCompany == c.Key).GroupBy(l => l.tipo))
+                        {
+                            users_ = new List<string>();
+                            foreach (var e in Alerts_.Where(t => t.Agent_Employee.IdCompany == c.Key && t.tipo == d.Key))
+                            {
+                                users_.Add(e.Agent_Employee.Usuario);
+                            }
+
+                            if (users_.Count() > 0)
+                            {
+                                EmailController ec = new EmailController();
+                                ec.SendAlert(empr.Email, d.Key, users_);
+                                //ec.SendAlert("luisfernandose@gmail.com", d.Key, users_);
+                            }
+
+                            List<Alerts> laedit = db.Alerts.Where(h => h.Agent_Employee.IdCompany == c.Key && h.tipo == d.Key).ToList();
+
+                            foreach (var o in laedit)
+                            {
+                                o.status = true;
+                            }
+
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
         }
 
         #endregion
