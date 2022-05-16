@@ -24,27 +24,25 @@
                 @using (Html.BeginForm("SoftwareReport", "Operation"))
                 {
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-lg-4">
                             <label asp-for="idgroup" class="control-label">Grupos</label>
                             <span asp-validation-for="idgroup" class="text-danger"></span>
                             @Html.DropDownList("idgroup", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
                         </div>
-                        <div class="col-4">
+                        <div class="col-lg-4">
                             <label asp-for="user" class="control-label">Usuarios</label>
                             <span asp-validation-for="user" class="text-danger"></span>
                             @Html.DropDownList("user", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-8">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class=""></i>Consultar
+                        <div class="col-lg-3">
+                            <br />
+                            <button class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
+                                <strong>Consultar</strong>
                             </button>
                         </div>
                     </div>
                 }
+
                 <br />
                 <br />
                 <br />
@@ -66,15 +64,14 @@
                             {
                                 foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.program)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.quantity)
-                                        </td>
-                                    </tr>
-                                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.program)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.quantity)
+                    </td>
+                </tr>}
                             }
 
                         </tbody>

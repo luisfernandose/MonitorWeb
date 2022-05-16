@@ -63,23 +63,23 @@ namespace Queue.Models
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
-        public decimal ProductiveTime { get; set; }
+        public double ProductiveTime { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
-        public decimal ImproductiveTime { get; set; }
+        public double ImproductiveTime { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
-        public decimal NeutralTime { get; set; }
+        public double NeutralTime { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
-        public decimal UnclasifyTime { get; set; }
+        public double UnclasifyTime { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
-        public decimal TotalHours
+        public double TotalHours
         {
             get
             {

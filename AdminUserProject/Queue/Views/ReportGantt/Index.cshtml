@@ -54,41 +54,42 @@
                 <h4 class="card-title">Selecciones rango de fechas a visualizar en las graficas</h4>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-lg-3">
                             <label>Fecha</label>
                             <div class="input-group">
                                 <input id="DateFrom" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                             </div>
                         </div>
 
-                        <div class=" col-3">
+                        <div class="col-lg-3">
                             <label>Mostrar Intervalos</label>
                             <div class="input-group">
                                 @Html.DropDownList("ddlPeriods", ListPeriods, "", new { @class = "form-control select2", style = "width:100%;", required = "required" })
                             </div>
                         </div>
 
-                        <div class=" col-3">
+                        <div class="col-lg-3">
                             <label>Empleados</label>
                             <div class="input-group">
                                 @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;", multiple = "true", required = "required" })
                             </div>
                         </div>
 
-                        <div class=" col-3">
+                        <div class="col-lg-3">
                             <br />
                             <button id="btnProcesarConsulta" class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
                                 <strong>Buscar</strong>
                             </button>
                         </div>
                     </div>
+                    <br />
                     <div class="row">
                         <h4>Mapa de Colores</h4>
                     </div>
-                    <div class="row">
+                    <div class="table-responsive">
                         @*['#55cbcd', '#ff968a', '#96b3c2', '#445a67'];*@
 
-                        <table class="form-control">
+                        <table class="table table-bordered table-striped">
                             <tr>
                                 <td>Productivas </td>
                                 <td style="background-color: #55cbcd;width:80px"></td>

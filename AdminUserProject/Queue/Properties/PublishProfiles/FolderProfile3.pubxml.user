@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <History>True|2022-04-22T23:30:47.7010395Z;True|2022-04-13T15:02:14.0466273-05:00;True|2022-03-24T16:26:33.5262309-05:00;True|2022-03-18T14:54:25.1991201-05:00;True|2022-03-07T11:44:16.4431837-05:00;False|2022-02-21T13:44:18.2283435-05:00;</History>
+    <History>True|2022-05-05T16:26:09.7676300Z;True|2022-04-22T18:30:47.7010395-05:00;True|2022-04-13T15:02:14.0466273-05:00;True|2022-03-24T16:26:33.5262309-05:00;True|2022-03-18T14:54:25.1991201-05:00;True|2022-03-07T11:44:16.4431837-05:00;False|2022-02-21T13:44:18.2283435-05:00;</History>
     <_PublishTargetUrl>D:\Proyectos\Personales\Monitor\Publicacion</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
@@ -29228,6 +29228,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll">
       <publishTime>07/11/2021 16:45:20</publishTime>
     </File>
+    <File Include="bin/Microsoft.Extensions.Logging.Abstractions.dll">
+      <publishTime>07/06/2018 00:26:54</publishTime>
+    </File>
     <File Include="bin/Microsoft.Extensions.Primitives.dll">
       <publishTime>07/13/2021 14:45:57</publishTime>
     </File>
@@ -29313,16 +29316,16 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:45:21</publishTime>
     </File>
     <File Include="bin/Quartz.dll">
-      <publishTime>07/11/2021 16:45:22</publishTime>
+      <publishTime>03/27/2022 03:09:38</publishTime>
     </File>
     <File Include="bin/Quartz.pdb">
       <publishTime>07/11/2021 16:45:22</publishTime>
     </File>
     <File Include="bin/Queue.dll">
-      <publishTime>04/27/2022 17:16:10</publishTime>
+      <publishTime>05/10/2022 16:49:17</publishTime>
     </File>
     <File Include="bin/Queue.pdb">
-      <publishTime>04/27/2022 17:16:10</publishTime>
+      <publishTime>05/10/2022 16:49:17</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>07/11/2021 16:45:20</publishTime>
@@ -29504,6 +29507,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/System.ComponentModel.TypeConverter.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
+    <File Include="bin/System.Configuration.ConfigurationManager.dll">
+      <publishTime>11/15/2019 08:38:16</publishTime>
+    </File>
     <File Include="bin/System.Console.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
@@ -29517,7 +29523,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
     <File Include="bin/System.Diagnostics.DiagnosticSource.dll">
-      <publishTime>07/11/2021 16:45:25</publishTime>
+      <publishTime>10/22/2021 18:41:28</publishTime>
     </File>
     <File Include="bin/System.Diagnostics.FileVersionInfo.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
@@ -29676,7 +29682,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
     <File Include="bin/System.Runtime.CompilerServices.Unsafe.dll">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>10/22/2021 18:40:18</publishTime>
     </File>
     <File Include="bin/System.Runtime.CompilerServices.VisualC.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
@@ -29711,6 +29717,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/System.Runtime.Serialization.Xml.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
+    <File Include="bin/System.Security.AccessControl.dll">
+      <publishTime>11/15/2019 08:41:04</publishTime>
+    </File>
     <File Include="bin/System.Security.Claims.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
@@ -29729,8 +29738,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="bin/System.Security.Cryptography.X509Certificates.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
     </File>
+    <File Include="bin/System.Security.Permissions.dll">
+      <publishTime>11/15/2019 08:38:24</publishTime>
+    </File>
     <File Include="bin/System.Security.Principal.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
+    </File>
+    <File Include="bin/System.Security.Principal.Windows.dll">
+      <publishTime>11/15/2019 08:41:16</publishTime>
     </File>
     <File Include="bin/System.Security.SecureString.dll">
       <publishTime>08/14/2021 17:46:13</publishTime>
@@ -29873,11 +29888,14 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Content/css/Spiner.css">
       <publishTime>10/07/2021 16:44:51</publishTime>
     </File>
+    <File Include="Content/email/Alerts.html">
+      <publishTime>05/10/2022 14:43:51</publishTime>
+    </File>
     <File Include="Content/email/Forgot.html">
-      <publishTime>07/11/2021 16:43:27</publishTime>
+      <publishTime>04/29/2022 11:42:21</publishTime>
     </File>
     <File Include="Content/email/Welcome.html">
-      <publishTime>07/11/2021 16:43:27</publishTime>
+      <publishTime>04/29/2022 11:29:45</publishTime>
     </File>
     <File Include="Content/jquery.fancybox.css">
       <publishTime>04/13/2022 08:17:34</publishTime>
@@ -42411,289 +42429,289 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:43:28</publishTime>
     </File>
     <File Include="Views/Account/ConfirmEmail.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/ExternalLoginConfirmation.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/ExternalLoginFailure.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/ForgotPassword.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/ForgotPasswordConfirmation.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/Login.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/Register.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>04/05/2022 13:19:36</publishTime>
     </File>
     <File Include="Views/Account/ResetPassword.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/ResetPasswordConfirmation.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/SendCode.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/VerifyCode.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Account/_ExternalLoginsListPartial.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Configuration/Create.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Configuration/Delete.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Configuration/Details.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Configuration/Edit.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Configuration/Index.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Employee/Create.cshtml">
-      <publishTime>04/13/2022 11:55:16</publishTime>
+      <publishTime>05/06/2022 12:26:04</publishTime>
     </File>
     <File Include="Views/Agent_Employee/Delete.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Employee/Edit.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>04/05/2022 13:01:10</publishTime>
     </File>
     <File Include="Views/Agent_Employee/Index.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>04/05/2022 17:08:56</publishTime>
     </File>
     <File Include="Views/Agent_Employee/uploaduser.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_EmployeesGroups/Create.cshtml">
-      <publishTime>04/07/2022 14:40:24</publishTime>
+      <publishTime>04/05/2022 14:23:18</publishTime>
     </File>
     <File Include="Views/Agent_EmployeesGroups/Delete.cshtml">
-      <publishTime>04/07/2022 14:58:14</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_EmployeesGroups/Details.cshtml">
-      <publishTime>04/07/2022 14:23:18</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_EmployeesGroups/Edit.cshtml">
-      <publishTime>04/08/2022 16:07:12</publishTime>
+      <publishTime>04/05/2022 14:39:09</publishTime>
     </File>
     <File Include="Views/Agent_EmployeesGroups/Index.cshtml">
-      <publishTime>04/07/2022 18:33:39</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Empresa/Create.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Empresa/Delete.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Empresa/Details.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Empresa/Edit.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Empresa/Index.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHorary/Create.cshtml">
-      <publishTime>03/30/2022 11:48:44</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHorary/Delete.cshtml">
-      <publishTime>04/07/2022 14:58:06</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHorary/Details.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHorary/Edit.cshtml">
-      <publishTime>04/07/2022 14:57:48</publishTime>
+      <publishTime>04/05/2022 14:41:32</publishTime>
     </File>
     <File Include="Views/Agent_GroupHorary/Index.cshtml">
-      <publishTime>03/30/2022 11:48:27</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHoraryDetail/Create.cshtml">
-      <publishTime>03/30/2022 11:50:49</publishTime>
+      <publishTime>04/05/2022 14:34:45</publishTime>
     </File>
     <File Include="Views/Agent_GroupHoraryDetail/Delete.cshtml">
-      <publishTime>03/06/2022 12:55:12</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHoraryDetail/Details.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_GroupHoraryDetail/Edit.cshtml">
-      <publishTime>03/30/2022 11:51:02</publishTime>
+      <publishTime>04/05/2022 14:42:37</publishTime>
     </File>
     <File Include="Views/Agent_GroupHoraryDetail/Index.cshtml">
-      <publishTime>03/30/2022 12:00:46</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_Job/Create.cshtml">
-      <publishTime>03/06/2022 09:41:42</publishTime>
+      <publishTime>04/05/2022 13:04:16</publishTime>
     </File>
     <File Include="Views/Agent_Job/Edit.cshtml">
-      <publishTime>03/06/2022 09:45:32</publishTime>
+      <publishTime>04/05/2022 13:03:41</publishTime>
     </File>
     <File Include="Views/Agent_Job/Index.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_ProgramClasification/Create.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>04/05/2022 14:29:17</publishTime>
     </File>
     <File Include="Views/Agent_ProgramClasification/Delete.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_ProgramClasification/Details.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Agent_ProgramClasification/Edit.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>04/05/2022 14:29:42</publishTime>
     </File>
     <File Include="Views/Agent_ProgramClasification/Index.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employees/Create.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employees/Delete.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employees/Details.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employees/Edit.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employees/Index.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/Create.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/Delete.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/Details.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/Edit.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/Index.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/_ContactCreate.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Employers/_ContactIndex.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Home/About.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Home/Contact.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>04/13/2022 15:41:47</publishTime>
+      <publishTime>05/06/2022 16:47:25</publishTime>
     </File>
     <File Include="Views/MainApplicationsAndSites/Index.cshtml">
-      <publishTime>09/18/2021 17:22:34</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Manage/AddPhoneNumber.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Manage/ChangePassword.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Manage/EditUser.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>04/05/2022 13:10:26</publishTime>
     </File>
     <File Include="Views/Manage/Index.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Manage/ManageLogins.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Manage/SetPassword.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Manage/UserList.cshtml">
-      <publishTime>03/31/2022 18:36:55</publishTime>
+      <publishTime>04/05/2022 12:23:56</publishTime>
     </File>
     <File Include="Views/Manage/VerifyPhoneNumber.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/MoreUsedApplications/Index.cshtml">
-      <publishTime>09/18/2021 17:43:37</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Operation/CapturesReport.cshtml">
-      <publishTime>04/13/2022 12:21:27</publishTime>
+      <publishTime>04/05/2022 15:25:46</publishTime>
     </File>
     <File Include="Views/Operation/HardwareReport.cshtml">
-      <publishTime>04/08/2022 18:22:01</publishTime>
+      <publishTime>04/05/2022 12:45:19</publishTime>
     </File>
     <File Include="Views/Operation/SoftwareReport.cshtml">
-      <publishTime>04/08/2022 16:08:33</publishTime>
+      <publishTime>04/05/2022 14:46:13</publishTime>
     </File>
     <File Include="Views/ReportApplications/Index.cshtml">
-      <publishTime>11/17/2021 19:16:19</publishTime>
+      <publishTime>04/05/2022 12:01:43</publishTime>
     </File>
     <File Include="Views/ReportGantt/Index.cshtml">
-      <publishTime>03/24/2022 08:38:54</publishTime>
+      <publishTime>04/05/2022 12:11:26</publishTime>
     </File>
     <File Include="Views/Role/Create.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Role/Delete.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Role/Details.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Role/Edit.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Role/Index.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Role/View.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
-      <publishTime>10/07/2021 16:44:51</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/Lockout.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>04/20/2022 19:03:10</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutElement.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutLogin.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutTablet.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/_LayoutViewer.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
-      <publishTime>07/11/2021 16:43:38</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/UserReport/Index.cshtml">
-      <publishTime>07/13/2021 14:45:57</publishTime>
+      <publishTime>02/05/2022 19:26:54</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>01/06/2022 13:01:19</publishTime>
@@ -42702,7 +42720,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2021 16:43:38</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/13/2022 15:00:18</publishTime>
+      <publishTime>05/05/2022 12:00:05</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -24,7 +24,7 @@
 
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.Day, htmlAttributes: new { @class = "control-label col-md-6" })
                                 <div class="col-md-10">
@@ -32,8 +32,9 @@
                                     @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+                            <br />
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.HourFrom, htmlAttributes: new { @class = "control-label col-md-6" })
                                 <div class="col-md-10">
@@ -41,8 +42,9 @@
                                     @Html.ValidationMessageFor(model => model.HourFrom, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+                            <br />
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.HourUntil, htmlAttributes: new { @class = "control-label col-md-6" })
                                 <div class="col-md-10">
@@ -50,8 +52,9 @@
                                     @Html.ValidationMessageFor(model => model.HourUntil, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+                            <br />
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-6" })
                                 <div class="col-md-10">
@@ -61,14 +64,14 @@
                             </div>
                         </div>
                         @*<div class="col-6">
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.Id_GroupHorary, "Id_GroupHorary", htmlAttributes: new { @class = "control-label col-md-2" })
-                                    <div class="col-md-10">
-                                        @Html.DropDownList("Id_GroupHorary", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                        @Html.ValidationMessageFor(model => model.Id_GroupHorary, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(model => model.Id_GroupHorary, "Id_GroupHorary", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Id_GroupHorary", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Id_GroupHorary, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>*@
                     </div>
                 </div>
 

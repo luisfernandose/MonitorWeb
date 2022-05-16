@@ -27,32 +27,37 @@ namespace Queue.Action
                 Response rp = new Response();
                 try
                 {
-                    Agent_Empresa ae = ent.Agent_Empresa.Where(a=> a.Key == key && a.status == true).SingleOrDefault();
+                    Agent_Empresa ae = ent.Agent_Empresa.Where(a => a.Key == key && a.status == true).SingleOrDefault();
 
                     if (ae != null)
                     {
-                        var token = tvh.GenerateToken(ae.Nombre, ae.Rut, ae.IdCompany.ToString());
+                        if (ent.License.Where(c => c.Agent_Empresa.IdCompany == ae.IdCompany && c.enddate >= DateTime.Today).Count() > 0)
+                        {
+                            var token = tvh.GenerateToken(ae.Nombre, ae.Rut, ae.IdCompany.ToString());
+                            ResponseConfigurationDTO responseConfigurationDTO = (from c in ent.Agent_Configuration
+                                                                                 where c.Agent_Empresa.IdCompany == ae.IdCompany
+                                                                                 select new ResponseConfigurationDTO
+                                                                                 {
+                                                                                     Id_Configuration = c.Id_Configuration,
+                                                                                     InactivityPeriod = c.InactivityPeriod,
+                                                                                     UploadFrecuency = c.UploadFrecuency,
+                                                                                     CaptureFrecuency = c.CaptureFrecuency,
+                                                                                     token = token,
+                                                                                     IsLogged = true,
+                                                                                     Id_Empresa = ae.IdCompany
+                                                                                 }).FirstOrDefault();
 
-
-                        ResponseConfigurationDTO responseConfigurationDTO = (from c in ent.Agent_Configuration
-                                                                             where c.Agent_Empresa.IdCompany == ae.IdCompany
-                                                                             select new ResponseConfigurationDTO
-                                                                             {
-                                                                                 Id_Configuration = c.Id_Configuration,
-                                                                                 InactivityPeriod = c.InactivityPeriod,
-                                                                                 UploadFrecuency = c.UploadFrecuency,
-                                                                                 CaptureFrecuency = c.CaptureFrecuency,
-                                                                                 token = token,
-                                                                                 IsLogged = true,
-                                                                                 Id_Empresa = ae.IdCompany
-                                                                             }).FirstOrDefault();
-                        
-                        rp.data = responseConfigurationDTO;
+                            rp.data = responseConfigurationDTO;
+                        }
+                        else
+                        {
+                            return autil.ReturnMesagge(ref rp, (int)GenericErrors.Licenceend, string.Empty, null);
+                        }
                     }
                     else
                     {
                         //login invalido                
-                        return autil.ReturnMesagge(ref rp, (int)GenericErrors.ErrorLogin, string.Empty, null); ;
+                        return autil.ReturnMesagge(ref rp, (int)GenericErrors.ErrorLogin, string.Empty, null);
                     }
 
                     //retorna un response, con el campo data lleno con la respuesta.               
