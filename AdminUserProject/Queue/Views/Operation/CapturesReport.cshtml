@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<Queue.ViewModels.CapturesViewModel>
 @{ ViewBag.Title = "CapturesReport";
-                Layout = "~/Views/Shared/_Layout.cshtml";
-                var idenx = 0; }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idenx = 0; }
 
-<div class="row justify-content-center">
+<div class="row justify-content-center" id="capturesReport">
     <div class="col-lg-12">
         <div class="card">
             <div class="box-header with-border">
@@ -20,7 +20,7 @@
                         </div>*@
                 </div>
                 @using (Html.BeginForm("CapturesReport", "Operation"))
-                {
+                 {
                     <div class="row">
                         <div class="col-lg-3">
                             <label asp-for="idgroup" class="control-label">Grupos</label>
@@ -51,6 +51,9 @@
                                 <button id="edit" name="add_dictionary" type="submit" value="Create" class="btn btn-info">
                                     Consultar
                                 </button>
+                            </div>
+                            <div class="p-2">
+                                <input type="button" id="create_pdf" class="btn btn-info" value="Generate PDF">
                             </div>
                         </div>
                     </div>
@@ -91,9 +94,10 @@
                     <td style="text-align:center">
                         <img style="width:150px;height:100px" data-fancybox data-src="#hidden-content" onclick="showimage('@item.idrecord')" src="data:image/png;base64,@item.image">
                     </td>
-                </tr>idenx = idenx + 1;
-                                }
-                            }
+                </tr>
+idenx = idenx + 1;
+            }
+        }
 
                         </tbody>
                     </table>
@@ -112,6 +116,10 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="~/assets/plugins/general/moment/min/moment.min.js" type="text/javascript"></script>
+    <script src="~/js/DownloadsPDF.js"></script>
     <script>$('#myTable').DataTable();</script>
 }
 
