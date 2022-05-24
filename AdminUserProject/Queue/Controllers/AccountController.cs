@@ -12,11 +12,12 @@ using System.Web;
 using System.Web.Mvc;
 using Queue.Utils;
 using Queue.Controllers.Token;
+using Queue.Models;
 
 namespace Queue.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private QueueContext db = new QueueContext();
         private ApplicationSignInManager _signInManager;
@@ -92,23 +93,31 @@ namespace Queue.Controllers
                     case SignInStatus.Success:
                         var oUser = await db.Users.Where(u => u.Email == model.Email).SingleOrDefaultAsync();
                         var id = Guid.Parse(oUser.Id);
-                        var company = db.Agent_UserCompany.Where(uc => uc.idUser == id).FirstOrDefault().IdCompany.ToString();
-                        oUser.IsLoged = true;
-                        //db.Entry(oUser).State = EntityState.Modified;
-                        await db.SaveChangesAsync();
 
-                        var role = UserManager.GetRoles(oUser.Id);
-                        Session["Email"] = oUser.Email;
-                        Session["Name"] = oUser.FirstName + " " + oUser.LastName;
-                        Session["UserId"] = oUser.Id;
-                        Session["Role"] = role;
-                        Session["InsuredKey"] = Guid.NewGuid().ToString();
-                        Session["Company"] = company;
+                        var ucompany = db.Agent_UserCompany.Where(uc => uc.idUser == id).FirstOrDefault();
 
-                        //audit section
-                        // ac.InserAuditAction("Login", ActionType.Action.Login.ToString());
+                        var company = ucompany.IdCompany.ToString();
 
-                        return RedirectToAction("Index", "Home");
+                        if (db.License.Where(c => c.Agent_Empresa.IdCompany == ucompany.IdCompany && c.enddate >= DateTime.Today).Count() > 0)
+                        {
+                            oUser.IsLoged = true;
+                            await db.SaveChangesAsync();
+
+                            var role = UserManager.GetRoles(oUser.Id);
+                            Session["Email"] = oUser.Email;
+                            Session["Name"] = oUser.FirstName + " " + oUser.LastName;
+                            Session["UserId"] = oUser.Id;
+                            Session["Role"] = role;
+                            Session["InsuredKey"] = Guid.NewGuid().ToString();
+                            Session["Company"] = company;
+
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Licencia vencida, comuniquese con un administrador");
+                            return View(model);
+                        }
 
                     //if (role[0] == "Admin")
                     //{
@@ -237,10 +246,18 @@ namespace Queue.Controllers
 
                 await db.SaveChangesAsync();
 
-                EmailController ec = new EmailController();
-                ec.SendInvitation(model.Email, model.Email, model.Password);
+                try
+                {
+                    EmailController ec = new EmailController();
+                    await ec.SendInvitation(model.Email, model.Email, model.Password);
+                }
+                catch (Exception ex)
+                {
+                    Warning("Error enviado correo: " + ex.Message, "");
+                }
 
 
+                Success("Usuario creado");
                 //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -250,6 +267,12 @@ namespace Queue.Controllers
                 //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                 return RedirectToAction("UserList", "Manage");
+            }
+            else
+            {
+                List<string> errors = result.Errors.ToList();
+
+                Warning(errors[0].ToString(), "");
             }
 
             List<SelectListItem> RoleID = new List<SelectListItem>();
@@ -333,9 +356,16 @@ namespace Queue.Controllers
                 // Send an email with this link
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                try
+                {
+                    EmailController ec = new EmailController();
+                    ec.SendForgot(model.Email, callbackUrl);
+                }
+                catch (Exception ex)
+                {
+                    Warning("Error: " + ex.Message, "");
+                }
 
-                EmailController ec = new EmailController();
-                ec.SendForgot(model.Email, callbackUrl);
 
                 //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
 

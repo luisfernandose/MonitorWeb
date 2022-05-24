@@ -51,14 +51,15 @@
                     </a>
                 </div>
                 <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
 
+                    <ul class="nav navbar-nav">
                         <li class="search-box">
                             <a class="nav-link hidden-sm-down" href="javascript:void(0)"><i class="mdi mdi-magnify"></i></a>
                             <form class="app-search" style="display: none;">
                                 <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
                             </form>
-                        </li>
+
+                        </li>                       
                         <!-- User Account-->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -118,7 +119,7 @@
                         </a>
                     </li>
 
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("SAdmin"))
                     {
                         <li class="treeview">
                             <a href="#">
@@ -241,6 +242,7 @@
         <div class="content-wrapper">
             <!-- Main content -->
             <section class="content">
+                <p style="color:red; font-weight:900">@ViewBag.restdaysmsg</p>                
                 @RenderBody()
                 <div style="display: none;" id="hidden-content">
                     <img id="large-image" src="" />
@@ -252,7 +254,7 @@
         <footer class="main-footer">
             &copy; @DateTime.Now.Year - MonitorTracker - ALL GROUP TECH
             <span id="siteseal">
-            @*<script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=7sy6EnKmQtilyicwT374CUUg1zSSb8vpuoxFrCpOhXpZtBapQHPrkBh0Tbb2"></script></span>*@
+                @*<script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=7sy6EnKmQtilyicwT374CUUg1zSSb8vpuoxFrCpOhXpZtBapQHPrkBh0Tbb2"></script></span>*@
         </footer>
         <div class="control-sidebar-bg"></div>
 

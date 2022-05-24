@@ -17,14 +17,14 @@ namespace Queue.Controllers
         private QueueContext db = new QueueContext();
 
         // GET: Licenses
-        public ActionResult Index()
+        public ActionResult Index(Guid idempresa)
         {
-            var company = Request.RequestContext.HttpContext.Session["Company"].ToString();
-            if (company != null)
+            ViewBag.idempresa = idempresa;
+            if (idempresa != null)
             {
-                var guidCompany = Guid.Parse(company);
-                return View(db.License.Where(j => j.Agent_Empresa.IdCompany == guidCompany).OrderBy(o => o.enddate).ToList());
+                return View(db.License.Where(j => j.Agent_Empresa.IdCompany == idempresa).OrderBy(o => o.enddate).ToList());
             }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -44,9 +44,13 @@ namespace Queue.Controllers
         }
 
         // GET: Licenses/Create
-        public ActionResult Create()
+        public ActionResult Create(Guid idempresa)
         {
-            return View();
+            License lc = new License();
+            lc.idempresa = idempresa;
+
+            ViewBag.idempresa = idempresa;
+            return View(lc);
         }
 
         // POST: Licenses/Create
@@ -58,12 +62,11 @@ namespace Queue.Controllers
         {
             if (ModelState.IsValid)
             {
-                Guid company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
                 license.IdLicense = Guid.NewGuid();
-                license.Agent_Empresa = db.Agent_Empresa.Where(g => g.IdCompany == company).SingleOrDefault();
+                license.Agent_Empresa = db.Agent_Empresa.Where(g => g.IdCompany == license.idempresa).SingleOrDefault();
                 db.License.Add(license);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { idempresa = license.idempresa });
             }
 
             return View(license);

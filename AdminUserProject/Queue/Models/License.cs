@@ -9,12 +9,15 @@ namespace Queue.Models
     public class License
     {
         [Key]
-        public Guid IdLicense { get; set; }     
+        public Guid IdLicense { get; set; }
 
         [DisplayName("Fecha Limite Licencia")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime enddate { get; set; }
 
         public virtual Agent_Empresa Agent_Empresa { get; set; }
+
+        [NotMapped]
+        public Guid idempresa { get; set; }
     }
 }

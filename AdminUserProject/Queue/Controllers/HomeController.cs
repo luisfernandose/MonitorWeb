@@ -29,7 +29,7 @@ namespace Queue.Controllers
 
             OperationController opc = new OperationController();
             List<BasicStatsDashboard> data = opc.GetDataForDashBoard(company.ToString(), dsb.DateFrom, dsb.DateTo, dsb.ddlUsers);
-            
+
             //cuadritos de resumen
             dasb.resume = GetResume(data);
             //app mas usadas
@@ -39,6 +39,15 @@ namespace Queue.Controllers
 
             ViewBag.ListUser = db.Agent_Employee.Where(u => u.IdCompany == company).Select(x => new SelectListItem() { Text = x.Usuario, Value = x.Usuario }).ToList();
 
+            License licence_ = db.License.Where(c => c.Agent_Empresa.IdCompany == company && c.enddate >= DateTime.Today).SingleOrDefault();
+
+            double restdays = (licence_.enddate - DateTime.Today).TotalDays;
+
+            if (restdays <= 10)
+            {
+                ViewBag.restdaysmsg = "Quedan " + restdays + " días para el vencimiento de su licencia, comuniquese con soporte para la renovación";
+                ViewBag.restdays = restdays;
+            }
             return View(dasb);
         }
 
@@ -181,7 +190,7 @@ namespace Queue.Controllers
             return lrs;
         }
 
-       
+
 
 
         [SessionAuthorize]

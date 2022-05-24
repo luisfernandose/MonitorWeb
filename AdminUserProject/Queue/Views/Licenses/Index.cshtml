@@ -14,14 +14,25 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="col-md-2">
+                        <a href="@Url.Action("Index", "Agent_Empresa")" class="btn btn-info btn-block m-t-10 float-right">
+                            <i class="glyphicon glyphicon-chevron-left"></i> Back
+                        </a>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <div class="col-md-10">
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-10">
                     </div>
                     <br />
                     <br />
                     <br />
-
                     <div class="col-md-2">
-                        <a href="@Url.Action("Create", "Licenses", new { id = ViewBag.IdGroupHorary })" class="btn btn-info btn-sm m-t-10 float-right">
+                        <a href="@Url.Action("Create", "Licenses", new { idempresa = ViewBag.idempresa })" class="btn btn-info btn-sm m-t-10 float-right">
                             <i class="fa fa-plus"></i> Nueva Licencia
                         </a>
                     </div>
@@ -49,7 +60,7 @@
                                         <a class="btn btn-outline-secondary" href="@Url.Action("Edit", "Licenses", new { id = item.IdLicense })"><i class="fa fa-edit"></i></a>
                                     </td>
                                 </tr>
-                             }
+                            }
                         </tbody>
                     </table>
                 </div>

@@ -65,9 +65,10 @@ namespace Queue.Action
             {
                 try
                 {
+                    string codigo_ = idmensje.ToString();
                     Agent_GenericError ge = (from g in ent.Agent_GenericError
-                                             where g.codigo_id == idmensje
-                                       select g).SingleOrDefault();
+                                             where g.Codigo == codigo_
+                                             select g).SingleOrDefault();
 
                     ret.status = status;
                     ret.response_code = ge.Codigo;

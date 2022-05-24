@@ -2180,14 +2180,15 @@ namespace Queue.Controllers
 
                 ListCapturesViewModel = (from e in MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture").AsQueryable<CaptureBase>()
                                          where e.IdCompany == IdCompany_
-                                         && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)
+                                         && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)                                         
                                          select new CapturesViewModel
                                          {
                                              idrecord = e.idrecord,
                                              UserName = e.UserName,
                                              Image = e.Image,
                                              Date = e.Date
-                                         }).OrderByDescending(o => o.Date).Take(100).Distinct().ToList();
+                                             //}).ToList();
+                                         }).OrderByDescending(o => o.Date).Take(100).ToList();
 
                 if (users.Count() > 0)
                 {

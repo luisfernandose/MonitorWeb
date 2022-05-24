@@ -1,7 +1,6 @@
 ﻿@{ ViewBag.Title = "Home Page"; }
 
-@{
-    var ListPeriods = new List<SelectListItem>()
+@{ var ListPeriods = new List<SelectListItem>()
 {
         new SelectListItem() { Text = "5 Minutos", Value = "5", Selected = true},
         new SelectListItem() { Text = "10 Minutos", Value = "10"},
@@ -16,9 +15,7 @@
     foreach (var item in ViewBag.DataUser)
     {
         ListUser.Add(item);
-    }
-
-}
+    } }
 <style>
 
     .modal.fade {
@@ -47,7 +44,7 @@
 <script src="~/Scripts/moment-with-locales.js"></script>
 <script src="~/Scripts/jquery.loading.js"></script>
 
-<div class="row">
+<div class="row" id="reporteAct">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -67,14 +64,12 @@
                                 @Html.DropDownList("ddlPeriods", ListPeriods, "", new { @class = "form-control select2", style = "width:100%;", required = "required" })
                             </div>
                         </div>
-
                         <div class="col-lg-3">
                             <label>Empleados</label>
                             <div class="input-group">
                                 @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;", multiple = "true", required = "required" })
                             </div>
                         </div>
-
                         <div class="col-lg-3">
                             <br />
                             <button id="btnProcesarConsulta" class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
@@ -84,7 +79,14 @@
                     </div>
                     <br />
                     <div class="row">
-                        <h4>Mapa de Colores</h4>
+                        <div class="col-lg-9">
+                            <h4>Mapa de Colores</h4>
+                            <br />
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="button" id="create_pdf" class="btn-sm btn-info btn-block" value="Generate PDF">
+                            <br />
+                        </div>
                     </div>
                     <div class="table-responsive">
                         @*['#55cbcd', '#ff968a', '#96b3c2', '#445a67'];*@
@@ -103,14 +105,10 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
-
 </div>
-
 
 <div class="row">
     <div class="col-12">
@@ -179,6 +177,10 @@
 </div>
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<script src="~/assets/plugins/general/moment/min/moment.min.js" type="text/javascript"></script>
+<script src="~/js/DownloadsPDF.js"></script>
 
 <script>
 

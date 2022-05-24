@@ -1,16 +1,12 @@
 ﻿@model Queue.Models.DashBoardStats
-@{
-    ViewBag.Title = "Home Page";
-}
-@{
-    var ListUser = new List<SelectListItem>
-       () { new SelectListItem() { Text = "Todos", Value = "Todos", Selected = true }, };
+@{ ViewBag.Title = "Home Page"; }
+@{ var ListUser = new List<SelectListItem>
+                     () { new SelectListItem() { Text = "Todos", Value = "Todos", Selected = true }, };
 
     foreach (var item in ViewBag.ListUser)
     {
         ListUser.Add(item);
-    }
-}
+    } }
 <!-- chartist CSS -->
 <link href="~/TemplateAssets/assets/plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
 <link href="~/TemplateAssets/assets/plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
@@ -32,7 +28,7 @@
 <script src="~/Scripts/moment-with-locales.js"></script>
 <script src="~/Scripts/jquery.loading.js"></script>
 
-<div class="row">
+<div class="row" id="dashboard">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -72,19 +68,27 @@
                                 <button id="add_Employee" name="add_dictionary" type="submit" value="Create" class="btn btn-info waves-effect waves-light btn-block">
                                     Filtrar
                                 </button>
-
                             </div>
                         </div>
                     </div>
-                }
-                <br />
+                 }
+
+                <div class="row">
+
+                </div>
                 <br />
                 <br />
                 <br />
                 <div class="row">
-                    <h1>Resumen del Dia</h1>
-                    <br />
+                    <div class="col-lg-9">
+                        <h1>Resumen del Día</h1>
+                        <br />
+                    </div>
+                    <div class="col-lg-2">
+                        <input type="button" id="create_pdf" class="btn btn-info waves-effect waves-light btn-block" value="Generate PDF">
+                    </div>
                 </div>
+
                 <br />
                 <br />
                 <div class="row">
@@ -93,7 +97,6 @@
                             <div class="no-shrink py-20">
                                 <span class="mdi mdi-clock-out font-size-50"></span>
                             </div>
-
                             <div class="py-30 bg-white text-dark">
                                 <div class="font-size-20 countnm">@Model.resume.ProductiveTime %</div>
                                 <span>Productivo</span>
@@ -106,7 +109,6 @@
                             <div class="no-shrink py-20">
                                 <span class="mdi mdi-clock-in font-size-50"></span>
                             </div>
-
                             <div class="py-30 bg-white text-dark">
                                 <div class="font-size-20 countnm">@Model.resume.ImproductiveTime %</div>
                                 <span>Improductivo</span>
@@ -119,7 +121,6 @@
                             <div class="no-shrink py-20">
                                 <span class="mdi mdi-clock-end font-size-50"></span>
                             </div>
-
                             <div class="py-30 bg-white text-dark">
                                 <div class="font-size-20 countnm">@Model.resume.NeutralTime %</div>
                                 <span>Neutral</span>
@@ -132,7 +133,6 @@
                             <div class="no-shrink py-20">
                                 <span style="color:white" class="mdi mdi-cancel font-size-50"></span>
                             </div>
-
                             <div class="py-30 bg-white text-dark">
                                 <div class="font-size-20 countnm">@Model.resume.UnclasifyTime %</div>
                                 <span>Sin Clasificar</span>
@@ -165,15 +165,15 @@
                                     <tbody>
                                         @foreach (var item in Model.DataPerUser)
                                         {
-                                            <tr>
-                                                <td>@item.User</td>
-                                                <td>@item.ProductiveTime.ToString("0.0#")</td>
-                                                <td>@item.ImproductiveTime.ToString("0.0#")</td>
-                                                <td>@item.NeutralTime.ToString("0.0#")</td>
-                                                <td>@item.UnclasifyTime.ToString("0.0#")</td>
-                                                <td>@item.TotalHours.ToString("0.0#")</td>
-                                            </tr>
-                                        }
+                            <tr>
+                                <td>@item.User</td>
+                                <td>@item.ProductiveTime.ToString("0.0#")</td>
+                                <td>@item.ImproductiveTime.ToString("0.0#")</td>
+                                <td>@item.NeutralTime.ToString("0.0#")</td>
+                                <td>@item.UnclasifyTime.ToString("0.0#")</td>
+                                <td>@item.TotalHours.ToString("0.0#")</td>
+                            </tr>
+}
                                     </tbody>
                                 </table>
                             </div>
@@ -181,12 +181,10 @@
                     </div>
                 </div>
 
-
                 <div id="chart_wrap">
                     <div id="columnchart_values"></div>
                     <br />
                 </div>
-
 
             </div>
         </div>
@@ -194,7 +192,10 @@
 </div>
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<script src="~/assets/plugins/general/moment/min/moment.min.js" type="text/javascript"></script>
+<script src="~/js/DownloadsPDF.js"></script>
 <script>
     google.charts.load("current", { packages: ['corechart'] });
     google.charts.setOnLoadCallback(drawChartApp);

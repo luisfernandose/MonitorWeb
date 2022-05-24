@@ -20,9 +20,17 @@ namespace Queue.Controllers
         }
 
         #region Register
-        public async void SendInvitation(string email, string login, string pass)
+        public async Task<bool> SendInvitation(string email, string login, string pass)
         {
-            await SendMail(email, SetEmailBody(email, login, pass), ConfigurationManager.AppSettings["EmailSubjec"]);
+            try
+            {
+                await SendMail(email, SetEmailBody(email, login, pass), ConfigurationManager.AppSettings["EmailSubjec"]);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return true;
         }
         private AlternateView SetEmailBody(string email, string login, string pass)
         {
@@ -173,7 +181,7 @@ namespace Queue.Controllers
             }
             catch (Exception ex)
             {
-                return false;
+                throw ex;
             }
         }
     }
