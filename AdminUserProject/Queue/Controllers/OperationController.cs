@@ -312,7 +312,7 @@ namespace Queue.Controllers
             var query = (from e in MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>()
                          where e.IdEmpresa == idcompany
                          && e.Date >= fromdate && e.Date <= todate
-                         && e.UserName == Name
+                         && e.UserName == Name 
                          select new AutomaticTakeTimeModel
                          {
                              UserName = e.UserName,
@@ -2074,6 +2074,7 @@ namespace Queue.Controllers
                         sr = new SoftwareReport();
                         sr.program = i.Key;
                         sr.quantity = i.Count();
+                        sr.user = i.FirstOrDefault().User;
                         srlist.Add(sr);
                     }
                 }
@@ -2091,6 +2092,60 @@ namespace Queue.Controllers
 
             return View(srlist);
         }
+
+
+        public ActionResult SoftwareReportDetails(string name , Guid? idgroup, string user =  "00000000-0000-0000-0000-000000000000")
+        {
+            List<SoftwareReport> srlist = new List<SoftwareReport>();
+            Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+
+            if (IdCompany != Guid.Empty)
+            {
+                if (!string.IsNullOrEmpty(user) || idgroup != null)
+                {
+                    MongoHelper.SoftWareList = MongoHelper.database.GetCollection<InstalledProgramsViewModel>("Software");
+                    var builder = Builders<InstalledProgramsViewModel>.Filter;
+                    var filter = builder.Eq("IdCompany", IdCompany) & builder.Eq("Status", true) & builder.Eq("Name", name);
+
+                    List<InstalledProgramsViewModel> results = MongoHelper.SoftWareList.Find(filter).ToList();
+
+                    if (idgroup != null && idgroup != Guid.Empty)
+                    {
+                        List<Agent_Employee> users_ = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_Employee.IdCompany == IdCompany).Select(t => t.Agent_Employee).ToList();
+                        List<string> _users = users_.Select(s => s.Usuario).ToList();
+
+                        results = results.Where(u => _users.Contains(u.User)).ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(user) && user != Guid.Empty.ToString())
+                    {
+                        results = results.Where(u => u.User == user).ToList();
+                    }
+
+                    SoftwareReport sr;
+                    foreach (var i in results.Where(g => g.Name == name))
+                    {
+                        sr = new SoftwareReport();
+                        sr.program = i.Name;
+                        sr.agrupation = i.Pc;
+                        srlist.Add(sr);
+                    }
+                }
+            }
+
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgroup = sli;
+
+
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
+            sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sle;
+
+
+            return View(srlist);
+        }
+
 
         public ActionResult HardwareReport(string user, Guid? idgroup)
         {
@@ -2124,6 +2179,7 @@ namespace Queue.Controllers
                     {
                         sr = new HardwareReport();
                         sr.type = i.Key.Type;
+                        sr.user = i.FirstOrDefault().User;
                         sr.hardware = i.Key.Hardware;
                         sr.quantity = i.Count();
                         srlist.Add(sr);
@@ -2140,6 +2196,58 @@ namespace Queue.Controllers
             sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.user = sle;
 
+
+            return View(srlist);
+        }
+
+        public ActionResult HardwareReportDetails(string hardware, Guid? idgroup, string user = "00000000-0000-0000-0000-000000000000")
+        {
+            List<HardwareReport> srlist = new List<HardwareReport>();
+            Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+            if (IdCompany != Guid.Empty)
+            {
+                if (!string.IsNullOrEmpty(user) || idgroup != null)
+                {
+                    MongoHelper.HardWareList = MongoHelper.database.GetCollection<InstalledHardwareViewModel>("Hardware");
+                    var builder = Builders<InstalledHardwareViewModel>.Filter;
+                    var filter = builder.Eq("IdCompany", IdCompany) & builder.Eq("status", true) & builder.Eq("Hardware", hardware);
+                   
+                    List<InstalledHardwareViewModel> results = MongoHelper.HardWareList.Find(filter).ToList();
+
+                    if (idgroup != null && idgroup != Guid.Empty)
+                    {
+                        List<Agent_Employee> users_ = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_Employee.IdCompany == IdCompany).Select(t => t.Agent_Employee).ToList();
+                        List<string> _users = users_.Select(s => s.Usuario).ToList();
+
+                        results = results.Where(u => _users.Contains(u.User)).ToList();
+                    }
+
+                    if (!string.IsNullOrEmpty(user) && user != Guid.Empty.ToString())
+                    {
+                        results = results.Where(u => u.User == user).ToList();
+                    }
+
+                    HardwareReport sr;
+                    foreach (var i in results.Where(g => g.Hardware == hardware))
+                    {
+                        sr = new HardwareReport();
+                        sr.agrupation = i.Pc;
+                        sr.type = i.Type;
+                        sr.hardware = i.Hardware;             
+                        srlist.Add(sr);
+                    }
+                }
+            }
+            
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgroup = sli;
+
+
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
+            sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sle;
+            
 
             return View(srlist);
         }
@@ -2180,7 +2288,7 @@ namespace Queue.Controllers
 
                 ListCapturesViewModel = (from e in MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture").AsQueryable<CaptureBase>()
                                          where e.IdCompany == IdCompany_
-                                         && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)                                         
+                                         && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)
                                          select new CapturesViewModel
                                          {
                                              idrecord = e.idrecord,

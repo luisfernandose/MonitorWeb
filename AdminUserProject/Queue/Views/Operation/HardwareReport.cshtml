@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Queue.Models.HardwareReport>
 
-@{ ViewBag.Title = "SoftwareReport";
+@{ ViewBag.Title = "HardwareReport";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="row justify-content-center" id="hardwareReport">
@@ -65,26 +65,36 @@
                                 <th style="text-align:center">
                                     Cantidad
                                 </th>
+                                <th style="text-align:center">
+                                    Acción
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (Model != null)
-                            {
+                             {
                                 foreach (var item in Model)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.type)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.hardware)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.quantity)
-                                        </td>
-                                    </tr>
-}
-                            }
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.type)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.hardware)
+                                    </td>
+                                    <td style="text-align:center">
+                                        @Html.DisplayFor(modelItem => item.quantity)
+                                    </td>
+                                    <td style="text-align:center">
+                                        <a class="btn btn-outline-secondary" href="@Url.Action("HardwareReportDetails", "Operation", new { hardware = item.hardware,idgruop = item.idgroup })"><i class="fa fa-eye"></i></a>
+
+                                    </td>
+                               
+                                </tr>
+                                    }
+                             }
+
+                            
 
                         </tbody>
                     </table>

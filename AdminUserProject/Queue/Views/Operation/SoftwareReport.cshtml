@@ -56,11 +56,14 @@
                     <table id="myTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th style="text-align:center">
+                                <th style="text-align:center" class="col-md-7">
                                     Programa
                                 </th>
                                 <th style="text-align:center">
                                     Cantidad
+                                </th>
+                                <th style="text-align:center">
+                                    Acción
                                 </th>
                             </tr>
                         </thead>
@@ -73,13 +76,16 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.program)
                                         </td>
-                                        <td>
+                                        <td style="text-align:center">
                                             @Html.DisplayFor(modelItem => item.quantity)
                                         </td>
+                                        <td style="text-align:center">
+                                            <a class="btn btn-outline-secondary" href="@Url.Action("SoftwareReportDetails", "Operation", new { name = item.program, idgruop = item.idgroup })"><i class="fa fa-eye"></i></a>
+                                        </td>
                                     </tr>
-}
-                            }
 
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>

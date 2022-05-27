@@ -14591,6 +14591,8 @@
     <Content Include="Views\Licenses\Details.cshtml" />
     <Content Include="Views\Licenses\Edit.cshtml" />
     <Content Include="Views\Licenses\Index.cshtml" />
+    <Content Include="Views\Operation\HardwareReportDetails.cshtml" />
+    <Content Include="Views\Operation\SoftwareReportDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\FilesRepository\" />
