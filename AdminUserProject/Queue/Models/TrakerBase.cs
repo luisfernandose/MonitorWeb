@@ -17,9 +17,7 @@ namespace Queue.Models
         public string Ip { get; set; }
         public string Pc { get; set; }
         public string UserName { get; set; }
-        public double Activity { get; set; }
-
-        public TimeSpan DateSpam { get; set; }
+        public double Activity { get; set; }       
 
         [BsonElement]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]        
@@ -28,8 +26,11 @@ namespace Queue.Models
         [BsonElement]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime FocusTime { get; set; }
-        public string StringDate { get; set; }
-        public string StringFocusTime { get; set; }
+
+        public string UploadFrecuency { get; set; }
+        public string Frecuency { get; set; }
+        public string prevvalue { get; set; }
+        public string newvalue { get; set; }
 
         public string IdEmpresa { get; set; }
     }
