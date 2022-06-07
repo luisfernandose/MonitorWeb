@@ -2534,7 +2534,6 @@ namespace Queue.Controllers
             }
         }
 
-       [HttpPost]
         public ActionResult Alertas(string idcompany, Guid? Id)
         {
             List<AlertAsociados> oAlerta = new List<AlertAsociados>();
