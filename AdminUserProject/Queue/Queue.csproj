@@ -496,9 +496,23 @@
     <Compile Include="Migrations\202205142019417_edita licencia.Designer.cs">
       <DependentUpon>202205142019417_edita licencia.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206011448237_AlertAsociados.cs" />
+    <Compile Include="Migrations\202206011448237_AlertAsociados.Designer.cs">
+      <DependentUpon>202206011448237_AlertAsociados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202206022030108_AlertasN.cs" />
+    <Compile Include="Migrations\202206022030108_AlertasN.Designer.cs">
+      <DependentUpon>202206022030108_AlertasN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202206022045205_AlertasCampo.cs" />
+    <Compile Include="Migrations\202206022045205_AlertasCampo.Designer.cs">
+      <DependentUpon>202206022045205_AlertasCampo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Agent_EmployeeGroupsEmployee.cs" />
     <Compile Include="Models\Agent_EmployeesGroups.cs" />
+    <Compile Include="Models\Alertas.cs" />
+    <Compile Include="Models\AlertAsociados.cs" />
     <Compile Include="Models\Alerts.cs" />
     <Compile Include="Models\HoraryDetail.cs" />
     <Compile Include="Models\HoraryModel.cs" />
@@ -14593,6 +14607,7 @@
     <Content Include="Views\Licenses\Index.cshtml" />
     <Content Include="Views\Operation\HardwareReportDetails.cshtml" />
     <Content Include="Views\Operation\SoftwareReportDetails.cshtml" />
+    <Content Include="Views\Operation\Alertas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\FilesRepository\" />
@@ -14709,6 +14724,15 @@
     <EmbeddedResource Include="Migrations\202205142019417_edita licencia.resx">
       <DependentUpon>202205142019417_edita licencia.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206011448237_AlertAsociados.resx">
+      <DependentUpon>202206011448237_AlertAsociados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206022030108_AlertasN.resx">
+      <DependentUpon>202206022030108_AlertasN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206022045205_AlertasCampo.resx">
+      <DependentUpon>202206022045205_AlertasCampo.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -14729,7 +14753,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50220</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50221/</IISUrl>
+          <IISUrl>http://localhost:51741/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

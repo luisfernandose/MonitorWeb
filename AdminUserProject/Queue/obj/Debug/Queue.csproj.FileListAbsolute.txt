@@ -4819,3 +4819,7 @@ C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.csproj.CoreCo
 C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.csproj.CopyComplete
 C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.dll
 C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.pdb
+C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.Migrations.AlertAsociados.resources
+C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.Migrations.AlertasN.resources
+C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.Migrations.AlertasCampo.resources
+C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.csproj.AssemblyReference.cache
