@@ -18,5 +18,6 @@ namespace Queue.Models
         public string IdCompany { get; set; }
         public byte[] Image { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
+        public int Hour { get; set; } = DateTime.Now.Hour;
     }
 }

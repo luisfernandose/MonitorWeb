@@ -22,5 +22,7 @@ namespace Queue.ViewModels
         public DateTime DateFrom { get; set; } = DateTime.Now;
         public DateTime DateTo { get; set; } = DateTime.Now;
         public String image { get; set; }
+
+        public Guid idgroup { get; set; }
     }
 }

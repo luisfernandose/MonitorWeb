@@ -1426,3 +1426,17 @@ D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\obj\Release\Qu
 D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.csproj.CopyComplete
 D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.dll
 D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.pdb
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libzstd.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libzstd.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.dll
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.xml
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.Migrations.licencia.resources
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\obj\Release\Queue.Migrations.editalicencia.resources
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libzstd.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libzstd.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.dll
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.xml

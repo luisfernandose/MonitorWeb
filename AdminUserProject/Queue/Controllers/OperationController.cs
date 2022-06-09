@@ -312,7 +312,7 @@ namespace Queue.Controllers
             var query = (from e in MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>()
                          where e.IdEmpresa == idcompany
                          && e.Date >= fromdate && e.Date <= todate
-                         && e.UserName == Name 
+                         && e.UserName == Name
                          select new AutomaticTakeTimeModel
                          {
                              UserName = e.UserName,
@@ -463,25 +463,8 @@ namespace Queue.Controllers
                 if (user == "Todos" || user == null)
                 {
 
-                    List<AutomaticTakeTimeModelViewModel> AutomaticTakeTimeModel_ = MongoHelper.database.GetCollection<AutomaticTakeTimeModelViewModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModelViewModel>().
-                       Where(e => e.IdEmpresa == idcompany
-                       && (e.FocusTime >= _startTest
-                       && e.FocusTime <= _endTest)).ToList();
-
-
-                    double actv_ = AutomaticTakeTimeModel_.Where(f => f.UserName == "AGTCO").Sum(a => a.Activity);
-                    TimeSpan time = TimeSpan.FromSeconds(actv_);
-                    string str = time.ToString(@"hh\:mm\:ss\:fff");
-
-
-                    DateTime di = AutomaticTakeTimeModel_.Where(f => f.UserName == "AGTCO").OrderBy(d => d.Date).Select(b => b.Date).FirstOrDefault();
-                    DateTime de = AutomaticTakeTimeModel_.Where(f => f.UserName == "AGTCO").OrderByDescending(d => d.Date).Select(b => b.Date).FirstOrDefault();
-
                     queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
-                    Where(e => e.IdEmpresa == idcompany
-                    && (e.FocusTime >= _startTest
-                    && e.FocusTime <= _endTest)
-                    )
+                    Where(e => e.IdEmpresa == idcompany && (e.FocusTime >= _startTest && e.FocusTime <= _endTest))
                     .Select(e =>
                                new BasicStatsDashboard
                                {
@@ -526,830 +509,6 @@ namespace Queue.Controllers
             return clasification;
         }
 
-
-        //public async Task<List<UsersReportGanttModel>> GetactivityData(string idcompany, DateTime fromdate, DateTime todate, int periods, string[] user)
-        //{
-
-        //    if (periods == 0) { periods = 5 * 60; }
-
-        //    var _queryFiltre = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
-        //        Where(e => e.IdEmpresa == idcompany);
-
-        //    List<string> filterusers = new List<string>();
-        //    filterusers = user.ToList();
-
-        //    //con esto filtramos por multiusuario, excepto si viene la palabra, todos
-        //    if (!filterusers.Contains("Todos"))
-        //        _queryFiltre = _queryFiltre.Where(x => filterusers.Contains(x.UserName));
-
-
-        //    var _startTest = new DateTime(fromdate.Year, fromdate.Month, fromdate.Day);
-        //    var _endTest = new DateTime(todate.Year, todate.Month, todate.Day);
-        //    _endTest = _endTest.Add(new TimeSpan(23, 59, 59));
-
-        //    //_queryFiltre = _queryFiltre.Where(x => x.FocusTime == fromdate);
-        //    _queryFiltre = _queryFiltre.Where(s => s.FocusTime >= _startTest && s.FocusTime <= _endTest);
-
-
-
-        //    var queryPrincipal = _queryFiltre.
-        //        //Where(e => e.FocusTime >= fromdate.Date && e.FocusTime <= todate.Date).
-        //        GroupBy(e => e.UserName)
-        //        .Select(e =>
-        //                   new UsersReportGanttModel
-        //                   {
-        //                       UserName = e.Key,
-        //                       ReportSytems = e.Select(x => new UsersReportGanttModel.ReportTime()
-        //                       {
-        //                           Application = x.Application,
-        //                           FocusTime = x.FocusTime,
-        //                           Activity = x.Activity
-        //                       }).ToList()
-        //                   }).ToList();
-
-
-
-        //    ConcurrentQueue<UsersReportGanttModel> queryAuxParallel = new ConcurrentQueue<UsersReportGanttModel>();
-
-        //    await Task.FromResult(Parallel.ForEach(queryPrincipal, new ParallelOptions { MaxDegreeOfParallelism = 4 }, async (Item) =>
-        //    {
-        //        UsersReportGanttModel InsertArray = new UsersReportGanttModel() { UserName = Item.UserName };
-
-        //        ConcurrentQueue<UsersReportGanttModel.ReportTime> _ReportSytemsParallel = new ConcurrentQueue<UsersReportGanttModel.ReportTime>();
-
-        //        await Task.FromResult(Parallel.ForEach(Item.ReportSytems, new ParallelOptions { MaxDegreeOfParallelism = 6 }, (Item2) =>
-        //        {
-        //            string _NameApps = Item2.Application.Trim().ToUpper();
-        //            int IdClassication = 0;
-        //            string NameClassication = "Sin clasificar";
-
-        //            using (DAL.QueueContext db = new DAL.QueueContext())
-        //            {
-
-        //                var programsFound = db.Agent_ProgramClasification.FirstOrDefault(t => t.Agent_Empresa.IdCompany.ToString() == idcompany && t.name.Trim().ToUpper() == _NameApps);
-
-        //                if (programsFound != null)
-        //                {
-        //                    switch (programsFound.clasification)
-        //                    {
-        //                        case 1:
-        //                            IdClassication = 1;
-        //                            NameClassication = "Productivas";
-        //                            break;
-        //                        case 2:
-        //                            IdClassication = 2;
-        //                            NameClassication = "Improductiva";
-        //                            break;
-        //                        case 3:
-        //                            IdClassication = 3;
-        //                            NameClassication = "Neutrales";
-        //                            break;
-        //                    }
-        //                }
-        //            }
-
-        //            var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //            {
-        //                Application = _NameApps,
-        //                FocusTime = Item2.FocusTime,
-        //                Activity = Item2.Activity,
-        //                AppsImproClassify = IdClassication,
-        //                AppImproName = NameClassication
-        //            };
-
-        //            _ReportSytemsParallel.Enqueue(NewReportTimes);
-
-
-        //        }));
-
-        //        InsertArray.ReportSytems = _ReportSytemsParallel.OrderBy(x => x.FocusTime).ToList();
-
-        //        queryAuxParallel.Enqueue(InsertArray);
-
-        //    }));
-
-
-        //    List<UsersReportGanttModel> queryAux = new List<UsersReportGanttModel>();
-        //    List<string> hahahah = new List<string>();
-
-        //    foreach (var item in queryAuxParallel)
-        //    {
-        //        var NewRecord = new UsersReportGanttModel() { UserName = item.UserName };
-        //        var listAppsGroupClasification = item.ReportSytems.Select(x => x.AppsImproClassify).Distinct().ToList();
-
-
-        //        List<UsersReportGanttModel.ReportTime> _reportTimestmp = new List<UsersReportGanttModel.ReportTime>();
-
-        //        var RecordTimes = item.ReportSytems.OrderBy(c => c.FocusTime);
-
-
-        //        string _IdAppsPrevious = string.Empty;
-
-        //        foreach (var itemReportTimes in RecordTimes)
-        //        {
-        //            var insertData = true;
-        //            if (_IdAppsPrevious == itemReportTimes.Application)
-        //            {
-        //                var sumaActivityRecordAppsLocal = itemReportTimes.Activity;
-        //                var infoTimesApps = _reportTimestmp.Where(x => x.Application == itemReportTimes.Application).OrderBy(x => x.FocusTimeEnd);
-        //                if (infoTimesApps.Any())
-        //                {
-        //                    var timesApps = infoTimesApps.Last();
-
-        //                    TimeSpan diff = timesApps.FocusTimeEnd - itemReportTimes.FocusTime;
-        //                    double _Seconds = Math.Abs(Math.Truncate(diff.TotalSeconds));
-        //                    if (!(_Seconds > 0))
-        //                    {
-        //                        timesApps.Activity += itemReportTimes.Activity;
-        //                        insertData = false;
-        //                    }
-        //                }
-        //            }
-
-        //            if (insertData)
-        //            {
-        //                var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //                {
-        //                    Application = itemReportTimes.Application,
-        //                    FocusTime = itemReportTimes.FocusTime,
-        //                    Activity = itemReportTimes.Activity,
-        //                    AppsImproClassify = itemReportTimes.AppsImproClassify,
-        //                    AppImproName = itemReportTimes.AppImproName
-        //                };
-
-        //                _reportTimestmp.Add(NewReportTimes);
-        //            }
-
-        //            _IdAppsPrevious = itemReportTimes.Application;
-        //        }
-
-        //        double _periods = periods * 60;
-        //        _reportTimestmp = _reportTimestmp.OrderBy(x => x.FocusTime).ToList();
-
-        //        //int AppsImproClassifyPrevious = 0;
-        //        //string NameImproClassifyPrevious = "";
-        //        //int AppsImproClassifyPrevious = "";
-
-        //        foreach (var itemReportTimes in _reportTimestmp)
-        //        {
-        //            hahahah.Add(item.UserName + ";" + itemReportTimes.Application + ";" + itemReportTimes.FocusTimeT + ";" + itemReportTimes.DateEnd + ";" + itemReportTimes.Activity);
-        //        }
-
-
-        //        //var infoApps = new List<string>();
-        //        var firtTime = true;
-
-        //        foreach (var itemReportTimes in _reportTimestmp)
-        //        {
-        //            bool newGroup = false;
-
-        //            if (firtTime)
-        //            {
-        //                firtTime = false;
-        //                var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //                {
-        //                    Application = itemReportTimes.Application,
-        //                    //GroupApplication = new List<string>() { ShowInfo },
-        //                    FocusTime = itemReportTimes.FocusTime,
-        //                    Activity = 0, //se sumará mas adelante
-        //                    AppsImproClassify = itemReportTimes.AppsImproClassify,
-        //                    AppImproName = itemReportTimes.AppImproName
-        //                };
-
-        //                NewRecord.ReportSytems.Add(NewReportTimes);
-        //            }
-
-        //            var foundRecordTimes = NewRecord.ReportSytems.Last();
-        //            //infoApps.Add(ShowInfo);
-
-
-        //            //if (AppsImproClassifyPrevious != itemReportTimes.AppsImproClassify)
-        //            //{
-        //            //    newGroup = true;
-        //            //}
-
-        //            //if (!newGroup)
-        //            //{
-        //            if (_periods > 0)
-        //            {
-        //                if ((foundRecordTimes.Activity + itemReportTimes.Activity) > _periods)
-        //                {
-        //                    newGroup = true;
-        //                }
-        //            }
-        //            //}
-
-        //            if (newGroup)
-        //            {
-        //                var _activitys = itemReportTimes.Activity;
-        //                var _FocusTime = itemReportTimes.FocusTime;
-
-        //                DateTime buscaf = new DateTime(2022, 2, 25, 16, 53, 26);
-
-        //                if (buscaf == _FocusTime)
-        //                {
-        //                    string ad = "";
-        //                }
-
-        //                double _InsertPreviousActivitys = 0;
-
-
-        //                if (foundRecordTimes.Activity < _periods)
-        //                {
-        //                    _InsertPreviousActivitys = (_periods - foundRecordTimes.Activity);
-        //                    _activitys = _activitys - _InsertPreviousActivitys;
-        //                    foundRecordTimes.Activity = 0;
-        //                }
-
-        //                if (foundRecordTimes.Activity == 0)
-        //                {
-        //                    foundRecordTimes.Application = itemReportTimes.Application;
-        //                    foundRecordTimes.GroupApplication.Add(new UsersReportGanttModel.ReportTimeGroupApps() { Application = itemReportTimes.Application, AppImproName = itemReportTimes.AppImproName, AppsImproClassify = itemReportTimes.AppsImproClassify, Activity = _InsertPreviousActivitys });
-        //                    foundRecordTimes.Activity = _periods;
-        //                    _FocusTime = foundRecordTimes.FocusTimeEnd;
-
-        //                    if (buscaf == _FocusTime)
-        //                    {
-        //                        string ad = "";
-        //                    }
-        //                }
-
-        //                double _aux = 0;
-        //                bool contineCorrection = true;
-        //                while (contineCorrection)
-        //                {
-        //                    var _sumActivitys = _aux + _activitys;
-        //                    if (_sumActivitys > _periods)
-        //                    {
-        //                        _aux = +_periods;
-        //                        //crear grupos
-        //                        var _NewReportTimes = new UsersReportGanttModel.ReportTime
-        //                        {
-        //                            Application = foundRecordTimes.Application,
-        //                            GroupApplication = new List<UsersReportGanttModel.ReportTimeGroupApps>() { new UsersReportGanttModel.ReportTimeGroupApps() { Application = itemReportTimes.Application, AppImproName = itemReportTimes.AppImproName, AppsImproClassify = itemReportTimes.AppsImproClassify, Activity = _periods } },
-        //                            FocusTime = _FocusTime,
-        //                            Activity = _periods,
-        //                            AppsImproClassify = itemReportTimes.AppsImproClassify,
-        //                            AppImproName = itemReportTimes.AppImproName
-        //                        };
-
-        //                        NewRecord.ReportSytems.Add(_NewReportTimes);
-        //                        _activitys -= _periods;
-        //                        _FocusTime = _NewReportTimes.FocusTimeEnd;
-
-        //                        if (buscaf == _FocusTime)
-        //                        {
-        //                            string ad = "";
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        contineCorrection = false;
-        //                        _activitys = Math.Abs(_activitys);
-        //                    }
-        //                }
-
-        //                //Cierre grupo
-        //                var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //                {
-        //                    Application = itemReportTimes.Application,
-        //                    GroupApplication = new List<UsersReportGanttModel.ReportTimeGroupApps>() { new UsersReportGanttModel.ReportTimeGroupApps() { Application = itemReportTimes.Application, AppImproName = itemReportTimes.AppImproName, AppsImproClassify = itemReportTimes.AppsImproClassify, Activity = _activitys } },
-        //                    FocusTime = _FocusTime,
-        //                    Activity = _activitys,
-        //                    AppsImproClassify = itemReportTimes.AppsImproClassify,
-        //                    AppImproName = itemReportTimes.AppImproName
-        //                };
-
-        //                NewRecord.ReportSytems.Add(NewReportTimes);
-
-        //                //infoApps = new List<string>();
-        //                if (NewReportTimes.MessageDuration != NewReportTimes.Suma)
-        //                {
-        //                    string adas = "";
-        //                }
-
-        //            }
-        //            else
-        //            {
-        //                //foundRecordTimes.Application += string.Join("</br>", infoApps);
-        //                foundRecordTimes.GroupApplication.Add(new UsersReportGanttModel.ReportTimeGroupApps() { Application = itemReportTimes.Application, AppImproName = itemReportTimes.AppImproName, AppsImproClassify = itemReportTimes.AppsImproClassify, Activity = itemReportTimes.Activity });
-        //                foundRecordTimes.Activity += itemReportTimes.Activity;
-        //            }
-
-        //            if (foundRecordTimes.MessageDuration != foundRecordTimes.Suma)
-        //            {
-        //                string adas = "";
-        //            }
-
-        //        }
-
-        //        //if (infoApps.Any())
-        //        //{
-
-        //        //    var foundRecordTimes = NewRecord.ReportSytems.Last();
-        //        //    foundRecordTimes.Application = string.Join("</br>", infoApps);
-        //        //    foundRecordTimes.Activity += ActivitysPrevious;
-        //        //}
-
-
-
-        //        //DateTime dateStart = _reportTimestmp.Min(x => x.FocusTime);
-        //        //DateTime dateEnd = _reportTimestmp.Max(x => x.FocusTimeEnd);
-
-        //        //if (_periods == 0) { dateEnd = _reportTimestmp.Max(x => x.FocusTimeEnd); }
-        //        //else { dateEnd = dateEnd.AddSeconds(_periods); }
-
-        //        //int AppsImproClassifyPrevious = _reportTimestmp.First().AppsImproClassify;
-        //        //string AppImproNamePrevious = _reportTimestmp.First().AppImproName;
-        //        //DateTime FocusTimePrevious = _reportTimestmp.First().FocusTime;
-        //        //bool reset = false;
-
-
-        //        //while (dateStart <= _endTest)
-        //        //{
-
-        //        //    var infoApps = new List<string>();
-
-
-
-        //        //    var infoReportTimes = _reportTimestmp.Where(x => x.FocusTime >= dateStart && x.FocusTime <= dateEnd).OrderBy(x => x.FocusTime);
-        //        //    DateTime firstFocusTime = infoReportTimes.Min(x => x.FocusTime);
-        //        //    double sumaActivityRecordAppsAll = 0;
-
-
-
-        //        //    foreach (var itemTimes in infoReportTimes)
-        //        //    {
-        //        //        double sumaActivityRecordAppsApps = itemTimes.Activity;
-
-        //        //        //TimeSpan diff = itemTimes.FocusTimeEnd - dateEnd;
-        //        //        //double _Secondsdiff = Math.Truncate(diff.TotalSeconds);
-        //        //        //if (_Secondsdiff > 0)
-        //        //        //{
-        //        //        //    sumaActivityRecordAppsApps -= _Secondsdiff;
-        //        //        //}
-
-
-        //        //        double _Seconds = Math.Round(sumaActivityRecordAppsApps);
-        //        //        double _Minutes = Math.Truncate(_Seconds / 60);
-        //        //        double _Hours = Math.Truncate(_Minutes / 60);
-
-        //        //        string diff_show = _Seconds + " segundos";
-        //        //        if (_Seconds >= 60)
-        //        //        {
-        //        //            var _SecondsDiff = Math.Abs(((_Minutes * 60) - _Seconds));
-        //        //            diff_show = _Minutes + " minuto(s) " + (_SecondsDiff > 0 ? _SecondsDiff + " segundos" : string.Empty);
-        //        //            if (_Minutes >= 60)
-        //        //            {
-        //        //                var _MinutesDiff = Math.Abs(((_Hours * 60) - _Minutes));
-        //        //                diff_show = _Hours + " hora(s) " + (_MinutesDiff > 0 ? _MinutesDiff + " minuto(s)" : string.Empty);
-        //        //            }
-        //        //        }
-
-        //        //        string ShowInfo = "<b>" + itemTimes.Application + ":</b> " + diff_show;
-
-        //        //        if (AppsImproClassifyPrevious != itemTimes.AppsImproClassify)
-        //        //        {
-        //        //            var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //        //            {
-        //        //                Application = string.Join("</br>", infoApps),
-        //        //                FocusTime = firstFocusTime,
-        //        //                Activity = sumaActivityRecordAppsAll,
-        //        //                AppsImproClassify = AppsImproClassifyPrevious,
-        //        //                AppImproName = AppImproNamePrevious
-        //        //            };
-
-        //        //            NewRecord.ReportSytems.Add(NewReportTimes);
-
-        //        //            infoApps = new List<string>();
-        //        //            sumaActivityRecordAppsAll = 0;
-        //        //            reset = true;
-
-        //        //            firstFocusTime = itemTimes.FocusTimeEnd;
-        //        //        }
-
-        //        //        if (_periods > 0)
-        //        //        {
-        //        //            if (!reset)
-        //        //            {
-        //        //                if ((sumaActivityRecordAppsAll + sumaActivityRecordAppsApps) > _periods)
-        //        //                {
-        //        //                    var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //        //                    {
-        //        //                        Application = string.Join("</br>", infoApps),
-        //        //                        FocusTime = firstFocusTime,
-        //        //                        Activity = sumaActivityRecordAppsAll,
-        //        //                        AppsImproClassify = itemTimes.AppsImproClassify,
-        //        //                        AppImproName = itemTimes.AppImproName
-        //        //                    };
-
-        //        //                    NewRecord.ReportSytems.Add(NewReportTimes);
-
-        //        //                    infoApps = new List<string>();
-        //        //                    sumaActivityRecordAppsAll = 0;
-        //        //                    firstFocusTime = itemTimes.FocusTimeEnd;
-        //        //                }
-        //        //            }
-        //        //            else { reset = false; }
-        //        //        }
-
-        //        //        infoApps.Add(ShowInfo);
-        //        //        sumaActivityRecordAppsAll += sumaActivityRecordAppsApps;
-
-        //        //        AppsImproClassifyPrevious = itemTimes.AppsImproClassify;
-        //        //        AppImproNamePrevious = itemTimes.AppImproName;
-        //        //    }
-
-        //        //    if (infoApps.Any())
-        //        //    {
-        //        //        var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //        //        {
-        //        //            Application = string.Join("</br>", infoApps),
-        //        //            FocusTime = firstFocusTime,
-        //        //            Activity = sumaActivityRecordAppsAll,
-        //        //            AppsImproClassify = AppsImproClassifyPrevious,
-        //        //            AppImproName = AppImproNamePrevious
-        //        //        };
-
-        //        //        NewRecord.ReportSytems.Add(NewReportTimes);
-        //        //    }
-
-        //        //    if (_periods == 0)
-        //        //    {
-        //        //        dateStart = _endTest.AddMinutes(30);
-        //        //    }
-        //        //    else
-        //        //    {
-        //        //        dateStart = dateStart.AddSeconds(_periods);
-        //        //    }
-        //        //}
-
-
-
-        //        //foreach (var itemAppsClasification in listAppsGroupClasification.OrderBy(x => x))
-        //        //{
-        //        //    var RecordTimes = _reportTimestmp.Where(x => x.AppsImproClassify == itemAppsClasification).OrderBy(c => c.FocusTime);
-
-        //        //    //DateTime dateStart = RecordTimes.Min(x => x.FocusTime);
-        //        //    //DateTime dateEnd = dateStart;
-
-
-        //        //    //while (dateStart <= _endTest)
-        //        //    //{
-        //        //    double sumaActivityRecordAppsAll = 0;
-        //        //    var infoApps = new List<string>();
-
-        //        //    if (_periods == 0) { dateEnd = RecordTimes.Max(x => x.FocusTimeEnd); }
-        //        //    else { dateEnd = dateEnd.AddSeconds(_periods); }
-
-        //        //    var infoReportTimes = RecordTimes.Where(x => x.FocusTime >= dateStart && x.FocusTime <= dateEnd);
-        //        //    var groupApps = infoReportTimes.Select(x => x.Application).Distinct();
-
-        //        //    foreach (var itemapp in groupApps)
-        //        //    {
-        //        //        double sumaActivityRecordApps = 0;
-
-        //        //        var infoReportTimesApps = infoReportTimes.Where(x => x.Application == itemapp);
-        //        //        sumaActivityRecordApps = Math.Abs(Math.Truncate(infoReportTimesApps.Sum(x => x.Activity)));
-
-        //        //        TimeSpan diff = infoReportTimesApps.Max(x => x.FocusTimeEnd) - dateEnd;
-        //        //        double _Secondsdiff = Math.Truncate(diff.TotalSeconds);
-
-        //        //        if (_Secondsdiff > 0)
-        //        //        {
-        //        //            sumaActivityRecordApps = sumaActivityRecordApps - _Secondsdiff;
-        //        //        }
-
-
-        //        //        double _Seconds = sumaActivityRecordApps;
-        //        //        double _Minutes = Math.Truncate(_Seconds / 60);
-        //        //        double _Hours = Math.Truncate(_Minutes / 60);
-
-        //        //        string diff_show = _Seconds + " segundos";
-        //        //        if (_Seconds > 60)
-        //        //        {
-        //        //            diff_show = _Minutes + " minuto(s) " + Math.Abs(((_Minutes * 60) - _Seconds)) + " segundos";
-        //        //            if (_Minutes > 60)
-        //        //            {
-        //        //                diff_show = _Hours + " hora(s) " + Math.Abs(((_Hours * 60) - _Minutes)) + " minuto(s)";
-        //        //            }
-        //        //        }
-
-        //        //        string ShowInfo = "<b>" + itemapp + ":</b> " + diff_show;
-
-        //        //        if (_periods > 0)
-        //        //        {
-        //        //            if ((sumaActivityRecordAppsAll + sumaActivityRecordApps) > _periods)
-        //        //            {
-        //        //                var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //        //                {
-        //        //                    Application = string.Join("</br>", infoApps),
-        //        //                    FocusTime = dateStart,
-        //        //                    Activity = sumaActivityRecordAppsAll,
-        //        //                    AppsImproClassify = itemAppsClasification,
-        //        //                    AppImproName = RecordTimes.First().AppImproName
-        //        //                };
-
-        //        //                NewRecord.ReportSytems.Add(NewReportTimes);
-
-        //        //                infoApps = new List<string>();
-        //        //                sumaActivityRecordAppsAll = 0;
-        //        //            }
-        //        //        }
-
-        //        //        infoApps.Add(ShowInfo);
-        //        //        sumaActivityRecordAppsAll += sumaActivityRecordApps;
-
-        //        //    }
-
-        //        //    if (infoApps.Any())
-        //        //    {
-        //        //        var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //        //        {
-        //        //            Application = string.Join("</br>", infoApps),
-        //        //            FocusTime = dateStart,
-        //        //            Activity = sumaActivityRecordAppsAll,
-        //        //            AppsImproClassify = itemAppsClasification,
-        //        //            AppImproName = RecordTimes.First().AppImproName
-        //        //        };
-
-        //        //        NewRecord.ReportSytems.Add(NewReportTimes);
-        //        //    }
-
-
-
-        //        //    if (_periods == 0)
-        //        //    {
-        //        //        dateStart = _endTest.AddMinutes(30);
-        //        //    }
-        //        //    else
-        //        //    {
-        //        //        dateStart = dateStart.AddSeconds(_periods);
-        //        //    }
-
-
-        //        //}
-
-
-
-
-        //        //}
-
-
-
-        //        if (NewRecord.ReportSytems.Any())
-        //        {
-        //            queryAux.Add(NewRecord);
-        //        }
-
-        //    }
-
-        //    //string asdsad = string.Join("|", hahahah);
-
-
-
-
-        //    //foreach (var item in queryPrincipal)
-        //    //{
-        //    //    var NewRecord = new UsersReportGanttModel() { UserName = item.UserName };
-        //    //    var listApps = item.ReportSytems.Select(x => x.Application).Distinct().ToList();
-
-        //    //    foreach (var itemApps in listApps)
-        //    //    {
-        //    //        var RecordTimes = item.ReportSytems.Where(x => x.Application == itemApps);
-        //    //        var sumaActivity = Math.Truncate(RecordTimes.Sum(x => x.Activity));
-
-        //    //        if (!(sumaActivity > 0))
-        //    //        {
-        //    //            continue;
-        //    //        }
-
-        //    //        int IdClassication = 0;
-        //    //        string NameClassication = "Sin clasificar";
-
-        //    //        using (DAL.QueueContext db = new DAL.QueueContext())
-        //    //        {
-        //    //            string _NameApps = item.UserName.Trim().ToUpper();
-        //    //            var programsFound = db.Agent_ProgramClasification.FirstOrDefault(t => t.Agent_Empresa.IdCompany.ToString() == idcompany && t.name.Trim().ToUpper() == _NameApps);
-
-        //    //            if (programsFound != null)
-        //    //            {
-        //    //                switch (programsFound.clasification)
-        //    //                {
-        //    //                    case 1:
-        //    //                        NameClassication = "Productivas";
-        //    //                        break;
-        //    //                    case 2:
-        //    //                        NameClassication = "Improductiva";
-        //    //                        break;
-        //    //                    case 3:
-        //    //                        NameClassication = "Neutrales";
-        //    //                        break;
-        //    //                }
-        //    //            }
-        //    //        }
-
-
-        //    //        var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //    //        {
-        //    //            Application = itemApps,
-        //    //            FocusTime = RecordTimes.OrderBy(x => x.FocusTime).First().FocusTime,
-        //    //            Activity = sumaActivity,
-        //    //            AppsImproClassify = IdClassication,
-        //    //            AppImproName = NameClassication
-        //    //        };
-
-        //    //        NewRecord.ReportSytems.Add(NewReportTimes);
-
-        //    //    }
-
-
-        //    //    queryAux.Add(NewRecord);
-        //    //}
-
-
-        //    return queryAux;
-        //}
-
-        //public async Task<List<UsersReportGanttModel>> GetactivityDataUserSelected(string idcompany, DateTime fromdate, DateTime todate, string user)
-        //{
-
-        //    var _queryFiltre = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
-        //        Where(e => e.IdEmpresa == idcompany);
-
-        //    _queryFiltre = _queryFiltre.Where(x => x.UserName == user);
-
-        //    var _startTest = new DateTime(fromdate.Year, fromdate.Month, fromdate.Day);
-        //    var _endTest = new DateTime(todate.Year, todate.Month, todate.Day);
-        //    _endTest = _endTest.Add(new TimeSpan(23, 59, 59));
-
-        //    _queryFiltre = _queryFiltre.Where(s => s.FocusTime >= _startTest && s.FocusTime <= _endTest);
-
-        //    var queryPrincipal = _queryFiltre.
-        //        GroupBy(e => e.UserName)
-        //        .Select(e =>
-        //                   new UsersReportGanttModel
-        //                   {
-        //                       UserName = e.Key,
-        //                       ReportSytems = e.Select(x => new UsersReportGanttModel.ReportTime()
-        //                       {
-        //                           Application = x.Application,
-        //                           FocusTime = x.FocusTime,
-        //                           Activity = x.Activity
-        //                       }).ToList()
-        //                   }).ToList();
-
-
-
-        //    ConcurrentQueue<UsersReportGanttModel> queryAuxParallel = new ConcurrentQueue<UsersReportGanttModel>();
-
-        //    await Task.FromResult(Parallel.ForEach(queryPrincipal, new ParallelOptions { MaxDegreeOfParallelism = 4 }, async (Item) =>
-        //    {
-        //        UsersReportGanttModel InsertArray = new UsersReportGanttModel() { UserName = Item.UserName };
-
-        //        ConcurrentQueue<UsersReportGanttModel.ReportTime> _ReportSytemsParallel = new ConcurrentQueue<UsersReportGanttModel.ReportTime>();
-
-        //        await Task.FromResult(Parallel.ForEach(Item.ReportSytems, new ParallelOptions { MaxDegreeOfParallelism = 6 }, (Item2) =>
-        //        {
-        //            string _NameApps = Item2.Application.Trim().ToUpper();
-        //            int IdClassication = 0;
-        //            string NameClassication = "Sin clasificar";
-
-        //            using (DAL.QueueContext db = new DAL.QueueContext())
-        //            {
-
-        //                var programsFound = db.Agent_ProgramClasification.FirstOrDefault(t => t.Agent_Empresa.IdCompany.ToString() == idcompany && t.name.Trim().ToUpper() == _NameApps);
-
-        //                if (programsFound != null)
-        //                {
-        //                    switch (programsFound.clasification)
-        //                    {
-        //                        case 1:
-        //                            IdClassication = 1;
-        //                            NameClassication = "Productivas";
-        //                            break;
-        //                        case 2:
-        //                            IdClassication = 2;
-        //                            NameClassication = "Improductiva";
-        //                            break;
-        //                        case 3:
-        //                            IdClassication = 3;
-        //                            NameClassication = "Neutrales";
-        //                            break;
-        //                    }
-        //                }
-        //            }
-
-        //            var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //            {
-        //                Application = _NameApps,
-        //                FocusTime = Item2.FocusTime,
-        //                Activity = Item2.Activity,
-        //                AppsImproClassify = IdClassication,
-        //                AppImproName = NameClassication
-        //            };
-
-        //            _ReportSytemsParallel.Enqueue(NewReportTimes);
-
-
-        //        }));
-
-        //        InsertArray.ReportSytems = _ReportSytemsParallel.OrderBy(x => x.FocusTime).ToList();
-
-        //        queryAuxParallel.Enqueue(InsertArray);
-
-        //    }));
-
-
-        //    List<UsersReportGanttModel> queryAux = new List<UsersReportGanttModel>();
-
-        //    foreach (var item in queryAuxParallel)
-        //    {
-
-
-        //        List<UsersReportGanttModel.ReportTime> _reportTimestmp = new List<UsersReportGanttModel.ReportTime>();
-
-        //        var RecordTimes = item.ReportSytems.OrderBy(c => c.FocusTime);
-        //        string _IdAppsPrevious = string.Empty;
-
-        //        foreach (var itemReportTimes in RecordTimes)
-        //        {
-        //            var insertData = true;
-        //            if (_IdAppsPrevious == itemReportTimes.Application)
-        //            {
-        //                var sumaActivityRecordAppsLocal = itemReportTimes.Activity;
-        //                var infoTimesApps = _reportTimestmp.Where(x => x.Application == itemReportTimes.Application).OrderBy(x => x.FocusTimeEnd);
-        //                if (infoTimesApps.Any())
-        //                {
-        //                    var timesApps = infoTimesApps.Last();
-
-        //                    TimeSpan diff = timesApps.FocusTimeEnd - itemReportTimes.FocusTime;
-        //                    double _Seconds = Math.Abs(Math.Truncate(diff.TotalSeconds));
-        //                    if (!(_Seconds > 0))
-        //                    {
-        //                        timesApps.Activity += itemReportTimes.Activity;
-        //                        insertData = false;
-        //                    }
-        //                }
-        //            }
-
-        //            if (insertData)
-        //            {
-        //                var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //                {
-        //                    Application = itemReportTimes.Application,
-        //                    FocusTime = itemReportTimes.FocusTime,
-        //                    Activity = itemReportTimes.Activity,
-        //                    AppsImproClassify = itemReportTimes.AppsImproClassify,
-        //                    AppImproName = itemReportTimes.AppImproName
-        //                };
-
-        //                _reportTimestmp.Add(NewReportTimes);
-        //            }
-
-        //            _IdAppsPrevious = itemReportTimes.Application;
-        //        }
-
-        //        var NewRecord = new UsersReportGanttModel() { UserName = item.UserName };
-        //        _reportTimestmp = _reportTimestmp.OrderBy(x => x.FocusTime).ToList();
-
-        //        var _FocusTime = _reportTimestmp.FirstOrDefault().FocusTime;
-
-        //        foreach (var itemReportTimes in _reportTimestmp)
-        //        {
-
-        //            var NewReportTimes = new UsersReportGanttModel.ReportTime
-        //            {
-        //                Application = itemReportTimes.Application,
-        //                GroupApplication = new List<UsersReportGanttModel.ReportTimeGroupApps>() { new UsersReportGanttModel.ReportTimeGroupApps() { Application = itemReportTimes.Application, AppImproName = itemReportTimes.AppImproName, AppsImproClassify = itemReportTimes.AppsImproClassify, Activity = itemReportTimes.Activity } },
-        //                FocusTime = _FocusTime,
-        //                Activity = itemReportTimes.Activity,
-        //                AppsImproClassify = itemReportTimes.AppsImproClassify,
-        //                AppImproName = itemReportTimes.AppImproName
-        //            };
-
-        //            NewRecord.ReportSytems.Add(NewReportTimes);
-
-        //            _FocusTime = NewReportTimes.FocusTimeEnd;
-        //        }
-
-        //        var list_apps = NewRecord.ReportSytems.Select(x => x.Application).Distinct();
-        //        foreach (var itemNameApps in list_apps)
-        //        {
-        //            var _NewRecord = new UsersReportGanttModel() { UserName = itemNameApps };
-
-        //            foreach (var itemTimeTrack in NewRecord.ReportSytems.Where(x => x.Application == itemNameApps).OrderBy(x => x.FocusTime))
-        //            {
-        //                _NewRecord.ReportSytems.Add(itemTimeTrack);
-        //            }
-
-        //            queryAux.Add(_NewRecord);
-
-        //        }
-        //    }
-
-        //    return queryAux;
-        //}
 
 
         public async Task<List<UsersReportGanttModel>> GetactivityData(string idcompany, DateTime fromdate, DateTime todate, int periods, string[] user)
@@ -1970,40 +1129,6 @@ namespace Queue.Controllers
             return bm;
         }
 
-        //public BasicStatsModel hh(string idcompany, DateTime fromdate, DateTime todate)
-        //{
-        //    BasicStatsModel bm = new BasicStatsModel();
-        //    var query = (from e in MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>()
-        //                 where e.IdEmpresa == idcompany
-        //                 && e.Date >= fromdate && e.Date <= todate
-        //                 select new AutomaticTakeTimeModel
-        //                 {
-        //                     Application = e.Application,
-        //                     Time = e.Activity,
-        //                     Date = e.Date
-        //                 }).Distinct().ToList();
-
-        //    foreach (var grouping in query.OrderByDescending(x => x.Time).GroupBy(g => g.Application).ToList())
-        //    {
-        //        var item = grouping;
-
-        //        double? time = query.Where(t => t.Application == item.Key).Select(f => f.Time).Sum();
-        //        bm.labels.Add(item.Key);
-        //        var date = query.Where(t => t.Application == item.Key).Select(f => f.Date).ToList();
-
-        //        double? totalminutes = 0;
-        //        for (int i = 0; i < date.Count; i++)
-        //        {
-        //            bm.DateTime.Add(date[i].ToString("H:mm:ss"));
-        //        }
-        //        if (time != null && time > 0)
-        //            totalminutes = (time / 60);
-
-        //        bm.data.Add(Math.Round(totalminutes.Value, 2));
-        //    }
-
-        //    return bm;
-        //}
         public BasicStatsDate DateUsedApp(string app, DateTime fromdate, DateTime todate)
         {
             BasicStatsDate bm = new BasicStatsDate();
@@ -2074,7 +1199,6 @@ namespace Queue.Controllers
                         sr = new SoftwareReport();
                         sr.program = i.Key;
                         sr.quantity = i.Count();
-                        sr.user = i.FirstOrDefault().User;
                         srlist.Add(sr);
                     }
                 }
@@ -2093,8 +1217,7 @@ namespace Queue.Controllers
             return View(srlist);
         }
 
-
-        public ActionResult SoftwareReportDetails(string name , Guid? idgroup, string user =  "00000000-0000-0000-0000-000000000000")
+        public ActionResult SoftwareReportDetails(string name, Guid? idgroup, string user = "00000000-0000-0000-0000-000000000000")
         {
             List<SoftwareReport> srlist = new List<SoftwareReport>();
             Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
@@ -2145,8 +1268,6 @@ namespace Queue.Controllers
 
             return View(srlist);
         }
-
-
         public ActionResult HardwareReport(string user, Guid? idgroup)
         {
             List<HardwareReport> srlist = new List<HardwareReport>();
@@ -2179,7 +1300,6 @@ namespace Queue.Controllers
                     {
                         sr = new HardwareReport();
                         sr.type = i.Key.Type;
-                        sr.user = i.FirstOrDefault().User;
                         sr.hardware = i.Key.Hardware;
                         sr.quantity = i.Count();
                         srlist.Add(sr);
@@ -2211,7 +1331,7 @@ namespace Queue.Controllers
                     MongoHelper.HardWareList = MongoHelper.database.GetCollection<InstalledHardwareViewModel>("Hardware");
                     var builder = Builders<InstalledHardwareViewModel>.Filter;
                     var filter = builder.Eq("IdCompany", IdCompany) & builder.Eq("status", true) & builder.Eq("Hardware", hardware);
-                   
+
                     List<InstalledHardwareViewModel> results = MongoHelper.HardWareList.Find(filter).ToList();
 
                     if (idgroup != null && idgroup != Guid.Empty)
@@ -2233,12 +1353,12 @@ namespace Queue.Controllers
                         sr = new HardwareReport();
                         sr.agrupation = i.Pc;
                         sr.type = i.Type;
-                        sr.hardware = i.Hardware;             
+                        sr.hardware = i.Hardware;
                         srlist.Add(sr);
                     }
                 }
             }
-            
+
             List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
             sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.idgroup = sli;
@@ -2247,13 +1367,19 @@ namespace Queue.Controllers
             List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
             sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.user = sle;
-            
+
 
             return View(srlist);
         }
 
+        //public ActionResult CapturesReport(string user, Guid? idgroup, DateTime? Datefrom, DateTime? Dateto)
+        [HttpGet]
+        public ActionResult CapturesReport()
+        {
+            return View();
+        }
 
-        public ActionResult CapturesReport(string user, Guid? idgroup, DateTime? Datefrom, DateTime? Dateto)
+        public ActionResult CapturesReport(CapturesViewModel cm)
         {
             Guid IdCompany = Guid.Empty;
             string IdCompany_ = IdCompany.ToString();
@@ -2269,26 +1395,27 @@ namespace Queue.Controllers
 
 
             List<CapturesViewModel> ListCapturesViewModel = new List<CapturesViewModel>();
-            if (Datefrom != null && Dateto != null && (!string.IsNullOrEmpty(user) || idgroup != Guid.Empty))
+            if (cm.DateFrom != null && cm.DateTo != null && (!string.IsNullOrEmpty(cm.UserName) || cm.idgroup != Guid.Empty))
             {
-                Dateto = Dateto.Value.AddHours(23).AddMinutes(59);
+                cm.DateTo = cm.DateTo.AddHours(23).AddMinutes(59);
 
                 List<string> users = new List<string>();
 
-                if (!string.IsNullOrEmpty(user))
+                if (!string.IsNullOrEmpty(cm.UserName))
                 {
-                    users.Add(user);
+                    users.Add(cm.UserName);
                 }
 
-                if (idgroup != Guid.Empty)
+                if (cm.idgroup != Guid.Empty)
                 {
                     users = new List<string>();
-                    users = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_EmployeesGroups.idemployeesGroup == idgroup).Select(g => g.Agent_Employee.Usuario).ToList();
+                    users = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_EmployeesGroups.idemployeesGroup == cm.idgroup).Select(g => g.Agent_Employee.Usuario).ToList();
                 }
 
                 ListCapturesViewModel = (from e in MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture").AsQueryable<CaptureBase>()
                                          where e.IdCompany == IdCompany_
-                                         && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)
+                                         && (e.Date >= cm.DateFrom && e.Date <= cm.DateTo)
+
                                          select new CapturesViewModel
                                          {
                                              idrecord = e.idrecord,
@@ -2309,14 +1436,14 @@ namespace Queue.Controllers
                     i.Date = i.Date.AddHours(-5);
                 }
 
-                ViewBag.Datefrom = Datefrom.Value.ToString("yyyy-MM-dd");
-                ViewBag.Dateto = Dateto.Value.ToString("yyyy-MM-dd");
+                ViewBag.Datefrom = cm.DateFrom.ToString("yyyy-MM-dd");
+                ViewBag.Dateto = cm.DateTo.ToString("yyyy-MM-dd");
             }
-            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", cm.idgroup);
             sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.idgroup = sli;
 
-            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", cm.UserName);
             sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.user = sle;
 
@@ -2325,7 +1452,6 @@ namespace Queue.Controllers
 
             return View(ListCapturesViewModel.OrderByDescending(o => o.Date));
         }
-        [HttpGet]
         public JsonResult GetCapturesReport(string id_)
         {
             try
@@ -2345,7 +1471,7 @@ namespace Queue.Controllers
                     cvm.UserName = Capturelist.UserName;
                     cvm.idrecord = Capturelist.idrecord;
                     cvm.image = Convert.ToBase64String(Capturelist.Image);
-                    cvm.Date = Capturelist.Date.AddHours(-5);
+                    cvm.Date = Capturelist.Date;
                 }
                 return Json(cvm, JsonRequestBehavior.AllowGet);
             }

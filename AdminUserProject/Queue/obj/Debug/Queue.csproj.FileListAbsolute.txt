@@ -4819,3 +4819,15 @@ C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.csproj.CoreCo
 C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.csproj.CopyComplete
 C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.dll
 C:\Sebastian\git\MonitorWeb\AdminUserProject\Queue\obj\Debug\Queue.pdb
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libzstd.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\libzstd.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.dll
+D:\Proyectos\Personales\Monitor\MonitorWeb\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.xml
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libzstd.so
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libsnappy64.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\libzstd.dylib
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.dll
+D:\Proyectos\Personales\Monitor\MonitorWeb\AdminUserProject\Queue\bin\System.Text.Encoding.CodePages.xml

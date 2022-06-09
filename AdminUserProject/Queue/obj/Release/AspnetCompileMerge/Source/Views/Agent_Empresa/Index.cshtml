@@ -49,6 +49,7 @@
                                 </th>
                                 <th style="text-align:center">Edit</th>
                                 <th style="text-align:center">Configurations</th>
+                                <th style="text-align:center">Licenses</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -69,23 +70,24 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Rut)
-                                </td>                                
+                                </td>
                                 <td>
                                     @if (item.status == true)
                                     {
-                                        <label>Active</label>
-                                    }
-                                    else
+                                        <label>Active</label> 
+                                    }else
                                     {
                                         <label>Inactive</label>
                                     }
-
                                 </td>
                                 <td style="text-align:center">
                                     <a class="btn btn-outline-secondary" href="@Url.Action("Edit", "Agent_Empresa", new { id = item.IdCompany })"><i class="fa fa-edit"></i></a>
                                 </td>
                                 <td style="text-align:center">
                                     <a class="btn btn-outline-secondary" href="@Url.Action("Create", "Agent_Configuration", new { id = item.IdCompany })"><i class="fa fa-laptop"></i></a>
+                                </td>
+                                <td style="text-align:center">
+                                    <a class="btn btn-outline-secondary" href="@Url.Action("Index", "Licenses", new { idempresa = item.IdCompany })"><i class="fa fa-drivers-license-o"></i></a>
                                 </td>
                             </tr>
                             }

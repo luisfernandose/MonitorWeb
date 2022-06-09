@@ -31,8 +31,13 @@ namespace Queue.Models
 
         [BsonElement]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime FocusTime { get; set; }     
-     
+        public DateTime FocusTime { get; set; }
+
+        public string UploadFrecuency { get; set; }
+        public string Frecuency { get; set; }
+        public string prevvalue { get; set; }
+        public string newvalue { get; set; }
+
 
         [Display(Name = "token")]
         [JsonProperty("token")]

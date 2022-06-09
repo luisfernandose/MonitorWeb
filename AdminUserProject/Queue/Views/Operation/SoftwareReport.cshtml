@@ -21,8 +21,8 @@
                                 </a>
                             </div>*@
                         @*<div class="btn-group" role="group" aria-label="...">
-                            <input type="button" id="create_pdf" class="btn btn-info btn-sm m-t-10 float-right" value="Generate PDF">
-                        </div>*@
+                                <input type="button" id="create_pdf" class="btn btn-info btn-sm m-t-10 float-right" value="Generate PDF">
+                            </div>*@
                     </div>
                 </div>
                 <br />
@@ -56,7 +56,7 @@
                     <table id="myTable" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th style="text-align:center" class="col-md-7">
+                                <th style="text-align:center">
                                     Programa
                                 </th>
                                 <th style="text-align:center">
@@ -76,16 +76,16 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.program)
                                         </td>
-                                        <td style="text-align:center">
+                                        <td>
                                             @Html.DisplayFor(modelItem => item.quantity)
                                         </td>
                                         <td style="text-align:center">
                                             <a class="btn btn-outline-secondary" href="@Url.Action("SoftwareReportDetails", "Operation", new { name = item.program, idgruop = item.idgroup })"><i class="fa fa-eye"></i></a>
                                         </td>
                                     </tr>
-
                                 }
                             }
+
                         </tbody>
                     </table>
                 </div>

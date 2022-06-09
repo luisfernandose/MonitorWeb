@@ -20,31 +20,61 @@
                         </div>*@
                 </div>
                 @using (Html.BeginForm("CapturesReport", "Operation"))
-                 {
-            <div class="row">
-                <div class="col-lg-3">
-                    <label asp-for="idgroup" class="control-label">Grupos</label>
-                    <span asp-validation-for="idgroup" class="text-danger"></span>
-                    @Html.DropDownList("idgroup", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
-                    <br />
-                </div>
-                <div class="col-lg-3">
-                    <label asp-for="user" class="control-label">Usuarios</label>
-                    <span asp-validation-for="user" class="text-danger"></span>
-                    @Html.DropDownList("user", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
-                    <br />
-                </div>
-                <div class="col-lg-3">
-                    <label>Fecha Desde:</label>
-                    <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="" />
-                    <br />
-                </div>
-                <div class="col-lg-3">
-                    <label>Fecha Desde:</label>
-                    <input type="date" class="form-control" id="DateTo" name="DateTo" value="" />
-                    <br />
-                </div>
-            </div>
+                {
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label asp-for="idgroup" class="control-label">Grupos</label>
+                            <span asp-validation-for="idgroup" class="text-danger"></span>
+                            @Html.DropDownList("idgroup", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
+                            <br />
+                        </div>
+                        <div class="col-lg-3">
+                            <label asp-for="user" class="control-label">Usuarios</label>
+                            <span asp-validation-for="user" class="text-danger"></span>
+                            @Html.DropDownList("user", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
+                            <br />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Fecha Desde:</label>
+                            <input type="date" class="form-control" id="DateFrom" name="DateFrom" value="" />
+                            <br />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Fecha Desde:</label>
+                            <input type="date" class="form-control" id="DateTo" name="DateTo" value="" />
+                            <br />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Hora:</label>
+                            <select class="form-control">
+                                <option value="0">Seleccione</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                            </select>
+                            <br />
+                        </div>
+                    </div>
                     <div class="form-actions" style="text-align:center">
                         <div class="d-flex flex-row-reverse">
                             <div class="p-2">
@@ -52,12 +82,12 @@
                                     Consultar
                                 </button>
                             </div>
-                            <div class="p-2">
-                                <input type="button" id="create_pdf" class="btn btn-info" value="Generate PDF">
-                            </div>
+                            @*<div class="p-2">
+                                    <input type="button" id="create_pdf" class="btn btn-info" value="Generate PDF">
+                                </div>*@
                         </div>
                     </div>
-                 }
+                }
 
                 <br />
                 <br />
@@ -84,20 +114,20 @@
 
                                 foreach (var item in Model)
                                 {
-                <tr>
-                    <td style="text-align:left">
-                        @Html.DisplayFor(modelItem => item.UserName)
-                    </td>
-                    <td style="text-align:center">
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td style="text-align:center">
-                        <img style="width:150px;height:100px" data-fancybox data-src="#hidden-content" onclick="showimage('@item.idrecord')" src="data:image/png;base64,@item.image">
-                    </td>
-                </tr>
-idenx = idenx + 1;
-            }
-        }
+                                    <tr>
+                                        <td style="text-align:left">
+                                            @Html.DisplayFor(modelItem => item.UserName)
+                                        </td>
+                                        <td style="text-align:center">
+                                            @Html.DisplayFor(modelItem => item.Date)
+                                        </td>
+                                        <td style="text-align:center">
+                                            <img style="width:150px;height:100px" data-fancybox data-src="#hidden-content" onclick="showimage('@item.idrecord')" src="data:image/png;base64,@item.image">
+                                        </td>
+                                    </tr>
+                                    idenx = idenx + 1;
+                                }
+                            }
 
                         </tbody>
                     </table>

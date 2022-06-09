@@ -10,10 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Queue.Utils;
-using Queue.Controllers.Token;
-using Queue.Models;
-
 namespace Queue.Controllers
 {
     [Authorize]

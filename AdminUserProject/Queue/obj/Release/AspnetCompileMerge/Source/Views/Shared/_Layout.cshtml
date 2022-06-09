@@ -15,9 +15,12 @@
     <link href="~/Content/css/master_style.css" rel="stylesheet" />
     <link href="~/Content/css/skins/_all-skins.css" rel="stylesheet" />
     <link href="~/Content/css/Spiner.css" rel="stylesheet" />
+    <link href="~/Content/jquery.fancybox.css" rel="stylesheet" />
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="https://raw.githack.com/ttskch/select2-bootstrap4-theme/master/dist/select2-bootstrap4.css" rel="stylesheet">
     <script src="~/assets/vendor_components/chart-js/chart.js"></script>
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
 
     @*@Styles.Render("~/css")*@
 </head>
@@ -48,14 +51,15 @@
                     </a>
                 </div>
                 <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
 
+                    <ul class="nav navbar-nav">
                         <li class="search-box">
                             <a class="nav-link hidden-sm-down" href="javascript:void(0)"><i class="mdi mdi-magnify"></i></a>
                             <form class="app-search" style="display: none;">
                                 <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
                             </form>
-                        </li>
+
+                        </li>                       
                         <!-- User Account-->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -115,36 +119,60 @@
                         </a>
                     </li>
 
-                    @if (User.IsInRole("Admin"))
+                    @if (User.IsInRole("Admin") || User.IsInRole("SAdmin"))
                     {
-                        <li class="">
-                            <a href="@Url.Action("UserList", "Manage")">
-                                <i class="mdi mdi-account-circle"></i>
-                                <span>Usuarios</span>
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="mdi mdi-apps"></i>
+                                <span>Administración</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-right pull-right"></i>
+                                </span>
                             </a>
-                        </li>
+                            <ul class="treeview-menu">
+                                <li class="">
+                                    <a href="@Url.Action("UserList", "Manage")">
+                                        <i class="mdi mdi-account-circle"></i>
+                                        <span>Usuarios</span>
+                                    </a>
+                                </li>
 
-                        <li class="">
-                            <a href="@Url.Action("Index", "Agent_Employee")">
-                                <i class="fa fa-users"></i>
-                                <span>Empleados</span>
-                            </a>
-                        </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_Employee")">
+                                        <i class="fa fa-users"></i>
+                                        <span>Empleados</span>
+                                    </a>
+                                </li>
 
-                        <li class="">
-                            <a href="@Url.Action("Index", "Agent_Job")">
-                                <i class="fa fa-calendar"></i>
-                                <span>Cargos & Horarios</span>
-                            </a>
-                        </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_Job")">
+                                        <i class="mdi mdi-clipboard-account"></i>
+                                        <span>Cargos</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_EmployeesGroups")">
+                                        <i class="mdi mdi-clipboard-account"></i>
+                                        <span>Grupos Usuarios</span>
+                                    </a>
+                                </li>
 
-                        <li class="">
-                            <a href="@Url.Action("Index", "Agent_ProgramClasification")">
-                                <i class="fa fa-microchip"></i>
-                                <span>Clasificación de programas</span>
-                            </a>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_ProgramClasification")">
+                                        <i class="mdi mdi-format-list-numbers"></i>
+                                        <span>Clasificación de programas</span>
+                                    </a>
+                                </li>
+                                <li class="">
+                                    <a href="@Url.Action("Index", "Agent_GroupHorary")">
+                                        <i class="fa fa-clock-o"></i>
+                                        <span>Jornada Laboral</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     }
+
                     @if (User.IsInRole("SAdmin"))
                     {
                         <li class="">
@@ -154,33 +182,58 @@
                             </a>
                         </li>
                     }
-                    @if (User.IsInRole("User"))
-                    {
-
-                    }
-
-                    <li class="">
-                        <a href="@Url.Action("Index", "Agent_GroupHorary")">
-                            <i class="fa fa-clock-o"></i>
-                            <span>Group Horary</span>
-                        </a>
-                    </li>
 
                     <li class="treeview">
                         <a href="#">
                             <i class="mdi mdi-notification-clear-all"></i>
-                            <span>Reportes</span>
+                            <span>Informes</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-right pull-right"></i>
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="@Url.Action("Index", "UserReport")">Por Empleado</a></li>
-                            <li><a href="@Url.Action("Index", "ReportApplications")">Aplicaciones mas usadas</a></li>
-                            <li><a href="@Url.Action("Index", "MainApplicationsAndSites")">Principales Sitios Web y Aplicaciones</a></li>
-                            <li><a href="@Url.Action("Index", "ReportGantt")">Reporte Gantt</a></li>
-                        </ul>  
+                            <li>
+                                <a href="@Url.Action("Index", "ReportGantt")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Actividades</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("SoftwareReport", "Operation")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Software</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("HardwareReport", "Operation")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Hardware</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("CapturesReport", "Operation")">
+                                    <i class="mdi mdi-gauge"></i>
+                                    <span>Reporte Capturas</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
+                    <li class="">
+                        <a href="#">
+                            <i class="mdi mdi-help-circle-outline"></i>
+                            <span>Ayuda</span>
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <a href="#">
+                            <i class="mdi mdi-monitor"></i>
+                            <span>Asistencia Técnica</span>
+                        </a>
+                    </li>
+
+
                 </ul>
             </section>
         </aside>
@@ -189,13 +242,19 @@
         <div class="content-wrapper">
             <!-- Main content -->
             <section class="content">
+                <p style="color:red; font-weight:900">@ViewBag.restdaysmsg</p>                
                 @RenderBody()
+                <div style="display: none;" id="hidden-content">
+                    <img id="large-image" src="" />
+                </div>
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            &copy; @DateTime.Now.Year - MonitorTracker - ALL GROUP TECHNOLOGY
+            &copy; @DateTime.Now.Year - MonitorTracker - ALL GROUP TECH
+            <span id="siteseal">
+                @*<script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=7sy6EnKmQtilyicwT374CUUg1zSSb8vpuoxFrCpOhXpZtBapQHPrkBh0Tbb2"></script></span>*@
         </footer>
         <div class="control-sidebar-bg"></div>
 
@@ -244,60 +303,55 @@
     <script src="~/assets/vendor_components/select2/dist/js/select2.full.js"></script>
     <script src="~/js/template.js"></script>
     <script src="~/js/iframeheight.js"></script>
-    <script src="~/js/Common.js?01"></script>
+    <script src="~/js/Common.js?02"></script>
+    <script src="~/Scripts/select2.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/jquery.fancybox.js"></script>
 
- 
 
     @if (TempData.ContainsKey(Queue.Utils.Alerts.SUCCESS))
     {
         foreach (var value in TempData.Values)
         {
             <script>
-            swal("Exitoso!", "@value.ToString()", "success");            
-    </script>
-}
-TempData.Remove(Queue.Utils.Alerts.SUCCESS);
-}
+            swal("Exitoso!", "@value.ToString()", "success");
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.SUCCESS);
+    }
 
-@if (TempData.ContainsKey(Queue.Utils.Alerts.ERROR))
-{
-    foreach (var value in TempData.Values)
+    @if (TempData.ContainsKey(Queue.Utils.Alerts.ERROR))
     {
-<script>
+        foreach (var value in TempData.Values)
+        {
+            <script>
         swal("Atención!", "@value.ToString()", "error");
-</script>
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.ERROR);
     }
-    TempData.Remove(Queue.Utils.Alerts.ERROR);
-}
 
-@if (TempData.ContainsKey(Queue.Utils.Alerts.INFORMATION))
-{
-    foreach (var value in TempData.Values)
+    @if (TempData.ContainsKey(Queue.Utils.Alerts.INFORMATION))
     {
-<script>
+        foreach (var value in TempData.Values)
+        {
+            <script>
         swal("Atención!", "@value.ToString()", "info");
-</script>
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.INFORMATION);
     }
-    TempData.Remove(Queue.Utils.Alerts.INFORMATION);
-}
 
-@if (TempData.ContainsKey(Queue.Utils.Alerts.WARNING))
-{
-    foreach (var value in TempData.Values)
+    @if (TempData.ContainsKey(Queue.Utils.Alerts.WARNING))
     {
-<script>
+        foreach (var value in TempData.Values)
+        {
+            <script>
         swal("Atención!", "@value.ToString()", "warning");
-</script>
+            </script>
+        }
+        TempData.Remove(Queue.Utils.Alerts.WARNING);
     }
-    TempData.Remove(Queue.Utils.Alerts.WARNING);
-}
-
-   
-@Html.EJS().ScriptManager()
-
-
-
 
 </body>
 

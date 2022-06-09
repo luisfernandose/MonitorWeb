@@ -1,132 +1,427 @@
 ﻿@{ ViewBag.Title = "Home Page"; }
 
+@{ var ListPeriods = new List<SelectListItem>()
+{
+        new SelectListItem() { Text = "5 Minutos", Value = "5", Selected = true},
+        new SelectListItem() { Text = "10 Minutos", Value = "10"},
+        new SelectListItem() { Text = "30 Minutos", Value = "30"},
+        new SelectListItem() { Text = "45 Minutos", Value = "45"},
+        new SelectListItem() { Text = "Una hora", Value = "60"},
+        new SelectListItem() { Text = "Dos horas", Value = "120"}
+    };
 
+    var ListUser = new List<SelectListItem>() { new SelectListItem() { Text = "Todos", Value = "Todos", Selected = true }, };
+
+    foreach (var item in ViewBag.DataUser)
+    {
+        ListUser.Add(item);
+    } }
+<style>
+
+    .modal.fade {
+        z-index: 999999 !important;
+    }
+
+    .modal {
+        top: 49px !important;
+    }
+
+    .modal-backdrop {
+        z-index: -10 !important;
+        display: none !important;
+    }
+
+
+    .modal-dialog {
+        max-width: 65%;
+        width: 65% !important;
+        /*margin: auto !important;
+        margin-top: 10px !important;*/
+    }
+</style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
-<div class="row">
-    <div class="col-md-12">
+<script src="~/Scripts/moment-with-locales.js"></script>
+<script src="~/Scripts/jquery.loading.js"></script>
+
+<div class="row" id="reporteAct">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Selecciones rango de fechas a visualizar en las graficas</h4>
                 <div class="card-body">
-                    <div class="row button-group">
-                        <div class="row col-md-6">
-                            <div class="col-md-6">
-                                <label>Fecha desde</label>
-                                <div class="input-group">
-                                    <input id="DateFrom" type="date" value="@ViewBag.DateFrom.ToString("yyyy-MM-dd")" />
-                                </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label>Fecha</label>
+                            <div class="input-group">
+                                <input id="DateFrom" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                             </div>
-                            
                         </div>
 
+                        <div class="col-lg-3">
+                            <label>Mostrar Intervalos</label>
+                            <div class="input-group">
+                                @Html.DropDownList("ddlPeriods", ListPeriods, "", new { @class = "form-control select2", style = "width:100%;", required = "required" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <label>Empleados</label>
+                            <div class="input-group">
+                                @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;", multiple = "true", required = "required" })
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <br />
+                            <button id="btnProcesarConsulta" class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
+                                <strong>Buscar</strong>
+                            </button>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <h4>Mapa de Colores</h4>
+                            <br />
+                        </div>
+                        <div class="col-lg-3">
+                            <input type="button" id="create_pdf" class="btn-sm btn-info btn-block" value="Generate PDF">
+                            <br />
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        @*['#55cbcd', '#ff968a', '#96b3c2', '#445a67'];*@
 
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <td>Productivas </td>
+                                <td style="background-color: #55cbcd;width:80px"></td>
+                                <td>Impoductivas </td>
+                                <td style="background-color: #ff968a; width: 80px"></td>
+                                <td>Neutrales </td>
+                                <td style="background-color: #96b3c2; width: 80px"></td>
+                                <td>Inactivo </td>
+                                <td style="background-color: #445a67; width: 80px"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            <div id="chart_div"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Aplicaciones</h4>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="divWait" style="display:none"> <i class="fa fa-spin fa-spinner"></i> Un momento por favor...</p>
+
+                            <div class="row">
+                                <div id="sin_Data" style="display:none" class="col-12">
+                                    <div class="alert alert-danger">
+                                        <strong>Sin registros!</strong> No hay datos disponibles para la fecha seleccionada
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="oneuser" class="row">
+                        <div class="col-2"></div>
+                        <div class="col-4">
+                            <select class="form-control select2" style="width:100% !important" id='ddl_users_apps'></select>
+                        </div>
+                        <div class="col-3" style="text-align:center !important">
+                            <button id="btnProcesarConsultaApps" class="btn-sm btn-info btn-block" type="button">
+                                <strong>Mostrar aplicaciones</strong>
+                            </button>
+                        </div>
+                        <div class="col-3"></div>
+
+                    </div>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div class="row">
+                                <div id="chart_div_0" class="col-12">
+                                </div>
+                            </div>
+                            <!-- Button trigger modal -->
+                            <!-- Modal -->
+                            <div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1">
+                                <div style="margin-left:25%" class="modal-dialog ">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="user_show"></h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="chart_div_2" class="col-12"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
 
 </div>
 
-
-
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+<script src="~/assets/plugins/general/moment/min/moment.min.js" type="text/javascript"></script>
+<script src="~/js/DownloadsPDF.js"></script>
 
 <script>
+
     jQuery(document).ready(async function () {
-        function ReportGantt(parameter) {
-            fetch('/ReportGantt/NewChart', {
-                method: 'POST', // or 'PUT'
-                body: JSON.stringify(parameter), // data can be `string` or {object}!
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json())
-              .then(data => drawChart(data));
+        $("#oneuser").hide();
 
-            google.charts.load("current", { packages: ["timeline"] });
-            google.charts.setOnLoadCallback(drawChart);
-            function drawChart(data) {
+        $('#ddlUsers').select2({
+            theme: "classic"
+        });
+        $('#ddl_users_apps').select2({
+            theme: "classic"
+        });
+    });
 
-                let userData = {
-                    User: []
-                };
-                console.log(data);
-                for (var i = 0; i < data.length; i++) {                
-                var dataG = JSON.parse(data[i]);
-                    userData['User'].push({ "User": dataG.User, "Date": dataG.Date, "TimeImpro": dataG.TimeImpro});              
-                }
-                console.log(dataG);
-                var container = document.getElementById('chart_div');
-                var chart = new google.visualization.Timeline(container);
-                var dataTable = new google.visualization.DataTable();
-                dataTable.addColumn({ type: 'string', id: 'Position' });
-                dataTable.addColumn({ type: 'string', id: 'Name' });
-                dataTable.addColumn({ type: 'date', id: 'Start' });
-                dataTable.addColumn({ type: 'date', id: 'End' });
-               
-                for (let i = 0; i < userData.User.length; i++) {
-                    let tiempo = userData.User[i].Date.sort();
-                    let horainicio = tiempo[0].split(":");                    
-                    let tiempoF = tiempo[userData.User[i].Date.length - 1];
-                    let horafin = tiempoF.split(":");
-                    let tiempoImpro = userData.User[i].TimeImpro.sort();
-                    let horainicioImpro;
-                    let horafinImpro;
-                    if (tiempoImpro.length != 0) {
-                        horainicioImpro = tiempoImpro[0].split(":");
-                        let tiempoFImpro = tiempoImpro[userData.User[i].TimeImpro.length - 1];
-                        horafinImpro = tiempoFImpro.split(":");
-                        
-                    }
-                    console.log(tiempo);
-                   if (tiempoImpro.length != 0) {
-                    dataTable.addRows([
-                        [userData.User[i].User, userData.User[i].Application, new Date(0, 0, 0, horafinImpro[0] <= horafin[0] ? horafinImpro[0] : horafin[0], horafinImpro[0] <= horafin[0] ? horafinImpro[1] : horafin[1], horafinImpro[0] <= horafin[0] ? horafinImpro[2] : horafin[2]), new Date(0, 0, 0, horafin[0] >= horafinImpro[0] ? horafin[0] : horafinImpro[0], horafin[0] >= horafinImpro[0] ? horafin[1] : horafinImpro[1], horafin[0] >= horafinImpro[0] ? horafin[2] : horafinImpro[2])],
-                        [userData.User[i].User, userData.User[i].AppImpro, new Date(0, 0, 0, horainicioImpro[0] <= horainicio[0] ? horainicio[0] : horainicioImpro[0], horainicio[0] <= horainicioImpro[0] ? horainicio[1] : horainicioImpro[1], horainicio[0] <= horainicioImpro[0] ? horainicio[2] : horainicioImpro[2]), new Date(0, 0, 0, horafinImpro[0] <= horafin[0] ? horafinImpro[0] : horafin[0], horafinImpro[0] <= horafin[0] ? horafinImpro[1] : horafin[1], horafinImpro[0] <= horafin[0] ? horafinImpro[2] : horafin[2])]
-                    ]);
-                } else {
-                    dataTable.addRows([
-                        [userData.User[i].User, 'Productivo', new Date(0, 0, 0, horainicio[0] < horafin[0] ? horainicio[0] : horafin[0], horainicio[1], horainicio[2]), new Date(0, 0, 0, horafin[0] > horainicio[0] ? horafin[0] : horainicio[0], horafin[1], horafin[2])]
+        $("#btnProcesarConsulta").click(function () {
+            $("#chart_div_0").html(null);
+            ReportGantt()
+        });
 
-                    ]);
-                }
-                }
-                
+        $("#btnProcesarConsultaApps").click(function () {
+            //$("#myModal").on("shown.bs.modal", function () {
+            //    $("#chart_div_2").html(null);
+            //    ReportGanttUserSelected($('#ddl_users_apps').val());
+            //}).modal('show');
 
-                
-                            
-                                    
-                
-               
-                var options = {
-                    colors: ['#7E72FA', '#E06863'],
-                };
-                    chart.draw(dataTable, options);
-               
-                }
-            
+            ReportGanttUserSelected($('#ddl_users_apps').val());
+
+            $("#myModal").on("hidden.bs.modal", function () {
+                $("#chart_div_2").html(null);
+                $("#user_show").html(null);
+            }).modal('show');
+        });
+
+
+
+    function ReportGantt() {
+        var params = new Object();
+        params.dateFrom = $("#DateFrom").val();
+        params.dateTo = $("#DateFrom").val();
+        params.periods = $("#ddlPeriods").val();
+        params.user = $("#ddlUsers").val();
+        params = JSON.stringify(params);
+
+        $("#sin_Data").hide();
+
+        //$("#chart_div_2").html(null);
+        //$("#user_show").html(null);
+        //$('#ddl_users_apps').empty();
+
+        $("#sin_Data").hide();
+        $("#chart_div_user").hide();
+        //$("#chart_div_user").html(null);
+        $("#chart_div_2").html(null);
+        $("#user_show").html(null);
+        $('#ddl_users_apps').empty();
+
+
+
+        google.charts.load("current", { packages: ["timeline"] }); google.charts.setOnLoadCallback(drawChart);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NewChart", "ReportGantt")",
+            data: params,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                console.log("******************************************");
+                console.log(data)
+                drawChart(data)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest, textStatus, errorThrown);
+            },
+            beforeSend: function () {
+                $("#divWait").show();
+            },
+            complete: function () {
+                $("#divWait").hide();
+            }
+        });
+
+    }
+
+
+     function ReportGanttUserSelected(usuario) {
+        var params = new Object();
+        params.dateFrom = $("#DateFrom").val();
+        params.dateTo = $("#DateFrom").val();
+         params.user = usuario;
+        params = JSON.stringify(params);
+
+
+
+        google.charts.load("current", { packages: ["timeline"] }); google.charts.setOnLoadCallback(drawChart);
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("NewChartUserSelected", "ReportGantt")",
+            data: params,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                drawChartUsersSelected(data, usuario)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest, textStatus, errorThrown);
+            },
+            beforeSend: function () {
+                $("#divWait").show();
+            },
+            complete: function () {
+                $("#divWait").hide();
+                $("#sin_Data").hide();
+            }
+        });
+
+    }
+
+
+    function drawChart(data) {
+        if (jQuery.isEmptyObject(data)) {
+            $("#sin_Data").show();
+        } else {
+            $("#sin_Data").hide();
+            $("#oneuser").show();
         }
+        ///                          impro       prod      impro
+        var item_classifityColor = ['#96b3c2', '#55cbcd', '#ff968a', '#445a67'];
+        //var item_classifityColor = ['#55cbcd', '#7E72FA', '#FF0000', '#96989A'];
 
-        $('#DateFrom').change(async function () {
-            var parameter = {
-                dateFrom: $("#DateFrom").val(),
-                dateTo: $("#DateTo").val(),                
-            };           
-            await ReportGantt(parameter);
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Usuario' });
+        dataTable.addColumn({ type: 'string', id: 'Aplicación' });
+        dataTable.addColumn({ type: 'string', role: 'tooltip' }); dataTable.addColumn({ type: 'string', role: 'style' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+
+
+
+
+        $.each(data, function (keyData, valueData) {
+            var NameUserLocal = valueData.UserName;
+
+            $('#ddl_users_apps').append($('<option>', { value: NameUserLocal, text: NameUserLocal}));
+
+            $.each(valueData.ReportSytems, function (keyReport, valueReport) {
+                var date1 = moment(valueReport.FocusTimeT, 'YYYY-MM-DD HH:mm:ss');
+                var date2 = moment(valueReport.DateEnd, 'YYYY-MM-DD HH:mm:ss');
+
+                var show_info = '<div class=\"google-visualization-tooltip\" style=\"width: 240px;\"><ul class=\"google-visualization-tooltip-item-list\"><li class=\"google-visualization-tooltip-item\"><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;\">' +
+                    valueReport.ApplicationT + '</span></li></ul><div class=\"google-visualization-tooltip-separator\"></div><ul class=\"google-visualization-tooltip-action-list\"><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Desde: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date1.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Hasta: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date2.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Duración:</span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + valueReport.MessageDuration + ' </span></li></ul></div>';
+
+                dataTable.addRows([
+                    [valueData.UserName, (valueReport.AppImproName + " | " + valueReport.Application), show_info, item_classifityColor[valueReport.GetAppsImproClassifyMoreUse], date1.toDate(), date2.toDate()]
+                ]);
+            });
         });
-        $('#DateTo').change(async function () {
-            var parameter = {
-                dateFrom: $("#DateFrom").val(),
-                dateTo: $("#DateTo").val(),
-            };
-            await ReportGantt(parameter);
+
+
+
+        var paddingHeight = 50;
+
+        // the natural height of all rows combined
+        var rowHeight = dataTable.getNumberOfRows() * 12;
+        // set the total chart height        var chartHeight = rowHeight + paddingHeight;
+
+        var options = {
+            height: /*chartHeight*/350,
+                                        //timeline: { colorByRowLabel: false, showBarLabels: false, showRowLabels: false },
+            timeline: { showBarLabels: false },
+            //colors: ['#CEBAB6', '#7E72FA', '#FF0000', '#96989A'],
+            tooltip: { isHtml: true },
+        };
+
+        var container = document.getElementById('chart_div_0');
+        var chart = new google.visualization.Timeline(container);
+
+        if ((dataTable.getNumberOfRows() <= 0)) { } else {                //$("#sin_Data").hide();
+            chart.draw(dataTable, options);
+        }
+    }
+
+    function drawChartUsersSelected(data, usas) {
+        var item_classifityColor = ['#96b3c2', '#55cbcd', '#ff968a', '#445a67'];
+
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'string', id: 'Usuario' });
+        dataTable.addColumn({ type: 'string', id: 'Aplicación' });
+        dataTable.addColumn({ type: 'string', role: 'tooltip' }); dataTable.addColumn({ type: 'string', role: 'style' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+
+
+        $.each(data, function (keyData, valueData) {
+            var NameUserLocal = valueData.UserName;
+
+            $("#user_show").html(usas);
+
+            $.each(valueData.ReportSytems, function (keyReport, valueReport) {
+                var date1 = moment(valueReport.FocusTimeT, 'YYYY-MM-DD HH:mm:ss');
+                var date2 = moment(valueReport.DateEnd, 'YYYY-MM-DD HH:mm:ss');
+
+                var show_info = '<div class=\"google-visualization-tooltip\" style=\"width: 240px;\"><ul class=\"google-visualization-tooltip-item-list\"><li class=\"google-visualization-tooltip-item\"><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;\">' +
+                    valueReport.ApplicationT + '</span></li></ul><div class=\"google-visualization-tooltip-separator\"></div><ul class=\"google-visualization-tooltip-action-list\"><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Desde: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date1.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Fecha Hasta: </span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + date2.format('LTS') + '</span></li><li data-logicalname=\"action#\" class=\"google-visualization-tooltip-action\">' +
+                    '<span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:bold;\">Duración:</span><span style=\"font-family:Arial;font-size:12px;color:#000000;opacity:1;margin:0;font-style:none;text-decoration:none;font-weight:none;\"> ' + valueReport.MessageDuration + ' </span></li></ul></div>';
+
+                dataTable.addRows([
+                    [valueData.UserName, (valueReport.AppImproName + " | " + valueReport.Application), show_info, item_classifityColor[valueReport.GetAppsImproClassifyMoreUse], date1.toDate(), date2.toDate()]
+                ]);
+            });
         });
-        });
+
+
+
+        var paddingHeight = 60;
+
+        // the natural height of all rows combined
+        var rowHeight = dataTable.getNumberOfRows() * 12;
+        // set the total chart height        var chartHeight = rowHeight + paddingHeight;
+
+        var options = {
+            height: /*chartHeight*/350,
+            //timeline: { colorByRowLabel: false, showBarLabels: false, showRowLabels: false },
+            timeline: { showBarLabels: false },
+            //colors: ['#CEBAB6', '#7E72FA', '#FF0000', '#96989A'],
+            tooltip: { isHtml: true },
+        };
+
+        var container = document.getElementById('chart_div_2');
+        var chart = new google.visualization.Timeline(container);
+
+        if ((dataTable.getNumberOfRows() <= 0)) { } else {                  chart.draw(dataTable, options);        }
+    }
 
 </script>
 

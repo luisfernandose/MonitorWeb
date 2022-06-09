@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<Queue.Models.Agent_Employee>
 
-@{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@{ ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="row justify-content-center">
     <div class="col-lg-12">
@@ -13,12 +11,12 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-lg-8">
                     </div>
                     <br />
                     <br />
                     <br />
-                    <div class="col-md-4">
+                    <div class="col-lg-4">
                         <div class="btn-group" role="group" aria-label="...">
                             <a type="button" href="@Url.Action("Create", "Agent_Employee")" class="btn btn-info btn-sm m-t-10 float-right">
                                 <i class="fa fa-plus"></i> Nuevo Empleado
@@ -29,11 +27,6 @@
                                 <i class="fa fa-plus"></i> Cargar Empleados
                             </a>
                         </div>
-                        @*<div class="btn-group" role="group" aria-label="...">
-                                <a type="button" href="" class="btn btn-info btn-sm m-t-10 float-right" data-toggle="modal" data-target="#FileModal">
-                                    <i class="fa fa-file"></i> Employee File
-                                </a>
-                            </div>*@
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -62,36 +55,35 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Identificacion)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Nombre)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Usuario)
-                                    </td>
-                                    <td>
-                                        @if (item.status == true)
-                                        {
-                                            <label>Active</label> }
-                                        else
-                                        {
-                                            <label>Inactive</label>}
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Identificacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Usuario)
+                    </td>
+                    <td>
+                        @if (item.status == true)
+                        {
+        <label>Active</label> }
+    else
+    {
+<label>Inactive</label>}
 
-                                    </td>
-                                    <td style="text-align:center">
-                                        <a class="btn btn-outline-secondary" href="@Url.Action("Edit", "Agent_Employee", new { id = item.idEmployee })"><i class="fa fa-edit"></i></a>
-                                    </td>
-                                    <td style="text-align:center">
-                                        <a class="btn btn-outline-secondary" href="@Url.Action("Delete", "Agent_Employee", new { id = item.idEmployee })"><i class="glyphicon glyphicon-remove"></i></a>
-                                    </td>
-                                </tr>
-                            }
+                    </td>
+                    <td style="text-align:center">
+                        <a class="btn btn-outline-secondary" href="@Url.Action("Edit", "Agent_Employee", new { id = item.idEmployee })"><i class="fa fa-edit"></i></a>
+                    </td>
+                    <td style="text-align:center">
+                        <a class="btn btn-outline-secondary" href="@Url.Action("Delete", "Agent_Employee", new { id = item.idEmployee })"><i class="glyphicon glyphicon-remove"></i></a>
+                    </td>
+                </tr>}
                         </tbody>
                     </table>
                 </div>
@@ -109,5 +101,6 @@
     <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+
     <script>$('#myTable').DataTable();</script>
 }

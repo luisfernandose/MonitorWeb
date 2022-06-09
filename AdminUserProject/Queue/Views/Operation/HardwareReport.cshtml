@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Queue.Models.HardwareReport>
 
-@{ ViewBag.Title = "HardwareReport";
+@{ ViewBag.Title = "SoftwareReport";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="row justify-content-center" id="hardwareReport">
@@ -15,13 +15,13 @@
                     </div>
                     <div class="col-lg-4">
                         @*<div class="btn-group" role="group" aria-label="...">
-                            <a href="@Url.Action("Create", "Agent_EmployeesGroups", new { id = ViewBag.IdGroupHorary })" class="btn btn-info btn-sm m-t-10 float-right">
-                                <i class="fa fa-file"></i> Export Excel
-                            </a>
-                        </div>*@
+                                <a href="@Url.Action("Create", "Agent_EmployeesGroups", new { id = ViewBag.IdGroupHorary })" class="btn btn-info btn-sm m-t-10 float-right">
+                                    <i class="fa fa-file"></i> Export Excel
+                                </a>
+                            </div>*@
                         @*<div class="btn-group" role="group" aria-label="...">
-                            <input type="button" id="create_pdf" class="btn btn-info btn-sm m-t-10 float-right" value="Generate PDF">
-                        </div>*@
+                                <input type="button" id="create_pdf" class="btn btn-info btn-sm m-t-10 float-right" value="Generate PDF">
+                            </div>*@
                     </div>
                 </div>
                 <br />
@@ -72,29 +72,26 @@
                         </thead>
                         <tbody>
                             @if (Model != null)
-                             {
+                            {
                                 foreach (var item in Model)
                                 {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.type)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.hardware)
-                                    </td>
-                                    <td style="text-align:center">
-                                        @Html.DisplayFor(modelItem => item.quantity)
-                                    </td>
-                                    <td style="text-align:center">
-                                        <a class="btn btn-outline-secondary" href="@Url.Action("HardwareReportDetails", "Operation", new { hardware = item.hardware,idgruop = item.idgroup })"><i class="fa fa-eye"></i></a>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.type)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.hardware)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.quantity)
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a class="btn btn-outline-secondary" href="@Url.Action("HardwareReportDetails", "Operation", new { hardware = item.hardware,idgruop = item.idgroup })"><i class="fa fa-eye"></i></a>
 
-                                    </td>
-                               
-                                </tr>
-                                    }
-                             }
-
-                            
+                                        </td>
+                                    </tr>
+                                }
+                            }
 
                         </tbody>
                     </table>
