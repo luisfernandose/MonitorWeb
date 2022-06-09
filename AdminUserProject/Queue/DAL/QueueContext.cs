@@ -50,6 +50,9 @@ namespace Queue.DAL
 
         public DbSet<Agent_EmployeeGroupsEmployee> Agent_EmployeeGroupsEmployee { get; set; }
         public DbSet<Alerts> Alerts { get; set; }
-        public DbSet<License> License { get; set; }        
+        public DbSet<License> License { get; set; }       
+        public DbSet<AlertAsociados> AlertAsociados { get; set; }
+
+        public DbSet<Alertas> Alertas { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -8,15 +7,16 @@ using System.Web;
 
 namespace Queue.Models
 {
-    [Table("Agent_Horary")]
-    public class Agent_GroupHorary
+    [Table("AlertAsociados")]
+    public class AlertAsociados
     {
         [Key]
-        public Guid Id_GroupHorary { get; set; }
-        [DisplayName("Nombre Jornada")]
-        [Required]
-        public string NameGroup { get; set; }
-
+        public Guid Id { get; set; }
+        public virtual Alertas Alertas { get; set; }
+        public string Email { get; set; }
         public Guid IdCompany { get; set; }
+        public virtual Agent_Empresa Agent_Empresa { get; set; }
+
+
     }
 }

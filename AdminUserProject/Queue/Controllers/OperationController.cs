@@ -15,11 +15,12 @@ using System.Collections;
 using System.IO;
 using System.Drawing;
 using System.Data.Entity;
+using System.Net;
 
 namespace Queue.Controllers
 {
     [Authorize]
-    public class OperationController : Controller
+    public class OperationController : BaseController
     {
         private QueueContext db = new QueueContext();
 
@@ -1163,7 +1164,7 @@ namespace Queue.Controllers
         #endregion
 
 
-
+            
         #region Reports      
         public ActionResult SoftwareReport(string user, Guid? idgroup)
         {
@@ -1217,7 +1218,12 @@ namespace Queue.Controllers
             return View(srlist);
         }
 
+<<<<<<< HEAD
         public ActionResult SoftwareReportDetails(string name, Guid? idgroup, string user = "00000000-0000-0000-0000-000000000000")
+=======
+
+        public ActionResult SoftwareReportDetails(string name , Guid? idgroup, string user = "00000000-0000-0000-0000-000000000000")
+>>>>>>> b543d6dc6eb69fee30121228112aab85cff94165
         {
             List<SoftwareReport> srlist = new List<SoftwareReport>();
             Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
@@ -1657,6 +1663,73 @@ namespace Queue.Controllers
                     }
                 }
             }
+        }
+
+        public ActionResult Alertas(string idcompany, Guid? Id)
+        {
+            List<AlertAsociados> oAlerta = new List<AlertAsociados>();
+
+            if (Id != null)
+            {
+                oAlerta = db.AlertAsociados.Where(p => p.Alertas.Id == Id).ToList();
+            }
+
+            List<SelectListItem> alert = CreateList(db.Alertas.ToList(), "Id", "Alerta", Id);
+            alert.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.Id = alert;
+
+            return View(oAlerta);
+
+        }
+
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Agregar(AlertAsociados alert, Guid Id)
+        {
+            if (ModelState.IsValid)
+            {
+                var company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+          
+                if (db.AlertAsociados.Where(t => t.IdCompany == company && t.Email == alert.Email).Count() == 0)
+                {
+                    alert.Id = Guid.NewGuid();
+                    alert.IdCompany = company;
+                    alert.Alertas = db.Alertas.Where(x => x.Id == Id).SingleOrDefault();
+                    //alert.Alertas = db.Alertas.Where(x => x.Id == alert.Id).SingleOrDefault();
+                    db.AlertAsociados.Add(alert);
+                    db.SaveChanges();
+                    Success("Registro exitoso");
+                    return RedirectToAction("Alertas");
+                }
+                else
+                    Warning("Email ya existe", string.Empty);
+            }
+
+            return View(alert);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AlertAsociados alertAsociados = db.AlertAsociados.Find(id);
+            if (alertAsociados == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                db.AlertAsociados.Remove(alertAsociados);
+                db.SaveChanges();
+                Success("Elimado exitosamente");
+                return RedirectToAction("Alertas");
+            }
+            
         }
 
         #endregion
