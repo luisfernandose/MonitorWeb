@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
 using System.Data;
+using System.Collections;
+using System.Reflection;
+using System.Globalization;
+using System.Numerics;
 
 namespace Queue.Controllers
 {
@@ -13,7 +17,7 @@ namespace Queue.Controllers
     public class HomeController : Controller
     {
         private QueueContext db = new QueueContext();
-
+        int DecimalPlaces = 4;
         [SessionAuthorize]
         public ActionResult Index(DashBoardStats dsb)
         {
@@ -28,7 +32,7 @@ namespace Queue.Controllers
 
 
             OperationController opc = new OperationController();
-            List<BasicStatsDashboard> data = opc.GetDataForDashBoard(company.ToString(), dsb.DateFrom, dsb.DateTo, dsb.ddlUsers);
+            List<BasicStatsDashboard> data = opc.GetDataForDashBoard(company.ToString(), dsb.DateFrom, dsb.DateTo, dsb.ddlUsers, dsb.idgroup);
 
             //cuadritos de resumen
             dasb.resume = GetResume(data);
@@ -38,6 +42,10 @@ namespace Queue.Controllers
             dasb.DataPerUser = GetTimePerUser(data);
 
             ViewBag.ListUser = db.Agent_Employee.Where(u => u.IdCompany == company).Select(x => new SelectListItem() { Text = x.Usuario, Value = x.Usuario }).ToList();
+
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == company).ToList(), "idemployeesGroup", "Nombre");
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgroup = sli;
 
             License licence_ = db.License.Where(c => c.Agent_Empresa.IdCompany == company && c.enddate >= DateTime.Today).SingleOrDefault();
 
@@ -57,7 +65,8 @@ namespace Queue.Controllers
 
             foreach (var k in data.GroupBy(g => g.Clasification))
             {
-                decimal total = decimal.Parse(data.Where(f => f.Clasification == k.Key).Sum(b => b.Time).ToString());
+                decimal total = 0;
+                total = decimal.Parse(data.Where(f => f.Clasification == k.Key).Sum(b => b.Time).ToString());
                 switch (k.Key)
                 {
                     case 0:
@@ -97,8 +106,10 @@ namespace Queue.Controllers
             foreach (var k in data.GroupBy(g => g.Application))
             {
                 rs = new AppResume();
-                rs.appname = k.Key;
-                rs.Time = decimal.Parse(data.Where(f => f.Application == k.Key).Sum(b => b.Time).ToString());
+                rs.appname = k.Key;                
+                decimal timesum = Math.Round((decimal)data.Where(f => f.Application == k.Key).Sum(b => b.Time).Value,4);
+                
+                rs.Time = timesum;
                 lrs.Add(rs);
             }
 
@@ -153,14 +164,14 @@ namespace Queue.Controllers
                     string di = data.Where(f => f.Clasification == k.Key && f.User == j.Key).OrderBy(t => t.Date).Select(g => g.Date).FirstOrDefault();
                     string df = data.Where(f => f.Clasification == k.Key && f.User == j.Key).OrderByDescending(t => t.Date).Select(g => g.Date).FirstOrDefault();
 
-
-                    double total = double.Parse(data.Where(f => f.Clasification == k.Key && f.User == j.Key).Sum(b => b.Time).ToString());
+                    double total = 0;
+                    total = double.Parse(data.Where(f => f.Clasification == k.Key && f.User == j.Key).Sum(b => b.Time).ToString());
                     TimeSpan time = TimeSpan.FromSeconds(total);
                     string str = time.ToString(@"hh\:mm\:ss\:fff");
 
                     if (total > 0)
                     {
-                        //para sacfar cantidad de minutos
+                        //para sacar cantidad de minutos
                         total = total / 60;
                         //para sacar las horas
                         total = total / 60;
@@ -191,7 +202,30 @@ namespace Queue.Controllers
         }
 
 
+        public static List<SelectListItem> CreateList(IEnumerable list, string dataValueField, string dataTextField, object selectedValue = null)
+        {
+            List<SelectListItem> sli = new List<SelectListItem>();
+            SelectListItem sl;
+            foreach (var i in list)
+            {
+                sl = new SelectListItem();
+                foreach (PropertyInfo p in i.GetType().GetProperties())
+                {
+                    if (p.Name == dataTextField)
+                        sl.Text = p.GetValue(i).ToString();
 
+                    if (p.Name == dataValueField)
+                    {
+                        sl.Value = p.GetValue(i).ToString();
+                        if (selectedValue != null)
+                            if (sl.Value == selectedValue.ToString())
+                                sl.Selected = true;
+                    }
+                }
+                sli.Add(sl);
+            }
+            return sli;
+        }
 
         [SessionAuthorize]
         public ActionResult About()
@@ -208,5 +242,27 @@ namespace Queue.Controllers
             return View();
         }
 
+
+        public BigInteger GetFrom(decimal value)
+        {
+            string strValue = HasDecimalPlaces(value) ? ConvertAValueWithDecimalPlaces(value) : ConvertARoundedValue(value);
+            return BigInteger.Parse(strValue);
+        }
+
+        private static bool HasDecimalPlaces(decimal value)
+        {
+            return !Math.Round(value).Equals(value) || value.ToString(CultureInfo.InvariantCulture).Contains(".");
+        }
+
+        private string ConvertAValueWithDecimalPlaces(decimal value)
+        {
+            var commaLeftRight = value.ToString(CultureInfo.InvariantCulture).Split('.');
+            return commaLeftRight[0] + commaLeftRight[1].PadRight(DecimalPlaces, '0').Substring(0, DecimalPlaces);
+        }
+
+        private string ConvertARoundedValue(decimal value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture) + new string('0', DecimalPlaces);
+        }
     }
 }

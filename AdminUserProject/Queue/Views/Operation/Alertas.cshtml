@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<Queue.Models.AlertAsociados>
+@model Queue.ViewModels.AlertModuleViewModel
 
 @{ ViewBag.Title = "Alertas";
     Layout = "~/Views/Shared/_Layout.cshtml"; }
@@ -29,33 +29,30 @@
                 }
                 -->
 
-
-                @using (Html.BeginForm("Agregar", "Operation"))
-                {
+                <form asp-controller="Operation" asp-action="Alertas" method="post" id="alertform" role="form">
                     <div class="row">
                         <div class="col-lg-4" id="select">
                             <label asp-for="Id" class="control-label">Alertas</label>
                             <span asp-validation-for="Id" class="text-danger"></span>
-                            @Html.DropDownList("Id", null, htmlAttributes: new { @class = "form-control", style = "width:100%;", required = "required" } )
+                            @Html.DropDownList("Id", null, htmlAttributes: new { @class = "form-control", style = "width:100%;", required = "required", onchange = "getlist()" })
                         </div>
 
                         <div class="col-lg-4">
-                            @Html.LabelFor(model => model.FirstOrDefault().Email, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.AlertAsociados.Email, htmlAttributes: new { @class = "control-label" })
                             <div class="input-group">
-                                @Html.EditorFor(model => model.FirstOrDefault().Email, new { htmlAttributes = new { @class = "form-control required", placeholder = "Registro de correo"} })
-                                @Html.ValidationMessageFor(model => model.FirstOrDefault().Email, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-2">
-                            <br />
-                            <div class="d-flex flex-row-reverse">
-                                <button class="btn-sm btn-info btn-block" type="submit">Agregar</button>
+                                @Html.EditorFor(model => model.AlertAsociados.Email, new { htmlAttributes = new { @class = "form-control required", placeholder = "Registro de correo", @type = "email" } })
+                                @Html.ValidationMessageFor(model => model.AlertAsociados.Email, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
+                        <div class="col-lg-2">
+                            <br />
+                            <div class="d-flex flex-row-reverse">
+                                <button class="btn-sm btn-info btn-block" formaction="AlertasCreate" type="submit">Agregar</button>
+                            </div>
                         </div>
-                }
+                    </div>
+                </form>
 
                 <br />
                 <br />
@@ -79,17 +76,17 @@
                         <tbody>
                             @if (Model != null)
                             {
-                                foreach (var item in Model)
+                                foreach (var item in Model.AlertListViewModel)
                                 {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Email)
+                                            @Html.DisplayFor(modelItem => item.mail)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Alertas.Alerta)
+                                            @Html.DisplayFor(modelItem => item.alert)
                                         </td>
 
-                                        @using (Html.BeginForm("Delete", "Operation", new { id = item.Id }))
+                                        @using (Html.BeginForm("Delete", "Operation", new { id = item.id }))
                                         {
                                             <td style="text-align:center">
                                                 <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-trash"></i></button>
@@ -124,13 +121,13 @@
     <script>$('#myTable').DataTable();</script>
 }
 
-
+<script src="~/assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 
     $(document).ready(function () {
 
         $('#select').on('change', function () {
-   	    var id = this.val();
+            var id = $("#Id").val()
             $.ajax({
                 url: '@Url.Action(actionName: "Alertas", controllerName: "Operation")',
                 type: 'Post',
@@ -142,6 +139,11 @@
             });
         })
     });
+
+    function getlist() {
+        $("#AlertAsociados_Email").val("")
+        $("#alertform").submit();
+    }
 
 </script>
 

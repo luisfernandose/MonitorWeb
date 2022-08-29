@@ -65,6 +65,36 @@
             The namespace of the collection.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.ChangeStreamDocument`1.CollectionUuid">
+            <summary>
+            Gets ui field from the oplog entry corresponding to the change event.
+            Only present when the showExpandedEvents change stream option is enabled and for the following event types (MongoDB 6.0 and later):
+            <list type="bullet">
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Create"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.CreateIndexes"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Delete"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Drop"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.DropIndexes"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Insert"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Modify"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.RefineCollectionShardKey"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.ReshardCollection"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.ShardCollection"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Update"/></description></item>
+            </list>
+            </summary>
+            <value>
+            The UUID of the collection.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.ChangeStreamDocument`1.DatabaseNamespace">
+            <summary>
+            Gets the database namespace.
+            </summary>
+            <value>
+            The database namespace.
+            </value>
+        </member>
         <member name="P:MongoDB.Driver.ChangeStreamDocument`1.DocumentKey">
             <summary>
             Gets the document key.
@@ -79,6 +109,33 @@
             </summary>
             <value>
             The full document.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.ChangeStreamDocument`1.FullDocumentBeforeChange">
+            <summary>
+            Gets the full document before change.
+            </summary>
+            <value>
+            The full document before change.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.ChangeStreamDocument`1.OperationDescription">
+            <summary>
+            Gets the description for the operation.
+            Only present when the showExpandedEvents change stream option is enabled and for the following event types (MongoDB 6.0 and later):
+            <list type="bullet">
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Create"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.CreateIndexes"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.DropIndexes"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Modify"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.RefineCollectionShardKey"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Rename"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.ReshardCollection"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.ShardCollection"/></description></item>
+            </list>
+            </summary>
+            <value>
+            The description of the operation.
             </value>
         </member>
         <member name="P:MongoDB.Driver.ChangeStreamDocument`1.OperationType">
@@ -113,6 +170,14 @@
             The update description.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.ChangeStreamDocument`1.WallTime">
+            <summary>
+            Gets the wall time of the change stream event.
+            </summary>
+            <value>
+            The wall time.
+            </value>
+        </member>
         <member name="T:MongoDB.Driver.ChangeStreamDocumentSerializer`1">
             <summary>
             A serializer for ChangeStreamDocument instances.
@@ -131,6 +196,34 @@
         <member name="M:MongoDB.Driver.ChangeStreamDocumentSerializer`1.CreateInstance(MongoDB.Bson.BsonDocument)">
             <inheritdoc />
         </member>
+        <member name="T:MongoDB.Driver.ChangeStreamFullDocumentBeforeChangeOption">
+            <summary>
+            Change stream FullDocumentBeforeChange option.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamFullDocumentBeforeChangeOption.Default">
+            <summary>
+            Do not send this option to the server.
+            Server's default is to not return the full document before change.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamFullDocumentBeforeChangeOption.Off">
+            <summary>
+            Do not return the full document before change.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamFullDocumentBeforeChangeOption.WhenAvailable">
+            <summary>
+            Returns the pre-image of the modified document for replace, update and delete
+            change events if the pre-image for this event is available.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamFullDocumentBeforeChangeOption.Required">
+            <summary>
+            Same behavior as 'whenAvailable' except that
+            an error is raised if the pre-image is not available.
+            </summary>
+        </member>
         <member name="T:MongoDB.Driver.ChangeStreamFullDocumentOption">
             <summary>
             Change stream FullDocument option.
@@ -138,7 +231,8 @@
         </member>
         <member name="F:MongoDB.Driver.ChangeStreamFullDocumentOption.Default">
             <summary>
-            Do not return the full document.
+            Do not send this option to the server.
+            Server's default is to not return the full document.
             </summary>
         </member>
         <member name="F:MongoDB.Driver.ChangeStreamFullDocumentOption.UpdateLookup">
@@ -146,6 +240,18 @@
             The change stream for partial updates will include both a delta describing the
             changes to the document as well as a copy of the entire document that was
             changed from some time after the change occurred.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamFullDocumentOption.WhenAvailable">
+            <summary>
+            Returns the post-image of the modified document for replace and update change events
+            if the post-image for this event is available.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamFullDocumentOption.Required">
+            <summary>
+            Same behavior as 'whenAvailable' except that
+            an error is raised if the post-image is not available.
             </summary>
         </member>
         <member name="T:MongoDB.Driver.ChangeStreamOperationType">
@@ -186,6 +292,46 @@
         <member name="F:MongoDB.Driver.ChangeStreamOperationType.Drop">
             <summary>
             A drop operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.DropDatabase">
+            <summary>
+            A dropDatabase operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.CreateIndexes">
+            <summary>
+            A createIndexes operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.DropIndexes">
+            <summary>
+            A dropIndexes operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.Modify">
+            <summary>
+            A modify operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.Create">
+            <summary>
+            A create operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.ShardCollection">
+            <summary>
+            A shardCollection operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.RefineCollectionShardKey">
+            <summary>
+            A refineCollectionShardKey operation type.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.ChangeStreamOperationType.ReshardCollection">
+            <summary>
+            A reshardCollection operation type.
             </summary>
         </member>
         <member name="T:MongoDB.Driver.ChangeStreamOperationTypeSerializer">
@@ -3682,12 +3828,11 @@
             Represents a creator for CryptClient.
             </summary>
         </member>
-        <member name="M:MongoDB.Driver.Core.Clusters.CryptClientCreator.CreateCryptClient(System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument})">
+        <member name="M:MongoDB.Driver.Core.Clusters.CryptClientCreator.CreateCryptClient(MongoDB.Driver.Core.Configuration.CryptClientSettings)">
             <summary>
             Create a CryptClient instance.
             </summary>
-            <param name="kmsProviders">The kms providers.</param>
-            <param name="schemaMap">The schema map.</param>
+            <param name="cryptClientSettings">Crypt client settings.</param>
             <returns>The CryptClient instance.</returns>
         </member>
         <member name="T:MongoDB.Driver.Core.Clusters.ElectionId">
@@ -4369,15 +4514,15 @@
             Represents settings for a cluster.
             </summary>
         </member>
-        <member name="M:MongoDB.Driver.Core.Configuration.ClusterSettings.#ctor(MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ClusterConnectionMode},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ConnectionModeSwitch},MongoDB.Driver.Optional{System.Nullable{System.Boolean}},MongoDB.Driver.Optional{System.Collections.Generic.IEnumerable{System.Net.EndPoint}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{System.Int32},MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{MongoDB.Driver.ServerApi},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{MongoDB.Driver.Core.Configuration.ConnectionStringScheme},MongoDB.Driver.Optional{System.Int32})">
+        <member name="M:MongoDB.Driver.Core.Configuration.ClusterSettings.#ctor(MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ClusterConnectionMode},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ConnectionModeSwitch},MongoDB.Driver.Optional{MongoDB.Driver.Core.Configuration.CryptClientSettings},MongoDB.Driver.Optional{System.Nullable{System.Boolean}},MongoDB.Driver.Optional{System.Collections.Generic.IEnumerable{System.Net.EndPoint}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{System.Int32},MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{MongoDB.Driver.ServerApi},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{MongoDB.Driver.Core.Configuration.ConnectionStringScheme},MongoDB.Driver.Optional{System.Int32})">
             <summary>
             Initializes a new instance of the <see cref="T:MongoDB.Driver.Core.Configuration.ClusterSettings"/> class.
             </summary>
             <param name="connectionMode">The connection mode.</param>
             <param name="connectionModeSwitch">The connection mode switch.</param>
+            <param name="cryptClientSettings">[Beta] Crypt client settings.</param>
             <param name="directConnection">The directConnection.</param>
             <param name="endPoints">The end points.</param>
-            <param name="kmsProviders">The kms providers.</param>
             <param name="loadBalanced">The load balanced.</param>
             <param name="localThreshold">The local threshold.</param>
             <param name="maxServerSelectionWaitQueueSize">Maximum size of the server selection wait queue.</param>
@@ -4386,7 +4531,6 @@
             <param name="serverSelectionTimeout">The server selection timeout.</param>
             <param name="preServerSelector">The pre server selector.</param>
             <param name="postServerSelector">The post server selector.</param>
-            <param name="schemaMap">The schema map.</param>
             <param name="scheme">The connection string scheme.</param>
             <param name="srvMaxHosts">Limits the number of SRV records used to populate the seedlist during initial discovery, as well as the number of additional hosts that may be added during SRV polling.</param>
         </member>
@@ -4403,6 +4547,11 @@
             Gets the connection mode switch.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.ClusterSettings.CryptClientSettings">
+            <summary>
+            [Beta] Gets the crypt client settings.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Core.Configuration.ClusterSettings.DirectConnection">
             <summary>
             Gets the DirectConnection.
@@ -4414,14 +4563,6 @@
             </summary>
             <value>
             The end points.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Configuration.ClusterSettings.KmsProviders">
-            <summary>
-            Gets the kms providers.
-            </summary>
-            <value>
-            The kms providers.
             </value>
         </member>
         <member name="P:MongoDB.Driver.Core.Configuration.ClusterSettings.LoadBalanced">
@@ -4451,14 +4592,6 @@
             </summary>
             <value>
             The name of the replica set.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Configuration.ClusterSettings.SchemaMap">
-            <summary>
-            Gets the schema map.
-            </summary>
-            <value>
-            The schema map.
             </value>
         </member>
         <member name="P:MongoDB.Driver.Core.Configuration.ClusterSettings.Scheme">
@@ -4508,15 +4641,15 @@
             The post server selector.
             </value>
         </member>
-        <member name="M:MongoDB.Driver.Core.Configuration.ClusterSettings.With(MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ClusterConnectionMode},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ConnectionModeSwitch},MongoDB.Driver.Optional{System.Nullable{System.Boolean}},MongoDB.Driver.Optional{System.Collections.Generic.IEnumerable{System.Net.EndPoint}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{System.Int32},MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{MongoDB.Driver.ServerApi},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{MongoDB.Driver.Core.Configuration.ConnectionStringScheme},MongoDB.Driver.Optional{System.Int32})">
+        <member name="M:MongoDB.Driver.Core.Configuration.ClusterSettings.With(MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ClusterConnectionMode},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ConnectionModeSwitch},MongoDB.Driver.Optional{MongoDB.Driver.Core.Configuration.CryptClientSettings},MongoDB.Driver.Optional{System.Nullable{System.Boolean}},MongoDB.Driver.Optional{System.Collections.Generic.IEnumerable{System.Net.EndPoint}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{System.Int32},MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{MongoDB.Driver.ServerApi},MongoDB.Driver.Optional{System.TimeSpan},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{MongoDB.Driver.Core.Clusters.ServerSelectors.IServerSelector},MongoDB.Driver.Optional{MongoDB.Driver.Core.Configuration.ConnectionStringScheme},MongoDB.Driver.Optional{System.Int32})">
             <summary>
             Returns a new ClusterSettings instance with some settings changed.
             </summary>
             <param name="connectionMode">The connection mode.</param>
             <param name="connectionModeSwitch">The connection mode switch.</param>
+            <param name="cryptClientSettings">[Beta] Crypt client settings.</param>
             <param name="directConnection">The directConnection.</param>
             <param name="endPoints">The end points.</param>
-            <param name="kmsProviders">The kms providers.</param>
             <param name="loadBalanced">The load balanced.</param>
             <param name="localThreshold">The local threshold.</param>
             <param name="maxServerSelectionWaitQueueSize">Maximum size of the server selection wait queue.</param>
@@ -4525,7 +4658,6 @@
             <param name="serverSelectionTimeout">The server selection timeout.</param>
             <param name="preServerSelector">The pre server selector.</param>
             <param name="postServerSelector">The post server selector.</param>
-            <param name="schemaMap">The schema map.</param>
             <param name="scheme">The connection string scheme.</param>
             <param name="srvMaxHosts">Limits the number of SRV records used to populate the seedlist during initial discovery, as well as the number of additional hosts that may be added during SRV polling.</param>
             <returns>A new ClusterSettings instance.</returns>
@@ -5039,6 +5171,64 @@
         <member name="M:MongoDB.Driver.Core.Configuration.ConnectionString.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:MongoDB.Driver.Core.Configuration.CryptClientSettings">
+            <summary>
+            [Beta] Represents settings for a crypt client.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.BypassQueryAnalysis">
+            <summary>
+            Gets a value indicating whether query analysis should be bypassed.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.CryptSharedLibPath">
+            <summary>
+            Gets the crypt shared library path.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.CryptSharedLibSearchPath">
+            <summary>
+            Gets the crypt shared library search path.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.EncryptedFieldsMap">
+            <summary>
+            Gets the encrypted fields map.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.IsCryptSharedLibRequired">
+            <summary>
+            Gets a value indicating whether crypt shared library is required.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.KmsProviders">
+            <summary>
+            Gets the KMS providers.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Configuration.CryptClientSettings.SchemaMap">
+            <summary>
+            Gets the schema map.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.Core.Configuration.CryptClientSettings.#ctor(System.Nullable{System.Boolean},System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument},System.Nullable{System.Boolean},System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MongoDB.Driver.Core.Configuration.CryptClientSettings"/> class.
+            </summary>
+            <param name="bypassQueryAnalysis">The bypass query analysis.</param>
+            <param name="cryptSharedLibPath">The crypt shared library library path.</param>
+            <param name="cryptSharedLibSearchPath">The crypt shared library search path.</param>
+            <param name="encryptedFieldsMap">The encrypted fields map.</param>
+            <param name="isCryptSharedLibRequired">Value indicating whether crypt shared library is required.</param>
+            <param name="kmsProviders">The KMS providers.</param>
+            <param name="schemaMap">The schema map.</param>
+        </member>
+        <member name="M:MongoDB.Driver.Core.Configuration.CryptClientSettings.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:MongoDB.Driver.Core.Configuration.CryptClientSettings.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
         <member name="T:MongoDB.Driver.Core.Configuration.SdamLoggingSettings">
             <summary>
             Represents settings for SDAM logging.
@@ -5306,10 +5496,11 @@
             <param name="cancellationToken">The cancellation token.</param>
             <returns>A Task whose result is a connection.</returns>
         </member>
-        <member name="M:MongoDB.Driver.Core.ConnectionPools.IConnectionPool.Clear">
+        <member name="M:MongoDB.Driver.Core.ConnectionPools.IConnectionPool.Clear(System.Boolean)">
             <summary>
             Clears the connection pool and marks it as paused.
             </summary>
+            <param name="closeInUseConnections">Whether in use connections should be closed.</param>
         </member>
         <member name="M:MongoDB.Driver.Core.ConnectionPools.IConnectionPool.Clear(MongoDB.Bson.ObjectId)">
             <summary>
@@ -5610,6 +5801,14 @@
             </summary>
             <value>
             <c>true</c> if this instance is an arbiter; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Connections.HelloResult.IsMongocryptd">
+            <summary>
+            Gets a value indicating whether this instance is a mongocryptd.
+            </summary>
+            <value>
+            <c>true</c> if this instance is a mongocryptd; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:MongoDB.Driver.Core.Connections.HelloResult.IsReplicaSetMember">
@@ -8825,9 +9024,19 @@
             Gets the change stream post batch resume token feature.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.ChangeStreamPrePostImages">
+            <summary>
+            Gets the change stream pre post images feature.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.ClientSideEncryption">
             <summary>
             Gets the client side encryption feature.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.ClusteredIndexes">
+            <summary>
+            Gets the clustered indexes feature.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.Collation">
@@ -8860,9 +9069,24 @@
             Gets the create indexes using insert operations feature.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.Csfle2">
+            <summary>
+            Gets the client side field level encryption 2 feature.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.CurrentOpCommand">
             <summary>
             Gets the current op command feature.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.DateOperatorsNewIn50">
+            <summary>
+            Gets the date operators added in 5.0 feature.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.DensifyStage">
+            <summary>
+            Gets the aggregate $densify stage feature.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.DocumentValidation">
@@ -8873,11 +9097,6 @@
         <member name="P:MongoDB.Driver.Core.Misc.Feature.DirectConnectionSetting">
             <summary>
             Gets the directConnection setting feature.
-            </summary>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Misc.Feature.EstimatedDocumentCountByCollStats">
-            <summary>
-            Gets the estimatedDocumentCountByCollStats feature.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.Eval">
@@ -8908,6 +9127,11 @@
         <member name="P:MongoDB.Driver.Core.Misc.Feature.FailPointsFailCommandForSharded">
             <summary>
             Gets the fail points fail command for sharded feature.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.FilterLimit">
+            <summary>
+            Gets filter limit feature.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.FindAllowDiskUse">
@@ -9055,6 +9279,11 @@
             Gets the partial indexes feature.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.PickAccumulatorsNewIn52">
+            <summary>
+            Gets the pick accumulators new in 5.2 feature.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.ReadConcern">
             <summary>
             Gets the read concern feature.
@@ -9100,6 +9329,11 @@
             Gets the set window fields feature.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.SetWindowFieldsLocf">
+            <summary>
+            Gets the set window fields $locf feature.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.ShardedTransactions">
             <summary>
             Gets the sharded transactions feature.
@@ -9108,6 +9342,11 @@
         <member name="P:MongoDB.Driver.Core.Misc.Feature.SnapshotReads">
             <summary>
             Gets the snapshot reads feature.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Misc.Feature.SortArrayOperator">
+            <summary>
+            Gets the $sortArray operator feature.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.Core.Misc.Feature.SpeculativeAuthentication">
@@ -9773,6 +10012,16 @@
         <member name="F:MongoDB.Driver.Core.Misc.WireVersion.Server52">
             <summary>
             Wire version 15.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.Core.Misc.WireVersion.Server53">
+            <summary>
+            Wire version 16.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.Core.Misc.WireVersion.Server60">
+            <summary>
+            Wire version 17.
             </summary>
         </member>
         <member name="T:MongoDB.Driver.Core.Operations.AggregateExplainOperation">
@@ -10767,6 +11016,14 @@
             The resume after value.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.Core.Operations.IChangeStreamOperation`1.ShowExpandedEvents">
+            <summary>
+            Gets or sets whether the change stream should show expanded events (MongoDB 6.0 and later).
+            </summary>
+            <value>
+            The value.
+            </value>
+        </member>
         <member name="P:MongoDB.Driver.Core.Operations.IChangeStreamOperation`1.StartAfter">
             <summary>
             Gets or sets the start after value.
@@ -10876,6 +11133,14 @@
             The full document option.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.FullDocumentBeforeChange">
+            <summary>
+            Gets or sets the full document before change option.
+            </summary>
+            <value>
+            The full document before change option.
+            </value>
+        </member>
         <member name="P:MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.MaxAwaitTime">
             <summary>
             Gets or sets the maximum await time.
@@ -10924,6 +11189,9 @@
             Gets or sets a value indicating whether to retry.
             </summary>
             <value>Whether to retry.</value>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.ShowExpandedEvents">
+            <inheritdoc />
         </member>
         <member name="P:MongoDB.Driver.Core.Operations.ChangeStreamOperation`1.StartAfter">
             <inheritdoc />
@@ -11305,6 +11573,14 @@
             A value indicating whether the collection is a capped collection.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.Core.Operations.CreateCollectionOperation.ChangeStreamPreAndPostImages">
+            <summary>
+            Gets or sets a change streams pre and post images options.
+            </summary>
+            <value>
+            change streams pre and post images options.
+            </value>
+        </member>
         <member name="P:MongoDB.Driver.Core.Operations.CreateCollectionOperation.Collation">
             <summary>
             Gets or sets the collation.
@@ -11434,6 +11710,14 @@
             The write concern.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.Core.Operations.CreateCollectionOperation.ClusteredIndex">
+            <summary>
+            Gets or sets the clustered index definition.
+            </summary>
+            <value>
+            The clustered index definition.
+            </value>
+        </member>
         <member name="M:MongoDB.Driver.Core.Operations.CreateCollectionOperation.Execute(MongoDB.Driver.Core.Bindings.IWriteBinding,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
@@ -11465,6 +11749,9 @@
             <summary>
             Gets or sets the comment.
             </summary>
+            <value>
+            The comment.
+            </value>
         </member>
         <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesOperation.CommitQuorum">
             <summary>
@@ -11497,88 +11784,16 @@
         </member>
         <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesOperation.MaxTime">
             <summary>
-            Gets or sets the max time.
+            Gets or sets the MaxTime.
             </summary>
-            <value>
-            The max time
+            <value> 
+            The maxtime.
             </value>
         </member>
         <member name="M:MongoDB.Driver.Core.Operations.CreateIndexesOperation.Execute(MongoDB.Driver.Core.Bindings.IWriteBinding,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:MongoDB.Driver.Core.Operations.CreateIndexesOperation.ExecuteAsync(MongoDB.Driver.Core.Bindings.IWriteBinding,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="T:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation">
-            <summary>
-            Represents a create indexes operation that uses the createIndexes command.
-            </summary>
-        </member>
-        <member name="M:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.#ctor(MongoDB.Driver.CollectionNamespace,System.Collections.Generic.IEnumerable{MongoDB.Driver.Core.Operations.CreateIndexRequest},MongoDB.Driver.Core.WireProtocol.Messages.Encoders.MessageEncoderSettings)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation"/> class.
-            </summary>
-            <param name="collectionNamespace">The collection namespace.</param>
-            <param name="requests">The requests.</param>
-            <param name="messageEncoderSettings">The message encoder settings.</param>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.CollectionNamespace">
-            <summary>
-            Gets the collection namespace.
-            </summary>
-            <value>
-            The collection namespace.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.Comment">
-            <summary>
-            Gets or sets the comment.
-            </summary>
-            <value>
-            The comment.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.CommitQuorum">
-            <summary>
-            Gets or sets the commit quorum.
-            </summary>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.MessageEncoderSettings">
-            <summary>
-            Gets the message encoder settings.
-            </summary>
-            <value>
-            The message encoder settings.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.Requests">
-            <summary>
-            Gets the create index requests.
-            </summary>
-            <value>
-            The create index requests.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.WriteConcern">
-            <summary>
-            Gets or sets the write concern.
-            </summary>
-            <value>
-            The write concern.
-            </value>
-        </member>
-        <member name="P:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.MaxTime">
-            <summary>
-            Gets or sets the MaxTime
-            </summary>
-            <value> 
-            The maxtime.
-            </value>
-        </member>
-        <member name="M:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.Execute(MongoDB.Driver.Core.Bindings.IWriteBinding,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:MongoDB.Driver.Core.Operations.CreateIndexesUsingCommandOperation.ExecuteAsync(MongoDB.Driver.Core.Bindings.IWriteBinding,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="T:MongoDB.Driver.Core.Operations.CreateIndexRequest">
@@ -12477,6 +12692,11 @@
         <member name="P:MongoDB.Driver.Core.Operations.EstimatedDocumentCountOperation.CollectionNamespace">
             <summary>
             Gets the collection namespace.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Core.Operations.EstimatedDocumentCountOperation.Comment">
+            <summary>
+            Gets or sets the comment.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.Core.Operations.EstimatedDocumentCountOperation.MaxTime">

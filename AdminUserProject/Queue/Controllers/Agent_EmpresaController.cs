@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Queue.DAL;
 using Queue.Models;
+using System.Collections.Generic;
 
 namespace Queue.Controllers
 {
@@ -51,7 +52,7 @@ namespace Queue.Controllers
             return View();
         }
 
-        
+
 
 
         [HttpPost]
@@ -71,7 +72,7 @@ namespace Queue.Controllers
                     db.Agent_Empresa.Add(agent_Empresa);
 
                     //Crear Usuario Admnistrador a la empresa
-                    var _username = String.Concat("Ad_", agent_Empresa.Nombre.Replace(" ","").Replace(".","").ToLower().ToString());
+                    var _username = String.Concat("Ad_", agent_Empresa.Nombre.Replace(" ", "").Replace(".", "").ToLower().ToString());
                     var user = new ApplicationUser { UserName = _username, Email = agent_Empresa.Email, FirstName = agent_Empresa.Nombre, LastName = agent_Empresa.Rut };
                     var Password = System.Web.Security.Membership.GeneratePassword(8, 1);
                     var result = await UserManager.CreateAsync(user, Password);
@@ -87,7 +88,9 @@ namespace Queue.Controllers
                         db.Entry(oUser).State = EntityState.Modified;
 
                         var ec = new EmailController();
-                        ec.SendInvitation(oUser.Email, oUser.Email, Password);
+                        List<string> _mails = new List<string>();
+                        _mails.Add(oUser.Email);
+                        await ec.SendInvitation(_mails, oUser.Email, Password);
 
                         await db.SaveChangesAsync();
 
@@ -111,7 +114,7 @@ namespace Queue.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index","Agent_Empresa");
+            return RedirectToAction("Index", "Agent_Empresa");
         }
 
         public ActionResult Edit(Guid? id)

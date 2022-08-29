@@ -13,5 +13,6 @@ namespace Queue.Models
 		[Key]
 		public Guid Id { get; set; }
 		public string Alerta { get; set; }
-	}
+        public int type { get; set; }
+    }
 }

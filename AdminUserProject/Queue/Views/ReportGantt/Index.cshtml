@@ -44,135 +44,139 @@
 <script src="~/Scripts/moment-with-locales.js"></script>
 <script src="~/Scripts/jquery.loading.js"></script>
 
-<div class="row" id="reporteAct">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Selecciones rango de fechas a visualizar en las graficas</h4>
+<div id="capturesReport">
+    <div class="row" id="reporteAct">
+        <div class="col-12">
+            <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <label>Fecha</label>
-                            <div class="input-group">
-                                <input id="DateFrom" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <label>Mostrar Intervalos</label>
-                            <div class="input-group">
-                                @Html.DropDownList("ddlPeriods", ListPeriods, "", new { @class = "form-control select2", style = "width:100%;", required = "required" })
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Empleados</label>
-                            <div class="input-group">
-                                @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;", multiple = "true", required = "required" })
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <br />
-                            <button id="btnProcesarConsulta" class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
-                                <strong>Buscar</strong>
-                            </button>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <h4>Mapa de Colores</h4>
-                            <br />
-                        </div>
-                        <div class="col-lg-3">
-                            <input type="button" id="create_pdf" class="btn-sm btn-info btn-block" value="Generate PDF">
-                            <br />
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        @*['#55cbcd', '#ff968a', '#96b3c2', '#445a67'];*@
-
-                        <table class="table table-bordered table-striped">
-                            <tr>
-                                <td>Productivas </td>
-                                <td style="background-color: #55cbcd;width:80px"></td>
-                                <td>Impoductivas </td>
-                                <td style="background-color: #ff968a; width: 80px"></td>
-                                <td>Neutrales </td>
-                                <td style="background-color: #96b3c2; width: 80px"></td>
-                                <td>Inactivo </td>
-                                <td style="background-color: #445a67; width: 80px"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Aplicaciones</h4>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <p id="divWait" style="display:none"> <i class="fa fa-spin fa-spinner"></i> Un momento por favor...</p>
-
-                            <div class="row">
-                                <div id="sin_Data" style="display:none" class="col-12">
-                                    <div class="alert alert-danger">
-                                        <strong>Sin registros!</strong> No hay datos disponibles para la fecha seleccionada
-                                    </div>
+                    <h4 class="card-title">Selecciones rango de fechas a visualizar en las graficas</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <label>Fecha</label>
+                                <div class="input-group">
+                                    <input id="DateFrom" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div id="oneuser" class="row">
-                        <div class="col-2"></div>
-                        <div class="col-4">
-                            <select class="form-control select2" style="width:100% !important" id='ddl_users_apps'></select>
-                        </div>
-                        <div class="col-3" style="text-align:center !important">
-                            <button id="btnProcesarConsultaApps" class="btn-sm btn-info btn-block" type="button">
-                                <strong>Mostrar aplicaciones</strong>
-                            </button>
-                        </div>
-                        <div class="col-3"></div>
 
-                    </div>
-                    <br />
-                    <br />
-                    <div class="row">
-                        <div class="col-12">
-
-                            <div class="row">
-                                <div id="chart_div_0" class="col-12">
+                            <div class="col-lg-3">
+                                <label>Mostrar Intervalos</label>
+                                <div class="input-group">
+                                    @Html.DropDownList("ddlPeriods", ListPeriods, "", new { @class = "form-control select2", style = "width:100%;", required = "required" })
                                 </div>
                             </div>
-                            <!-- Button trigger modal -->
-                            <!-- Modal -->
-                            <div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1">
-                                <div style="margin-left:25%" class="modal-dialog ">
-                                    <div class="modal-content">
-
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="user_show"></h4>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="chart_div_2" class="col-12"></div>
-                                        </div>
-                                    </div>
+                            <div class="col-lg-3">
+                                <label>Empleados</label>
+                                <div class="input-group">
+                                    @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;", multiple = "true", required = "required" })
                                 </div>
                             </div>
+                            <div class="col-lg-3">
+                                <br />
+                                <button id="btnProcesarConsulta" class="btn-sm btn-info btn-block" data-toggle="tooltip" data-placement="right" type="button">
+                                    <strong>Buscar</strong>
+                                </button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <h4>Mapa de Colores</h4>
+                                <br />
+                            </div>
+                            <div class="col-lg-3">
+                                <input type="button" id="create_pdf" class="btn-sm btn-info btn-block" value="Generate PDF">
+                                <br />
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            @*['#55cbcd', '#ff968a', '#96b3c2', '#445a67'];*@
+
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td>Productivas </td>
+                                    <td style="background-color: #55cbcd;width:80px"></td>
+                                    <td>Impoductivas </td>
+                                    <td style="background-color: #ff968a; width: 80px"></td>
+                                    <td>Neutrales </td>
+                                    <td style="background-color: #96b3c2; width: 80px"></td>
+                                    <td>Inactivo </td>
+                                    <td style="background-color: #445a67; width: 80px"></td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Aplicaciones</h4>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p id="divWait" style="display:none"> <i class="fa fa-spin fa-spinner"></i> Un momento por favor...</p>
+
+                                <div class="row">
+                                    <div id="sin_Data" style="display:none" class="col-12">
+                                        <div class="alert alert-danger">
+                                            <strong>Sin registros!</strong> No hay datos disponibles para la fecha seleccionada
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="oneuser" class="row">
+                            <div class="col-2"></div>
+                            <div class="col-4">
+                                <select class="form-control select2" style="width:100% !important" id='ddl_users_apps'></select>
+                            </div>
+                            <div class="col-3" style="text-align:center !important">
+                                <button id="btnProcesarConsultaApps" class="btn-sm btn-info btn-block" type="button">
+                                    <strong>Mostrar aplicaciones</strong>
+                                </button>
+                            </div>
+                            <div class="col-3"></div>
+
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+
+                                <div class="row">
+                                    <div id="chart_div_0" class="col-12">
+                                    </div>
+                                </div>
+                                <!-- Button trigger modal -->
+                                <!-- Modal -->
+                                <div id="myModal" class="modal fade" data-backdrop="false" tabindex="-1">
+                                    <div style="margin-left:25%" class="modal-dialog ">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="user_show"></h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="chart_div_2" class="col-12"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 
 </div>
 
@@ -249,7 +253,6 @@
             dataType: "json",
             async: true,
             success: function (data) {
-                console.log("******************************************");
                 console.log(data)
                 drawChart(data)
             },

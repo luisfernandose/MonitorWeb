@@ -16,6 +16,7 @@ using System.IO;
 using System.Drawing;
 using System.Data.Entity;
 using System.Net;
+using MongoDB.Bson;
 
 namespace Queue.Controllers
 {
@@ -39,7 +40,7 @@ namespace Queue.Controllers
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return false;
             }
@@ -63,24 +64,34 @@ namespace Queue.Controllers
         {
             try
             {
+                List<TrakerBase> ltbr = new List<TrakerBase>();
                 MongoHelper.TrakerBase = MongoHelper.database.GetCollection<TrakerBase>("TrackerTime");
 
                 //sele restan 5 horas porque no se que pasa con el servidor de mkongo que le suma 5 horas, no se como configurar una UTC acorde con mongo para que ponga
                 //la hora que es.
                 foreach (var j in tb)
                 {
-                    j.Date = new DateTime(j.Date.Year, j.Date.Month, j.Date.Day, j.Date.Hour, j.Date.Minute, j.Date.Second, j.Date.Kind);
-                    j.FocusTime = new DateTime(j.FocusTime.Year, j.FocusTime.Month, j.FocusTime.Day, j.FocusTime.Hour, j.FocusTime.Minute, j.FocusTime.Second, j.FocusTime.Kind);
+                    double upload = double.Parse(j.UploadFrecuency);
 
+                    j.Date = new DateTime(j.Date.Year, j.Date.Month, j.Date.Day, j.Date.Hour, j.Date.Minute, j.Date.Second, j.Date.Kind).AddHours(-5);
+                    j.FocusTime = new DateTime(j.FocusTime.Year, j.FocusTime.Month, j.FocusTime.Day, j.FocusTime.Hour, j.FocusTime.Minute, j.FocusTime.Second, j.FocusTime.Kind).AddHours(-5);
+
+                    if (j.Inactivity > (upload + 5))
+                        j.Inactivity = upload;
+
+                    //aqui preguntamos si el tiempo de actividad es mayor al doble de la frecuencia de subida se elimina de la lista, 
+                    //porque puede ser un bug
+                    TrakerBase trb = new TrakerBase();
+                    if (j.Activity >= (upload * 2))
+                    {
+                        ltbr.Add(trb);
+                    }
                 }
-
-
-                //MongoHelper.TrakerBase = MongoHelper.database.GetCollection<TrakerBase>("TrackerTime");
-                //var builder = Builders<TrakerBase>.Filter;
-
-                //var filter2 = builder.Gte("Date", DateTime.Today) & builder.Eq("Pc", Pc) & builder.Eq("status", true);
-
-                //var results2 = MongoHelper.TrakerBase.Find(filter2).ToList();
+                //se eliminan los que son mayores al doble de actividad, por posible bug
+                foreach (var l in ltbr)
+                {
+                    tb.Remove(l);
+                }
 
                 MongoHelper.TrakerBase.InsertMany(tb);
 
@@ -103,6 +114,8 @@ namespace Queue.Controllers
             try
             {
                 MongoHelper.UserCapture = MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture");
+                cb.Date = cb.Date.AddHours(-5);
+                cb.Hour = cb.Date.Hour;
                 MongoHelper.UserCapture.InsertOne(cb);
 
                 return true;
@@ -154,8 +167,8 @@ namespace Queue.Controllers
                 var collection = MongoHelper.database.GetCollection<InstalledProgramsViewModel>("Software");
                 var builder = Builders<InstalledProgramsViewModel>.Filter;
                 var filter = builder.Eq("_id", o._id);
-                var update = Builders<InstalledProgramsViewModel>.Update.Set("Status", false).Set("uninstalldate", DateTime.Now);
-                var result = collection.UpdateOne(filter, update);
+                //var update = Builders<InstalledProgramsViewModel>.Update.Set("Status", false).Set("uninstalldate", DateTime.Now);
+                var result = collection.DeleteOne(filter);
             }
             catch (Exception ex)
             {
@@ -332,7 +345,7 @@ namespace Queue.Controllers
         }
         public BasicStatsModel TypeApp(string idcompany)
         {
-            DateTime dateFrom = DateTime.Today.AddDays(-50);
+            DateTime dateFrom = DateTime.Today;//.AddDays(-50);
             DateTime dateTo = dateFrom.AddHours(23);
             BasicStatsModel bm = new BasicStatsModel();
             var query = (from e in MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>()
@@ -445,7 +458,7 @@ namespace Queue.Controllers
             }
         }
 
-        public List<BasicStatsDashboard> GetDataForDashBoard(string idcompany, DateTime from, DateTime to, string user)
+        public List<BasicStatsDashboard> GetDataForDashBoard(string idcompany, DateTime from, DateTime to, string user, Guid idgroup)
         {
             try
             {
@@ -461,10 +474,18 @@ namespace Queue.Controllers
                 //_endTest = _endTest.Add(new TimeSpan(23, 59, 59));
                 List<BasicStatsDashboard> queryPrincipal = new List<BasicStatsDashboard>();
 
-                if (user == "Todos" || user == null)
-                {
+                List<string> users = new List<string>();
 
-                    queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
+                if (idgroup != null && idgroup != Guid.Empty)
+                {
+                    users = new List<string>();
+                    users = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_EmployeesGroups.idemployeesGroup == idgroup).Select(g => g.Agent_Employee.Usuario.ToLower()).ToList();
+                }
+                if (!string.IsNullOrEmpty(user) && user != Guid.Empty.ToString() && user != "Todos")
+                    users.Add(user.ToLower());
+
+
+                queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
                     Where(e => e.IdEmpresa == idcompany && (e.FocusTime >= _startTest && e.FocusTime <= _endTest))
                     .Select(e =>
                                new BasicStatsDashboard
@@ -474,25 +495,23 @@ namespace Queue.Controllers
                                    Time = e.Activity,
                                    Date_ = e.Date
                                }).ToList();
-                }
-                else
-                {
-                    queryPrincipal = MongoHelper.database.GetCollection<AutomaticTakeTimeModel>("TrackerTime").AsQueryable<AutomaticTakeTimeModel>().
-                    Where(e => e.IdEmpresa == idcompany && (e.FocusTime >= _startTest && e.FocusTime <= _endTest) && e.UserName == user)
-                    .Select(e =>
-                               new BasicStatsDashboard
-                               {
-                                   User = e.UserName,
-                                   Application = e.Application,
-                                   Time = e.Activity,
-                                   Date_ = e.Date
-                               }).ToList();
-                }
+
+
+                //foltra por usuario o usuarios
+                if (users.Count() > 0)
+                    queryPrincipal = queryPrincipal.Where(v => users.Contains(v.User.ToLower())).ToList();
+
 
                 foreach (var j in queryPrincipal)
                 {
                     j.Clasification = clasifications.Where(t => t.name == j.Application).Select(s => s.clasification).SingleOrDefault();
                 }
+
+                queryPrincipal = queryPrincipal.OrderBy(o => o.Date_).ToList();
+
+                List<BasicStatsDashboard> queryPrincipaltest = new List<BasicStatsDashboard>();
+
+                queryPrincipaltest = queryPrincipal.OrderByDescending(o => o.Time).ToList();
 
                 return queryPrincipal;
 
@@ -1164,7 +1183,7 @@ namespace Queue.Controllers
         #endregion
 
 
-            
+
         #region Reports      
         public ActionResult SoftwareReport(string user, Guid? idgroup)
         {
@@ -1218,12 +1237,7 @@ namespace Queue.Controllers
             return View(srlist);
         }
 
-<<<<<<< HEAD
         public ActionResult SoftwareReportDetails(string name, Guid? idgroup, string user = "00000000-0000-0000-0000-000000000000")
-=======
-
-        public ActionResult SoftwareReportDetails(string name , Guid? idgroup, string user = "00000000-0000-0000-0000-000000000000")
->>>>>>> b543d6dc6eb69fee30121228112aab85cff94165
         {
             List<SoftwareReport> srlist = new List<SoftwareReport>();
             Guid IdCompany = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
@@ -1272,7 +1286,7 @@ namespace Queue.Controllers
             ViewBag.user = sle;
 
 
-            return View(srlist);
+            return View(srlist.Distinct());
         }
         public ActionResult HardwareReport(string user, Guid? idgroup)
         {
@@ -1378,15 +1392,9 @@ namespace Queue.Controllers
             return View(srlist);
         }
 
-        //public ActionResult CapturesReport(string user, Guid? idgroup, DateTime? Datefrom, DateTime? Dateto)
-        [HttpGet]
-        public ActionResult CapturesReport()
+        public ActionResult CapturesReport(string user, Guid? idgroup, DateTime? Datefrom, DateTime? Dateto, int? hour)
         {
-            return View();
-        }
-
-        public ActionResult CapturesReport(CapturesViewModel cm)
-        {
+            List<CapturesViewModel> result = new List<CapturesViewModel>();
             Guid IdCompany = Guid.Empty;
             string IdCompany_ = IdCompany.ToString();
             try
@@ -1399,65 +1407,80 @@ namespace Queue.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-
-            List<CapturesViewModel> ListCapturesViewModel = new List<CapturesViewModel>();
-            if (cm.DateFrom != null && cm.DateTo != null && (!string.IsNullOrEmpty(cm.UserName) || cm.idgroup != Guid.Empty))
+            if (Datefrom == null)
             {
-                cm.DateTo = cm.DateTo.AddHours(23).AddMinutes(59);
+                Datefrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 01, 01, 00);
+            }
 
+            if (Dateto == null)
+            {
+                Dateto = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 00);
+            }
+            else
+                Dateto = Dateto.Value.AddHours(23).AddMinutes(59);
+
+
+            if (Datefrom != null && Dateto != null)
+            {
                 List<string> users = new List<string>();
 
-                if (!string.IsNullOrEmpty(cm.UserName))
-                {
-                    users.Add(cm.UserName);
-                }
-
-                if (cm.idgroup != Guid.Empty)
+                if (idgroup != Guid.Empty && idgroup != null)
                 {
                     users = new List<string>();
-                    users = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_EmployeesGroups.idemployeesGroup == cm.idgroup).Select(g => g.Agent_Employee.Usuario).ToList();
+                    users = db.Agent_EmployeeGroupsEmployee.Where(f => f.Agent_EmployeesGroups.idemployeesGroup == idgroup).Select(g => g.Agent_Employee.Usuario).ToList();
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(user) && user != Guid.Empty.ToString())
+                    {
+                        users.Add(user);
+                    }
                 }
 
-                ListCapturesViewModel = (from e in MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture").AsQueryable<CaptureBase>()
-                                         where e.IdCompany == IdCompany_
-                                         && (e.Date >= cm.DateFrom && e.Date <= cm.DateTo)
 
-                                         select new CapturesViewModel
-                                         {
-                                             idrecord = e.idrecord,
-                                             UserName = e.UserName,
-                                             Image = e.Image,
-                                             Date = e.Date
-                                             //}).ToList();
-                                         }).OrderByDescending(o => o.Date).Take(100).ToList();
+                IQueryable<CaptureBase> ListCapturesViewModel = (from e in MongoHelper.database.GetCollection<CaptureBase>("WindowsCapture").AsQueryable<CaptureBase>()
+                                                                 where e.IdCompany == IdCompany_
+                                                                 && (e.Date >= Datefrom.Value && e.Date <= Dateto.Value)
+                                                                 select new CaptureBase
+                                                                 {
+                                                                     idrecord = e.idrecord,
+                                                                     UserName = e.UserName,
+                                                                     Image = e.Image,
+                                                                     Date = e.Date,
+                                                                     Hour = e.Hour
+                                                                 });
+
+                if (hour != null && hour != 0)
+                    ListCapturesViewModel = ListCapturesViewModel.Where(t => t.Hour == hour);
 
                 if (users.Count() > 0)
+                    ListCapturesViewModel = ListCapturesViewModel.Where(p => users.Contains(p.UserName));
+
+                foreach (var i in ListCapturesViewModel.OrderByDescending(o => o.Date).Take(100).ToList())
                 {
-                    ListCapturesViewModel = ListCapturesViewModel.Where(p => users.Contains(p.UserName)).ToList();
+                    CapturesViewModel cvm = new CapturesViewModel();
+                    cvm.idrecord = i.idrecord;
+                    cvm.UserName = i.UserName;
+                    cvm.image = Convert.ToBase64String(i.Image);
+                    cvm.Date = i.Date;
+                    result.Add(cvm);
                 }
 
-                foreach (var i in ListCapturesViewModel)
-                {
-                    i.image = Convert.ToBase64String(i.Image);
-                    i.Date = i.Date.AddHours(-5);
-                }
-
-                ViewBag.Datefrom = cm.DateFrom.ToString("yyyy-MM-dd");
-                ViewBag.Dateto = cm.DateTo.ToString("yyyy-MM-dd");
+                ViewBag.Datefrom = Datefrom.Value.ToString("yyyy-MM-dd");
+                ViewBag.Dateto = Dateto.Value.ToString("yyyy-MM-dd");
             }
-            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", cm.idgroup);
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == IdCompany).ToList(), "idemployeesGroup", "Nombre", idgroup);
             sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.idgroup = sli;
 
-            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", cm.UserName);
+            List<SelectListItem> sle = CreateList(db.Agent_Employee.Where(c => c.IdCompany == IdCompany).ToList(), "Usuario", "Usuario", user);
             sle.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.user = sle;
 
 
-
-
-            return View(ListCapturesViewModel.OrderByDescending(o => o.Date));
+            return View(result.OrderByDescending(o => o.Date));
         }
+        [HttpGet]
         public JsonResult GetCapturesReport(string id_)
         {
             try
@@ -1512,6 +1535,72 @@ namespace Queue.Controllers
             return sli;
         }
 
+
+        [HttpGet]
+        public ActionResult TimePerActivity()
+        {
+            Guid company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+            List<SelectListItem> sliu = CreateList(db.Agent_Employee.Where(u => u.IdCompany == company), "Usuario", "Usuario").ToList();
+            sliu.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sliu;
+
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == company).ToList(), "idemployeesGroup", "Nombre");
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgruoup = sli;
+
+            TimePerActivityViewModel datos = new TimePerActivityViewModel();
+
+            return View(datos);
+        }
+
+        public ActionResult TimePerActivity(TimePerActivityViewModel activity)
+        {
+            Guid company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
+
+            if (activity.from.Year <= 1900)
+                activity.from = DateTime.Today;
+
+            if (activity.to.Year <= 1900)
+                activity.to = DateTime.Today;
+
+
+            List<BasicStatsDashboard> data = GetDataForDashBoard(company.ToString(), activity.from, activity.to, activity.user, activity.idgruoup);
+            TimePerActivityViewModel datos = new TimePerActivityViewModel();
+            if (data.Count() > 0)
+            {
+                foreach (var i in data.GroupBy(g => g.Application))
+                {
+                    ActivitySumViewModel activities = new ActivitySumViewModel();
+
+                    activities.program = i.Key;
+                    double times = data.Where(b => b.Application == i.Key).Sum(k => k.Time).Value;
+
+                    //sacamos minutos
+                    times = times / 60;
+
+                    //sacamos hotas
+                    times = times / 60;
+
+                    activities.time = times;
+
+                    if (times > 0.01)
+                        datos.activities.Add(activities);
+                }
+            }
+            datos.activities = datos.activities.OrderByDescending(o => o.time).ToList();
+
+            List<SelectListItem> sliu = CreateList(db.Agent_Employee.Where(u => u.IdCompany == company), "Usuario", "Usuario", activity.user).ToList();
+            sliu.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.user = sliu;
+
+            List<SelectListItem> sli = CreateList(db.Agent_EmployeesGroups.Where(c => c.Agent_Empresa.IdCompany == company).ToList(), "idemployeesGroup", "Nombre", activity.idgruoup);
+            sli.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.idgruoup = sli;
+
+            return View(datos);
+        }
+
+
         #endregion
 
 
@@ -1526,6 +1615,7 @@ namespace Queue.Controllers
             MongoHelper.TrakerBase = MongoHelper.database.GetCollection<TrakerBase>("TrackerTime");
             var builder = Builders<TrakerBase>.Filter;
 
+            List<Alertas> _alertas = db.Alertas.ToList();
             //var filter = builder.Gte("Date", DateTime.Today.AddDays(-5));
             var filter = builder.Gte("Date", DateTime.Today);
 
@@ -1588,6 +1678,8 @@ namespace Queue.Controllers
 
                         double inactivity = lavm.Where(p => p.username == m.Key).Sum(s => s.inactivity);
 
+                        //Alerts alla = db.Alerts.Where(r => r.tipo == 3 && r.Agent_Employee.Usuario == m.Key && r.Agent_Employee.IdCompany == _idempresa).SingleOrDefault();
+
                         //alerta de usuario con mas de 30 min de inactividad acumulada
                         if (inactivity >= 30 && db.Alerts.Where(r => r.tipo == 3 && r.Agent_Employee.Usuario == m.Key && r.Agent_Employee.IdCompany == _idempresa).Count() == 0)
                         {
@@ -1601,7 +1693,7 @@ namespace Queue.Controllers
                         }
 
 
-                        // no reporta desde hace mas de 30 min
+                        // no reporta desde hace mas de 30 minE
 
                         //nos traemos la ultima vez que reporto
                         DateTime lastreport = results.Where(p => p.UserName == m.Key && p.IdEmpresa == n.Key).OrderByDescending(o => o.Date).Select(f => f.Date).FirstOrDefault();
@@ -1631,83 +1723,107 @@ namespace Queue.Controllers
 
                     ///DESPUES QUE HACEMOS LAS VALIDACIONES, BUSCAMOS LO QUE HAY QUE REPORTAR PARA ENVIAR LOS CORREOS
 
-                    List<Alerts> Alerts_ = db.Alerts.Where(t => t.status == false).ToList();
-                    foreach (var c in Alerts_.GroupBy(g => g.Agent_Employee.IdCompany))
+                    List<Alerts> Alerts_ = db.Alerts.Where(t => t.status == false).Include(a => a.Agent_Employee).ToList();
+                    foreach (var c in Alerts_.Where(t => t.Agent_Employee != null).GroupBy(g => g.Agent_Employee.IdCompany))
                     {
                         Agent_Empresa empr = db.Agent_Empresa.Where(e => e.IdCompany == c.Key).SingleOrDefault();
                         List<string> users_ = new List<string>();
-                        foreach (var d in Alerts_.Where(t => t.Agent_Employee.IdCompany == c.Key).GroupBy(l => l.tipo))
+                        foreach (var d in Alerts_.Where(t => t.Agent_Employee != null && t.Agent_Employee.IdCompany == c.Key).GroupBy(l => l.tipo))
                         {
                             users_ = new List<string>();
-                            foreach (var e in Alerts_.Where(t => t.Agent_Employee.IdCompany == c.Key && t.tipo == d.Key))
+                            foreach (var e in Alerts_.Where(t => t.Agent_Employee != null && t.Agent_Employee.IdCompany == c.Key && t.tipo == d.Key))
                             {
                                 users_.Add(e.Agent_Employee.Usuario);
                             }
-
+                            List<string> _AlertAsociados = new List<string>();
                             if (users_.Count() > 0)
                             {
-                                EmailController ec = new EmailController();
-                                ec.SendAlert(empr.Email, d.Key, users_);
-                                //ec.SendAlert("luisfernandose@gmail.com", d.Key, users_);
+                                //traemos la listade correos por el tipo de alerta
+                                Guid alertid = _alertas.Where(g => g.type == d.Key).Select(j => j.Id).SingleOrDefault();
+                                _AlertAsociados = db.AlertAsociados.Where(t => t.Alertas.Id == alertid && t.Agent_Empresa.IdCompany == c.Key).Select(p => p.Email).ToList();
+
+                                if (_AlertAsociados.Count() > 0)
+                                {
+                                    EmailController ec = new EmailController();
+                                    //ec.SendAlert(_AlertAsociados, d.Key, users_);
+                                }
                             }
 
-                            List<Alerts> laedit = db.Alerts.Where(h => h.Agent_Employee.IdCompany == c.Key && h.tipo == d.Key).ToList();
-
-                            foreach (var o in laedit)
+                            if (_AlertAsociados.Count() > 0)
                             {
-                                o.status = true;
-                            }
+                                List<Alerts> laedit = db.Alerts.Where(h => h.Agent_Employee.IdCompany == c.Key && h.tipo == d.Key).ToList();
 
-                            db.SaveChanges();
+                                foreach (var o in laedit)
+                                {
+                                    o.status = true;
+                                    db.SaveChanges();
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
-        public ActionResult Alertas(string idcompany, Guid? Id)
+        [Authorize(Roles = "Admin")]
+        public ActionResult Alertas(Guid? Id)
         {
-            List<AlertAsociados> oAlerta = new List<AlertAsociados>();
+            AlertModuleViewModel avm = new AlertModuleViewModel();
+            var company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
 
-            if (Id != null)
+            List<AlertAsociados> oAlerta = new List<AlertAsociados>();
+            if (Id != null && Id != Guid.Empty)
             {
-                oAlerta = db.AlertAsociados.Where(p => p.Alertas.Id == Id).ToList();
+                oAlerta = db.AlertAsociados.Where(p => p.Alertas.Id == Id && p.IdCompany == company).Include(a => a.Alertas).ToList();
+                foreach (var j in oAlerta)
+                {
+                    AlertListViewModel alaso = new AlertListViewModel();
+                    alaso.id = j.Id;
+                    alaso.alert = j.Alertas.Alerta;
+                    alaso.mail = j.Email;
+                    avm.AlertListViewModel.Add(alaso);
+                }
             }
 
-            List<SelectListItem> alert = CreateList(db.Alertas.ToList(), "Id", "Alerta", Id);
+            List<SelectListItem> alert = CreateList(db.Alertas.ToList(), "Id", "Alerta");
             alert.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
             ViewBag.Id = alert;
 
-            return View(oAlerta);
+            return View(avm);
 
         }
 
-
-
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public ActionResult Agregar(AlertAsociados alert, Guid Id)
+        public ActionResult Alertas(AlertModuleViewModel alert)
         {
             if (ModelState.IsValid)
             {
                 var company = Guid.Parse(Request.RequestContext.HttpContext.Session["Company"].ToString());
-          
-                if (db.AlertAsociados.Where(t => t.IdCompany == company && t.Email == alert.Email).Count() == 0)
+
+                if (alert.id != null && !string.IsNullOrEmpty(alert.AlertAsociados?.Email))
                 {
-                    alert.Id = Guid.NewGuid();
-                    alert.IdCompany = company;
-                    alert.Alertas = db.Alertas.Where(x => x.Id == Id).SingleOrDefault();
-                    //alert.Alertas = db.Alertas.Where(x => x.Id == alert.Id).SingleOrDefault();
-                    db.AlertAsociados.Add(alert);
-                    db.SaveChanges();
-                    Success("Registro exitoso");
-                    return RedirectToAction("Alertas");
+                    Guid idalet = Guid.Parse(alert.id);
+
+                    if (db.AlertAsociados.Where(t => t.IdCompany == company && t.Email == alert.AlertAsociados.Email && t.Alertas.Id == idalet).Count() == 0)
+                    {
+                        alert.AlertAsociados.Id = Guid.NewGuid();
+                        alert.AlertAsociados.IdCompany = company;
+                        alert.AlertAsociados.Alertas = db.Alertas.Where(x => x.Id == idalet).SingleOrDefault();
+                        db.AlertAsociados.Add(alert.AlertAsociados);
+                        db.SaveChanges();
+                        Success("Registro exitoso");
+                    }
+                    else
+                        Warning("Email ya se encuentra reacionado con esta alerta", string.Empty);
                 }
-                else
-                    Warning("Email ya existe", string.Empty);
             }
 
-            return View(alert);
+            List<SelectListItem> lalert = CreateList(db.Alertas.ToList(), "Id", "Alerta", alert.AlertAsociados?.Id);
+            lalert.Insert(0, (new SelectListItem { Text = "Seleccione", Value = Guid.Empty.ToString() }));
+            ViewBag.Id = lalert;
+
+            return RedirectToAction("Alertas", new { Id = alert.id });
         }
 
         [HttpPost]
@@ -1729,7 +1845,7 @@ namespace Queue.Controllers
                 Success("Elimado exitosamente");
                 return RedirectToAction("Alertas");
             }
-            
+
         }
 
         #endregion

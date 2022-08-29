@@ -68,7 +68,6 @@ namespace Queue.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -165,7 +164,6 @@ namespace Queue.Controllers
         // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)
@@ -245,7 +243,9 @@ namespace Queue.Controllers
                 try
                 {
                     EmailController ec = new EmailController();
-                    await ec.SendInvitation(model.Email, model.Email, model.Password);
+                    List<string> _mails = new List<string>();
+                    _mails.Add(model.Email);
+                    await ec.SendInvitation(_mails, model.Email, model.Password);
                 }
                 catch (Exception ex)
                 {
@@ -301,7 +301,9 @@ namespace Queue.Controllers
                 db.Entry(oUser).State = EntityState.Modified;
 
                 EmailController ec = new EmailController();
-                ec.SendInvitation(model.Email, model.Email, model.Password);
+                List<string> _mails = new List<string>();
+                _mails.Add(model.Email);
+                await ec.SendInvitation(_mails, model.Email, model.Password);
 
                 await db.SaveChangesAsync();
 
@@ -355,7 +357,9 @@ namespace Queue.Controllers
                 try
                 {
                     EmailController ec = new EmailController();
-                    ec.SendForgot(model.Email, callbackUrl);
+                    List<string> _mails = new List<string>();
+                    _mails.Add(model.Email);
+                    ec.SendForgot(_mails, callbackUrl);
                 }
                 catch (Exception ex)
                 {

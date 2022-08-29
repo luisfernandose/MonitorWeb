@@ -58,8 +58,8 @@
     <Reference Include="CsvHelper, Version=26.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.26.1.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="DnsClient, Version=1.6.0.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
-      <HintPath>..\packages\DnsClient.1.6.0\lib\net45\DnsClient.dll</HintPath>
+    <Reference Include="DnsClient, Version=1.6.1.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\packages\DnsClient.1.6.1\lib\net45\DnsClient.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -110,17 +110,17 @@
     <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Bson, Version=2.15.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Bson.2.15.1\lib\netstandard2.0\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=2.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.17.0\lib\netstandard2.0\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=2.15.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Driver.2.15.1\lib\netstandard2.0\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=2.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.17.0\lib\netstandard2.0\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver.Core, Version=2.15.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Driver.Core.2.15.1\lib\netstandard2.0\MongoDB.Driver.Core.dll</HintPath>
+    <Reference Include="MongoDB.Driver.Core, Version=2.17.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.17.0\lib\netstandard2.0\MongoDB.Driver.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Libmongocrypt, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Libmongocrypt.1.3.0\lib\netstandard2.0\MongoDB.Libmongocrypt.dll</HintPath>
+    <Reference Include="MongoDB.Libmongocrypt, Version=1.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Libmongocrypt.1.5.4\lib\netstandard2.0\MongoDB.Libmongocrypt.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -511,6 +511,10 @@
     <Compile Include="Migrations\202206022045205_AlertasCampo.Designer.cs">
       <DependentUpon>202206022045205_AlertasCampo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206101727033_edit alert.cs" />
+    <Compile Include="Migrations\202206101727033_edit alert.Designer.cs">
+      <DependentUpon>202206101727033_edit alert.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Agent_EmployeeGroupsEmployee.cs" />
     <Compile Include="Models\Agent_EmployeesGroups.cs" />
@@ -572,7 +576,10 @@
     <Compile Include="Utils\ExtensionMethods.cs" />
     <Compile Include="Utils\Variance.cs" />
     <Compile Include="Utils\Alerts.cs" />
+    <Compile Include="ViewModels\ActivitySumViewModel.cs" />
     <Compile Include="ViewModels\Agent_Employee_ViewModel.cs" />
+    <Compile Include="ViewModels\AlertListViewModel.cs" />
+    <Compile Include="ViewModels\AlertModuleViewModel.cs" />
     <Compile Include="ViewModels\AlertsDataViewModel.cs" />
     <Compile Include="ViewModels\AutomaticTakeTimeModelViewModel.cs" />
     <Compile Include="ViewModels\CapturesViewModel.cs" />
@@ -580,6 +587,7 @@
     <Compile Include="ViewModels\InstalledProgramsViewModel.cs" />
     <Compile Include="ViewModels\LogsViewModel.cs" />
     <Compile Include="ViewModels\PrinterPost.cs" />
+    <Compile Include="ViewModels\TimePerActivityViewModel.cs" />
     <Compile Include="ViewModels\UserListViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -9323,6 +9331,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="js\Common.js" />
     <Content Include="js\demo.js" />
+    <Content Include="js\DownloadsPDF.js" />
     <Content Include="js\iframeheight.js" />
     <Content Include="js\Messages.js" />
     <Content Include="js\pages\advanced-form-element.js" />
@@ -10413,8 +10422,6 @@
     <Content Include="Core\Compression\Zstandard\lib\linux\libzstd.so" />
     <Content Include="Core\Compression\Snappy\lib\osx\libsnappy64.dylib" />
     <Content Include="Core\Compression\Snappy\lib\linux\libsnappy64.so" />
-    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\IISWithMigrations.pubxml" />
     <Content Include="Scripts\c3.js" />
     <Content Include="Scripts\c3.min.js" />
@@ -14618,6 +14625,7 @@
     <Content Include="Views\Operation\HardwareReportDetails.cshtml" />
     <Content Include="Views\Operation\SoftwareReportDetails.cshtml" />
     <Content Include="Views\Operation\Alertas.cshtml" />
+    <Content Include="Views\Operation\TimePerActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\FilesRepository\" />
@@ -14743,6 +14751,9 @@
     <EmbeddedResource Include="Migrations\202206022045205_AlertasCampo.resx">
       <DependentUpon>202206022045205_AlertasCampo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206101727033_edit alert.resx">
+      <DependentUpon>202206101727033_edit alert.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -14778,11 +14789,11 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\packages\MongoDB.Libmongocrypt.1.3.0\build\MongoDB.Libmongocrypt.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MongoDB.Libmongocrypt.1.3.0\build\MongoDB.Libmongocrypt.targets'))" />
-    <Error Condition="!Exists('..\packages\MongoDB.Driver.Core.2.15.1\build\MongoDB.Driver.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MongoDB.Driver.Core.2.15.1\build\MongoDB.Driver.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\MongoDB.Libmongocrypt.1.5.4\build\MongoDB.Libmongocrypt.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MongoDB.Libmongocrypt.1.5.4\build\MongoDB.Libmongocrypt.targets'))" />
+    <Error Condition="!Exists('..\packages\MongoDB.Driver.Core.2.17.0\build\MongoDB.Driver.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MongoDB.Driver.Core.2.17.0\build\MongoDB.Driver.Core.targets'))" />
   </Target>
-  <Import Project="..\packages\MongoDB.Libmongocrypt.1.3.0\build\MongoDB.Libmongocrypt.targets" Condition="Exists('..\packages\MongoDB.Libmongocrypt.1.3.0\build\MongoDB.Libmongocrypt.targets')" />
-  <Import Project="..\packages\MongoDB.Driver.Core.2.15.1\build\MongoDB.Driver.Core.targets" Condition="Exists('..\packages\MongoDB.Driver.Core.2.15.1\build\MongoDB.Driver.Core.targets')" />
+  <Import Project="..\packages\MongoDB.Libmongocrypt.1.5.4\build\MongoDB.Libmongocrypt.targets" Condition="Exists('..\packages\MongoDB.Libmongocrypt.1.5.4\build\MongoDB.Libmongocrypt.targets')" />
+  <Import Project="..\packages\MongoDB.Driver.Core.2.17.0\build\MongoDB.Driver.Core.targets" Condition="Exists('..\packages\MongoDB.Driver.Core.2.17.0\build\MongoDB.Driver.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

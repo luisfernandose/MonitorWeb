@@ -1,7 +1,7 @@
 ﻿@model Queue.Models.DashBoardStats
 @{ ViewBag.Title = "Home Page"; }
 @{ var ListUser = new List<SelectListItem>
-                     () { new SelectListItem() { Text = "Todos", Value = "Todos", Selected = true }, };
+                         () { new SelectListItem() { Text = "Todos", Value = "Todos", Selected = true }, };
 
     foreach (var item in ViewBag.ListUser)
     {
@@ -57,10 +57,21 @@
                         </div>
 
                         <div class="col-lg-3">
+                            <label asp-for="idgroup" class="control-label">Grupos</label>
+                            <span asp-validation-for="idgroup" class="text-danger"></span>
+                            @Html.DropDownList("idgroup", null, htmlAttributes: new { @class = "form-control", autocomplete = "off" })
+                            <br />
+                        </div>
+
+                        <div class="col-lg-3">
                             <label>Empleados</label>
                             <div class="input-group">
                                 @Html.DropDownList("ddlUsers", ListUser, "", new { @class = "form-control select2", style = "width:100%;" })
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10">
                         </div>
                         <div class="col-lg-2">
                             <br />
@@ -71,7 +82,7 @@
                             </div>
                         </div>
                     </div>
-                 }
+                }
 
                 <div class="row">
 
@@ -165,15 +176,15 @@
                                     <tbody>
                                         @foreach (var item in Model.DataPerUser)
                                         {
-                            <tr>
-                                <td>@item.User</td>
-                                <td>@item.ProductiveTime.ToString("0.0#")</td>
-                                <td>@item.ImproductiveTime.ToString("0.0#")</td>
-                                <td>@item.NeutralTime.ToString("0.0#")</td>
-                                <td>@item.UnclasifyTime.ToString("0.0#")</td>
-                                <td>@item.TotalHours.ToString("0.0#")</td>
-                            </tr>
-}
+                                            <tr>
+                                                <td>@item.User</td>
+                                                <td>@item.ProductiveTime.ToString("0.0#")</td>
+                                                <td>@item.ImproductiveTime.ToString("0.0#")</td>
+                                                <td>@item.NeutralTime.ToString("0.0#")</td>
+                                                <td>@item.UnclasifyTime.ToString("0.0#")</td>
+                                                <td>@item.TotalHours.ToString("0.0#")</td>
+                                            </tr>
+                                        }
                                     </tbody>
                                 </table>
                             </div>

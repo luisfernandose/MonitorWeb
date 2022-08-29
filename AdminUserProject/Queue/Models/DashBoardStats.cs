@@ -15,5 +15,6 @@ namespace Queue.Models
         public DateTime DateFrom { get; set; } = DateTime.Today;
         public DateTime DateTo { get; set; } = DateTime.Today;
         public string ddlUsers { get; set; }
+        public Guid idgroup { get; set; }
     }
 }

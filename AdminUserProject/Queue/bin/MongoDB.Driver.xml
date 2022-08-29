@@ -484,6 +484,12 @@
         <member name="M:MongoDB.Driver.AggregateFluentBase`1.Count">
             <inheritdoc />
         </member>
+        <member name="M:MongoDB.Driver.AggregateFluentBase`1.Densify(MongoDB.Driver.FieldDefinition{`0},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{MongoDB.Driver.FieldDefinition{`0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:MongoDB.Driver.AggregateFluentBase`1.Densify(MongoDB.Driver.FieldDefinition{`0},MongoDB.Driver.DensifyRange,MongoDB.Driver.FieldDefinition{`0}[])">
+            <inheritdoc />
+        </member>
         <member name="M:MongoDB.Driver.AggregateFluentBase`1.Facet``1(System.Collections.Generic.IEnumerable{MongoDB.Driver.AggregateFacet{`0}},MongoDB.Driver.AggregateFacetOptions{``0})">
             <inheritdoc />
         </member>
@@ -1146,6 +1152,14 @@
             The full document.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.ChangeStreamOptions.FullDocumentBeforeChange">
+            <summary>
+            Gets or sets the full document before change.
+            </summary>
+            <value>
+            The full document before change.
+            </value>
+        </member>
         <member name="P:MongoDB.Driver.ChangeStreamOptions.MaxAwaitTime">
             <summary>
             Gets or sets the maximum await time.
@@ -1160,6 +1174,24 @@
             </summary>
             <value>
             The resume after.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.ChangeStreamOptions.ShowExpandedEvents">
+            <summary>
+            Gets or sets whether the change stream should show expanded events (MongoDB 6.0 and later).
+            Expanded change stream events include:
+            <list type="bullet">
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Create"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.CreateIndexes"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.DropIndexes"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.Modify"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.RefineCollectionShardKey"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.ReshardCollection"/></description></item>
+                <item><description><see cref="F:MongoDB.Driver.ChangeStreamOperationType.ShardCollection"/></description></item>
+            </list>
+            </summary>
+            <value>
+            The value.
             </value>
         </member>
         <member name="P:MongoDB.Driver.ChangeStreamOptions.StartAfter">
@@ -1177,6 +1209,32 @@
             <value>
             The start at operation time.
             </value>
+        </member>
+        <member name="T:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions">
+            <summary>
+            Change stream pre and post images options.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions"/> class.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions.#ctor(MongoDB.Bson.BsonDocument)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions"/> class.
+            </summary>
+            <param name="bsonDocument">The backing document.</param>
+        </member>
+        <member name="P:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions.BackingDocument">
+            <summary>
+            Gets the backing document.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.ChangeStreamPreAndPostImagesOptions.Enabled">
+            <summary>
+            Gets or sets a value indicating whether ChangeStreamPreAndPostImages is enabled.
+            </summary>
         </member>
         <member name="T:MongoDB.Driver.ChangeStreamStageOptions">
             <summary>
@@ -1320,6 +1378,32 @@
             <value>
               <c>true</c> if snapshot reads are requested; otherwise, <c>false</c>.
             </value>
+        </member>
+        <member name="T:MongoDB.Driver.ClusteredIndexOptions`1">
+            <summary>
+            Options for creating a clustered index.
+            </summary>
+            <typeparam name="TDocument">The document type.</typeparam>
+        </member>
+        <member name="M:MongoDB.Driver.ClusteredIndexOptions`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MongoDB.Driver.ClusteredIndexOptions`1"/> class.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.ClusteredIndexOptions`1.Key">
+            <summary>
+            Gets or sets the index key, which must currently be {_id: 1}.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.ClusteredIndexOptions`1.Name">
+            <summary>
+            Gets or sets the index name.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.ClusteredIndexOptions`1.Unique">
+            <summary>
+            Gets or sets whether the index entries must be unique, which currently must be true.
+            </summary>
         </member>
         <member name="T:MongoDB.Driver.ClusterRegistry">
             <summary>
@@ -1557,6 +1641,16 @@
             Gets or sets a value indicating whether the collection is capped.
             </summary>
         </member>
+        <member name="P:MongoDB.Driver.CreateCollectionOptions.ChangeStreamPreAndPostImagesOptions">
+            <summary>
+            Gets or sets  Gets or sets a change streams pre and post images options.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.CreateCollectionOptions.EncryptedFields">
+            <summary>
+            [Beta] Gets or sets encrypted fields.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.CreateCollectionOptions.ExpireAfter">
             <summary>
             Gets or sets a timespan indicating how long documents in a time series collection should be retained.
@@ -1633,6 +1727,11 @@
             </summary>
             <param name="options">The options.</param>
             <returns>The generic options.</returns>
+        </member>
+        <member name="P:MongoDB.Driver.CreateCollectionOptions`1.ClusteredIndex">
+            <summary>
+            Gets or sets the <see cref="T:MongoDB.Driver.ClusteredIndexOptions`1"/>.
+            </summary>
         </member>
         <member name="P:MongoDB.Driver.CreateCollectionOptions`1.DocumentSerializer">
             <summary>
@@ -2013,6 +2112,292 @@
         <member name="P:MongoDB.Driver.DeleteResult.Unacknowledged.IsAcknowledged">
             <inheritdoc/>
         </member>
+        <member name="T:MongoDB.Driver.DensifyRange">
+            <summary>
+            Represents a range for the $densify stage.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyRange.DateTime(System.DateTime,System.DateTime,System.Int32,MongoDB.Driver.DensifyDateTimeUnit)">
+            <summary>
+            Creates a DensifyRange with DateTime bounds.
+            </summary>
+            <param name="lowerBound">The lower bound.</param>
+            <param name="upperBound">The upper bound.</param>
+            <param name="step">The step.</param>
+            <param name="unit">The unit.</param>
+            <returns>A DensifyRange with DateTime bounds.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyRange.DateTime(MongoDB.Driver.DensifyBounds,System.Int32,MongoDB.Driver.DensifyDateTimeUnit)">
+            <summary>
+            Creates a DensifyRange with DateTime bounds.
+            </summary>
+            <param name="bounds">The bounds.</param>
+            <param name="step">The step.</param>
+            <param name="unit">The unit.</param>
+            <returns>A DensifyRange with DateTime bounds.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyRange.Numeric``1(``0,``0,``0)">
+            <summary>
+            Creates a DensifyRange with numeric bounds.
+            </summary>
+            <typeparam name="TNumber">The numeric type.</typeparam>
+            <param name="lowerBound">The lower bound.</param>
+            <param name="upperBound">The upper bound.</param>
+            <param name="step">The step.</param>
+            <returns>A DensifyRange with numeric bounds.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyRange.Numeric``1(MongoDB.Driver.DensifyBounds,``0)">
+            <summary>
+            Creates a DensifyRange with numeric bounds.
+            </summary>
+            <typeparam name="TNumber">The numeric type.</typeparam>
+            <param name="bounds">The bounds.</param>
+            <param name="step">The step.</param>
+            <returns>A DensifyRange with numeric bounds.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyRange.Render">
+            <summary>
+            Renders the range as a BsonDocument.
+            </summary>
+            <returns>The rendered range.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyRange.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyBounds">
+            <summary>
+            Represents keyword densify bounds.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyBounds.Full">
+            <summary>
+            Gets a DensifyBounds representing the "full" bounds.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyBounds.Partition">
+            <summary>
+            Gets a DensifyBounds representing the "partition" bounds.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyBounds.Keyword">
+            <summary>
+            Gets the keyword.
+            </summary>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyNumericRange`1">
+            <summary>
+            Represents a numeric densify range.
+            </summary>
+            <typeparam name="TNumber">The numeric type.</typeparam>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyNumericRange`1.#ctor(MongoDB.Driver.DensifyNumericBounds{`0},`0)">
+            <summary>
+            Initializes a new instance of DensifyNumericRange.
+            </summary>
+            <param name="bounds">The bounds.</param>
+            <param name="step">The step.</param>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyNumericRange`1.Bounds">
+            <summary>
+            Gets the bounds.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyNumericRange`1.Step">
+            <summary>
+            Gets the step.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyNumericRange`1.Render">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyNumericBounds`1">
+            <summary>
+            Represents a numeric densify bounds.
+            </summary>
+            <typeparam name="TNumber">The numeric type.</typeparam>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyNumericBounds`1.Render">
+            <summary>
+            Renders the bounds as a BsonValue.
+            </summary>
+            <returns>The rendered bounds.</returns>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyKeywordNumericBounds`1">
+            <summary>
+            Represents a keyword numeric densify bounds.
+            </summary>
+            <typeparam name="TNumber">The numeric type.</typeparam>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyKeywordNumericBounds`1.Keyword">
+            <summary>
+            Gets the keyword.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyKeywordNumericBounds`1.Render">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyLowerUpperNumericBounds`1">
+            <summary>
+            Represents a numeric densify bounds with lower and upper bounds.
+            </summary>
+            <typeparam name="TNumber">The numeric type.</typeparam>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyLowerUpperNumericBounds`1.#ctor(`0,`0)">
+            <summary>
+            Initializes an instance of DensifyLowerUpperNumericBounds.
+            </summary>
+            <param name="lowerBound">The lower bound.</param>
+            <param name="upperBound">The upper bound.</param>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyLowerUpperNumericBounds`1.LowerBound">
+            <summary>
+            Gets the lower bound.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyLowerUpperNumericBounds`1.UpperBound">
+            <summary>
+            Gets the upper bound.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyLowerUpperNumericBounds`1.Render">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyDateTimeRange">
+            <summary>
+            Represents a DateTime densify range.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyDateTimeRange.#ctor(MongoDB.Driver.DensifyDateTimeBounds,System.Int32,MongoDB.Driver.DensifyDateTimeUnit)">
+            <summary>
+            Initializes an instance of DensifyDateTimeRange.
+            </summary>
+            <param name="bounds">The bounds.</param>
+            <param name="step">The step.</param>
+            <param name="unit">The unit.</param>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyDateTimeRange.Bounds">
+            <summary>
+            Gets the bounds.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyDateTimeRange.Step">
+            <summary>
+            Gets the step.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyDateTimeRange.Unit">
+            <summary>
+            Gets the unit.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyDateTimeRange.Render">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyDateTimeBounds">
+            <summary>
+            Represents a DateTime densify bounds.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyDateTimeBounds.Render">
+            <summary>
+            Renders the bounds as a BsonValue.
+            </summary>
+            <returns>The rendered bounds.</returns>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyKeywordDateTimeBounds">
+            <summary>
+            Represents a keyword DateTime densify bounds.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyKeywordDateTimeBounds.#ctor(System.String)">
+            <summary>
+            Initializes an instance of DensifyKeywordDateTimeBounds.
+            </summary>
+            <param name="keyword">The keyword.</param>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyKeywordDateTimeBounds.Keyword">
+            <summary>
+            Gets the keyword.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyKeywordDateTimeBounds.Render">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyLowerUpperDateTimeBounds">
+            <summary>
+            Represents a DateTime densify bounds with lower and upper bounds.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyLowerUpperDateTimeBounds.#ctor(System.DateTime,System.DateTime)">
+            <summary>
+            Initializes an instance of DensifyLowerUpperDateTimeBounds.
+            </summary>
+            <param name="lowerBound">The lower bound.</param>
+            <param name="upperBound">The upper bound.</param>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyLowerUpperDateTimeBounds.LowerBound">
+            <summary>
+            Gets the lower bound.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DensifyLowerUpperDateTimeBounds.UpperBound">
+            <summary>
+            Gets the upper bound.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.DensifyLowerUpperDateTimeBounds.Render">
+            <inheritdoc/>
+        </member>
+        <member name="T:MongoDB.Driver.DensifyDateTimeUnit">
+            <summary>
+            Represents a densify DateTime unit.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Milliseconds">
+            <summary>
+            Milliseconds.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Seconds">
+            <summary>
+            Seconds.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Minutes">
+            <summary>
+            Minutes.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Hours">
+            <summary>
+            Hours.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Days">
+            <summary>
+            Days.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Weeks">
+            <summary>
+            Weeks.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Months">
+            <summary>
+            Months.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Quarters">
+            <summary>
+            Quarters.
+            </summary>
+        </member>
+        <member name="F:MongoDB.Driver.DensifyDateTimeUnit.Years">
+            <summary>
+            Years.
+            </summary>
+        </member>
         <member name="T:MongoDB.Driver.DistinctOptions">
             <summary>
             Options for the distinct command.
@@ -2137,6 +2522,16 @@
         <member name="M:MongoDB.Driver.PositionDocumentsWindowBoundary.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:MongoDB.Driver.DropCollectionOptions">
+            <summary>
+            Options for dropping a collection.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.DropCollectionOptions.EncryptedFields">
+            <summary>
+            [Beta] Gets or sets encrypted fields.
+            </summary>
+        </member>
         <member name="T:MongoDB.Driver.DropIndexOptions">
             <summary>
             Options for dropping an index.
@@ -2158,7 +2553,12 @@
         </member>
         <member name="P:MongoDB.Driver.Encryption.AutoEncryptionLibMongoCryptController.InternalClient">
             <summary>
-            this property is used by DisposableMongoClient.Dispose to unregister the internal cluster.
+            This property is used by DisposableMongoClient.Dispose to unregister the internal cluster.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Encryption.AutoEncryptionLibMongoCryptController.MongoCryptdClient">
+            <summary>
+            This property is used by DisposableMongoClient.Dispose to unregister the mongocryptd cluster.
             </summary>
         </member>
         <member name="T:MongoDB.Driver.Encryption.AutoEncryptionOptions">
@@ -2166,7 +2566,7 @@
             Auto encryption options.
             </summary>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.AutoEncryptionOptions.#ctor(MongoDB.Driver.CollectionNamespace,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},MongoDB.Driver.Optional{MongoDB.Driver.IMongoClient},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Driver.SslSettings}})">
+        <member name="M:MongoDB.Driver.Encryption.AutoEncryptionOptions.#ctor(MongoDB.Driver.CollectionNamespace,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},MongoDB.Driver.Optional{MongoDB.Driver.IMongoClient},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Driver.SslSettings}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{System.Nullable{System.Boolean}})">
             <summary>
             Initializes a new instance of the <see cref="T:MongoDB.Driver.Encryption.AutoEncryptionOptions"/> class.
             </summary>
@@ -2177,6 +2577,8 @@
             <param name="keyVaultClient">The keyVault client.</param>
             <param name="schemaMap">The schema map.</param>
             <param name="tlsOptions">The tls options.</param>
+            <param name="encryptedFieldsMap">[Beta] The encryptedFields map.</param>
+            <param name="bypassQueryAnalysis">[Beta] The bypass query analysis flag.</param>
         </member>
         <member name="P:MongoDB.Driver.Encryption.AutoEncryptionOptions.BypassAutoEncryption">
             <summary>
@@ -2186,6 +2588,17 @@
               <c>true</c> if automatic encryption should be bypasssed; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.Encryption.AutoEncryptionOptions.BypassQueryAnalysis">
+            <summary>
+            [Beta] Gets a value indicating whether to bypass query analysis.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.Encryption.AutoEncryptionOptions.EncryptedFieldsMap">
+            <summary>
+            [Beta] Gets the encrypted fields map.
+            Supplying an encryptedFieldsMap provides more security than relying on an encryptedFields obtained from the server. It protects against a malicious server advertising a false encryptedFields.
+            </summary>
+        </member>
         <member name="P:MongoDB.Driver.Encryption.AutoEncryptionOptions.ExtraOptions">
             <summary>
             Gets the extra options.
@@ -2193,6 +2606,10 @@
             <value>
             The extra options.
             </value>
+            <remarks>
+            All MongoClient objects in the same process should use the same setting for extraOptions.cryptSharedLibPath,
+            as it is an error to load more that one crypt_shared dynamic library simultaneously in a single operating system process.
+            </remarks>
         </member>
         <member name="P:MongoDB.Driver.Encryption.AutoEncryptionOptions.KeyVaultClient">
             <summary>
@@ -2234,17 +2651,19 @@
             The schema map.
             </value>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.AutoEncryptionOptions.With(MongoDB.Driver.Optional{MongoDB.Driver.CollectionNamespace},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},MongoDB.Driver.Optional{MongoDB.Driver.IMongoClient},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Driver.SslSettings}})">
+        <member name="M:MongoDB.Driver.Encryption.AutoEncryptionOptions.With(MongoDB.Driver.Optional{MongoDB.Driver.CollectionNamespace},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}}},MongoDB.Driver.Optional{System.Boolean},MongoDB.Driver.Optional{System.Nullable{System.Boolean}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,System.Object}},MongoDB.Driver.Optional{MongoDB.Driver.IMongoClient},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Driver.SslSettings}},MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyDictionary{System.String,MongoDB.Bson.BsonDocument}})">
             <summary>
             Returns a new instance of the <see cref="T:MongoDB.Driver.Encryption.AutoEncryptionOptions"/> class.
             </summary>
             <param name="keyVaultNamespace">The keyVault namespace.</param>
             <param name="kmsProviders">The kms providers.</param>
             <param name="bypassAutoEncryption">The bypass auto encryption flag.</param>
+            <param name="bypassQueryAnalysis">[Beta] The bypass query analysis flag.</param>
             <param name="extraOptions">The extra options.</param>
             <param name="keyVaultClient">The keyVault client.</param>
             <param name="schemaMap">The schema map.</param>
             <param name="tlsOptions">The tls options.</param>
+            <param name="encryptedFieldsMap">[Beta] The encryptedFields map.</param>
             <returns>A new instance of <see cref="T:MongoDB.Driver.Encryption.AutoEncryptionOptions"/>.</returns>
         </member>
         <member name="M:MongoDB.Driver.Encryption.AutoEncryptionOptions.Equals(System.Object)">
@@ -2267,9 +2686,27 @@
             </summary>
             <param name="clientEncryptionOptions">The client encryption options.</param>
         </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.AddAlternateKeyName(System.Guid,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Adds an alternate key name to the keyAltNames array of the key document in the key vault collection with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="id">The id.</param>
+            <param name="alternateKeyName">The alternate key name.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the previous version of the key document.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.AddAlternateKeyNameAsync(System.Guid,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Adds an alternate key name to the keyAltNames array of the key document in the key vault collection with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="id">The id.</param>
+            <param name="alternateKeyName">The key alter name.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the previous version of the key document.</returns>
+        </member>
         <member name="M:MongoDB.Driver.Encryption.ClientEncryption.CreateDataKey(System.String,MongoDB.Driver.Encryption.DataKeyOptions,System.Threading.CancellationToken)">
             <summary>
-            Creates a data key.
+            An alias function equivalent to createKey.
             </summary>
             <param name="kmsProvider">The kms provider.</param>
             <param name="dataKeyOptions">The data key options.</param>
@@ -2278,7 +2715,7 @@
         </member>
         <member name="M:MongoDB.Driver.Encryption.ClientEncryption.CreateDataKeyAsync(System.String,MongoDB.Driver.Encryption.DataKeyOptions,System.Threading.CancellationToken)">
             <summary>
-            Creates a data key.
+            An alias function equivalent to createKey.
             </summary>
             <param name="kmsProvider">The kms provider.</param>
             <param name="dataKeyOptions">The data key options.</param>
@@ -2301,6 +2738,22 @@
             <param name="cancellationToken">The cancellation token.</param>
             <returns>The decrypted value.</returns>
         </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.DeleteKey(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Removes the key document with the given UUID (BSON binary subtype 0x04) from the key vault collection.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the result of the internal deleteOne() operation on the key vault collection.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.DeleteKeyAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Removes the key document with the given UUID (BSON binary subtype 0x04) from the key vault collection.
+            </summary>
+            <param name="id">The id.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the result of the internal deleteOne() operation on the key vault collection.</returns>
+        </member>
         <member name="M:MongoDB.Driver.Encryption.ClientEncryption.Dispose">
             <inheritdoc />
         </member>
@@ -2321,6 +2774,88 @@
             <param name="encryptOptions">The encrypt options.</param>
             <param name="cancellationToken">The cancellation token.</param>
             <returns>The encrypted value.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.GetKey(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Finds a single key document with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="id">The id.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the result of the internal find() operation on the key vault collection.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.GetKeyAsync(System.Guid,System.Threading.CancellationToken)">
+            <summary>
+            Finds a single key document with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="id">The id.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the result of the internal find() operation on the key vault collection.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.GetKeyByAlternateKeyName(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Finds a single key document with the given alter name.
+            </summary>
+            <param name="alternateKeyName">The alternate key name.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns a key document in the key vault collection with the given alternateKeyName.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.GetKeyByAlternateKeyNameAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Finds a single key document with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="alternateKeyName">The alternate key name.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns a key document in the key vault collection with the given alternateKeyName.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.GetKeys(System.Threading.CancellationToken)">
+            <summary>
+            Finds all documents in the key vault collection.
+            </summary>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the result of the internal find() operation on the key vault collection.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.GetKeysAsync(System.Threading.CancellationToken)">
+            <summary>
+            Finds all documents in the key vault collection.
+            </summary>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the result of the internal find() operation on the key vault collection.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.RemoveAlternateKeyName(System.Guid,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Removes an alternateKeyName from the keyAltNames array of the key document in the key vault collection with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="id">The id.</param>
+            <param name="alternateKeyName">The alternate key name.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the previous version of the key document.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.RemoveAlternateKeyNameAsync(System.Guid,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Removes an alternateKeyName from the keyAltNames array of the key document in the key vault collection with the given UUID (BSON binary subtype 0x04).
+            </summary>
+            <param name="id">The id.</param>
+            <param name="alternateKeyName">The alternate key name.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>Returns the previous version of the key document.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.RewrapManyDataKey(MongoDB.Driver.FilterDefinition{MongoDB.Bson.BsonDocument},MongoDB.Driver.Encryption.RewrapManyDataKeyOptions,System.Threading.CancellationToken)">
+            <summary>
+            Decrypts multiple data keys and (re-)encrypts them with a new masterKey, or with their current masterKey if a new one is not given.
+            </summary>
+            <param name="filter">The filter.</param>
+            <param name="options">The options.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>The result.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.ClientEncryption.RewrapManyDataKeyAsync(MongoDB.Driver.FilterDefinition{MongoDB.Bson.BsonDocument},MongoDB.Driver.Encryption.RewrapManyDataKeyOptions,System.Threading.CancellationToken)">
+            <summary>
+            Decrypts multiple data keys and (re-)encrypts them with a new masterKey, or with their current masterKey if a new one is not given.
+            </summary>
+            <param name="filter">The filter.</param>
+            <param name="options">The options.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>The result.</returns>
         </member>
         <member name="T:MongoDB.Driver.Encryption.ClientEncryptionOptions">
             <summary>
@@ -2383,12 +2918,13 @@
             Options for creating a data key.
             </summary>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.DataKeyOptions.#ctor(MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyList{System.String}},MongoDB.Driver.Optional{MongoDB.Bson.BsonDocument})">
+        <member name="M:MongoDB.Driver.Encryption.DataKeyOptions.#ctor(MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyList{System.String}},MongoDB.Driver.Optional{MongoDB.Bson.BsonDocument},MongoDB.Driver.Optional{MongoDB.Bson.BsonBinaryData})">
             <summary>
             Initializes a new instance of the <see cref="T:MongoDB.Driver.Encryption.DataKeyOptions"/> class.
             </summary>
             <param name="alternateKeyNames">The alternate key names.</param>
             <param name="masterKey">The master key.</param>
+            <param name="keyMaterial">The key material.</param>
         </member>
         <member name="P:MongoDB.Driver.Encryption.DataKeyOptions.AlternateKeyNames">
             <summary>
@@ -2396,6 +2932,14 @@
             </summary>
             <value>
             The alternate key names.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.Encryption.DataKeyOptions.KeyMaterial">
+            <summary>
+            Gets the key material.
+            </summary>
+            <value>
+            The key material.
             </value>
         </member>
         <member name="P:MongoDB.Driver.Encryption.DataKeyOptions.MasterKey">
@@ -2406,12 +2950,13 @@
             The master key.
             </value>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.DataKeyOptions.With(MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyList{System.String}},MongoDB.Driver.Optional{MongoDB.Bson.BsonDocument})">
+        <member name="M:MongoDB.Driver.Encryption.DataKeyOptions.With(MongoDB.Driver.Optional{System.Collections.Generic.IReadOnlyList{System.String}},MongoDB.Driver.Optional{MongoDB.Bson.BsonDocument},MongoDB.Driver.Optional{MongoDB.Bson.BsonBinaryData})">
             <summary>
             Returns a new DataKeyOptions instance with some settings changed.
             </summary>
             <param name="alternateKeyNames">The alternate key names.</param>
             <param name="masterKey">The master key.</param>
+            <param name="keyMaterial">The key material.</param>
             <returns>A new DataKeyOptions instance.</returns>
         </member>
         <member name="T:MongoDB.Driver.Encryption.EncryptionAlgorithm">
@@ -2429,26 +2974,44 @@
             Random algorithm.
             </summary>
         </member>
+        <member name="F:MongoDB.Driver.Encryption.EncryptionAlgorithm.Indexed">
+            <summary>
+            [Beta] Indexed algorithm.
+            </summary>
+            <remarks>
+            To insert or query with an "Indexed" encrypted payload, use a MongoClient configured with AutoEncryptionOptions.
+            AutoEncryptionOptions.BypassQueryAnalysis may be true. AutoEncryptionOptions.BypassAutoEncryption must be false.
+            </remarks>
+        </member>
+        <member name="F:MongoDB.Driver.Encryption.EncryptionAlgorithm.Unindexed">
+            <summary>
+            [Beta] Unindexed algorithm.
+            </summary>
+        </member>
         <member name="T:MongoDB.Driver.Encryption.EncryptOptions">
             <summary>
             Encryption options for explicit encryption.
             </summary>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.EncryptOptions.#ctor(System.String,MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.Nullable{System.Guid}})">
+        <member name="M:MongoDB.Driver.Encryption.EncryptOptions.#ctor(System.String,MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.Nullable{System.Guid}},MongoDB.Driver.Optional{System.Nullable{System.Int64}},MongoDB.Driver.Optional{System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:MongoDB.Driver.Encryption.EncryptOptions"/> class.
             </summary>
             <param name="algorithm">The encryption algorithm.</param>
             <param name="alternateKeyName">The alternate key name.</param>
             <param name="keyId">The key Id.</param>
+            <param name="contentionFactor">[Beta] The contention factor.</param>
+            <param name="queryType">[Beta] The query type.</param>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.EncryptOptions.#ctor(MongoDB.Driver.Encryption.EncryptionAlgorithm,MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.Nullable{System.Guid}})">
+        <member name="M:MongoDB.Driver.Encryption.EncryptOptions.#ctor(MongoDB.Driver.Encryption.EncryptionAlgorithm,MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.Nullable{System.Guid}},MongoDB.Driver.Optional{System.Nullable{System.Int64}},MongoDB.Driver.Optional{System.String})">
             <summary>
             Initializes a new instance of the <see cref="T:MongoDB.Driver.Encryption.EncryptOptions"/> class.
             </summary>
             <param name="algorithm">The encryption algorithm.</param>
             <param name="alternateKeyName">The alternate key name.</param>
             <param name="keyId">The key Id.</param>
+            <param name="contentionFactor">[Beta] The contention factor.</param>
+            <param name="queryType">[Beta] The query type.</param>
         </member>
         <member name="P:MongoDB.Driver.Encryption.EncryptOptions.Algorithm">
             <summary>
@@ -2466,6 +3029,14 @@
             The alternate key name.
             </value>
         </member>
+        <member name="P:MongoDB.Driver.Encryption.EncryptOptions.ContentionFactor">
+            <summary>
+            [Beta] Gets the contention factor.
+            </summary>
+            <value>
+            The contention factor.
+            </value>
+        </member>
         <member name="P:MongoDB.Driver.Encryption.EncryptOptions.KeyId">
             <summary>
             Gets the key identifier.
@@ -2474,13 +3045,23 @@
             The key identifier.
             </value>
         </member>
-        <member name="M:MongoDB.Driver.Encryption.EncryptOptions.With(MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.Nullable{System.Guid}})">
+        <member name="P:MongoDB.Driver.Encryption.EncryptOptions.QueryType">
+            <summary>
+            [Beta] Gets the query type.
+            </summary>
+            <value>
+            The query type.
+            </value>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.EncryptOptions.With(MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.String},MongoDB.Driver.Optional{System.Nullable{System.Guid}},MongoDB.Driver.Optional{System.Nullable{System.Int64}},MongoDB.Driver.Optional{System.String})">
             <summary>
             Returns a new EncryptOptions instance with some settings changed.
             </summary>
             <param name="algorithm">The encryption algorithm.</param>
             <param name="alternateKeyName">The alternate key name.</param>
             <param name="keyId">The keyId.</param>
+            <param name="contentionFactor">[Beta] The contention factor.</param>
+            <param name="queryType">[Beta] The query type.</param>
             <returns>A new EncryptOptions instance.</returns>
         </member>
         <member name="T:MongoDB.Driver.Encryption.MongoEncryptionException">
@@ -2501,9 +3082,71 @@
             <param name="info">The SerializationInfo.</param>
             <param name="context">The StreamingContext.</param>
         </member>
+        <member name="T:MongoDB.Driver.Encryption.RewrapManyDataKeyOptions">
+            <summary>
+            Rewrap many data keys options.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.RewrapManyDataKeyOptions.#ctor(System.String,MongoDB.Driver.Optional{MongoDB.Bson.BsonDocument})">
+            <summary>
+            Initializes a new instance of the <see cref="T:MongoDB.Driver.Encryption.RewrapManyDataKeyOptions"/> class.
+            </summary>
+            <param name="masterKey">The master key.</param>
+            <param name="provider">The provider name.</param>
+        </member>
+        <member name="P:MongoDB.Driver.Encryption.RewrapManyDataKeyOptions.Provider">
+            <summary>
+            Gets the provider name.
+            </summary>
+            <value>
+            The provider name.
+            </value>
+        </member>
+        <member name="P:MongoDB.Driver.Encryption.RewrapManyDataKeyOptions.MasterKey">
+            <summary>
+            Gets the master key.
+            </summary>
+            <value>
+            The master key.
+            </value>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.RewrapManyDataKeyOptions.With(MongoDB.Driver.Optional{MongoDB.Bson.BsonDocument},MongoDB.Driver.Optional{System.String})">
+            <summary>
+            Returns a new DataKeyOptions instance with some settings changed.
+            </summary>
+            <param name="masterKey">The master key.</param>
+            <param name="provider">The provider name.</param>
+            <returns>A new DataKeyOptions instance.</returns>
+        </member>
+        <member name="T:MongoDB.Driver.Encryption.RewrapManyDataKeyResult">
+            <summary>
+            Rewrap many data keys result.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.RewrapManyDataKeyResult.#ctor">
+            <summary>
+            Create RewrapManyDataKeyResult.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.Encryption.RewrapManyDataKeyResult.#ctor(MongoDB.Driver.BulkWriteResult)">
+            <summary>
+            Create RewrapManyDataKeyResult.
+            </summary>
+            <param name="bulkWriteResult">The bulkWriteResult.</param>
+        </member>
+        <member name="P:MongoDB.Driver.Encryption.RewrapManyDataKeyResult.BulkWriteResult">
+            <summary>
+            Bulk write result.
+            </summary>
+        </member>
         <member name="T:MongoDB.Driver.EstimatedDocumentCountOptions">
             <summary>
             Options for estimated document count.
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.EstimatedDocumentCountOptions.Comment">
+            <summary>
+            Gets or sets the comment.
             </summary>
         </member>
         <member name="P:MongoDB.Driver.EstimatedDocumentCountOptions.MaxTime">
@@ -3135,6 +3778,70 @@
             Creates a not in filter for an array field.
             </summary>
             <typeparam name="TItem">The type of the item.</typeparam>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringIn(MongoDB.Driver.FieldDefinition{`0,System.Collections.Generic.IEnumerable{System.String}},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates an in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringIn(MongoDB.Driver.FieldDefinition{`0,System.Collections.Generic.IEnumerable{System.String}},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates an in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringIn(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{System.String}}},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates an in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringIn(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{System.String}}},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates an in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringNin(MongoDB.Driver.FieldDefinition{`0,System.Collections.Generic.IEnumerable{System.String}},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates a not in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringNin(MongoDB.Driver.FieldDefinition{`0,System.Collections.Generic.IEnumerable{System.String}},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates a not in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringNin(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{System.String}}},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates a not in filter for a string array field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.AnyStringNin(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.IEnumerable{System.String}}},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates a not in filter for a string array field.
+            </summary>
             <param name="field">The field.</param>
             <param name="values">The values.</param>
             <returns>A not in filter.</returns>
@@ -3922,6 +4629,70 @@
             <param name="field">The field.</param>
             <param name="size">The size.</param>
             <returns>A size less than or equal filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringIn(MongoDB.Driver.FieldDefinition{`0,System.String},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates an in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringIn(MongoDB.Driver.FieldDefinition{`0,System.String},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates an in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringIn(System.Linq.Expressions.Expression{System.Func{`0,System.String}},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates an in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringIn(System.Linq.Expressions.Expression{System.Func{`0,System.String}},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates an in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>An in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringNin(MongoDB.Driver.FieldDefinition{`0,System.String},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates a not in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringNin(MongoDB.Driver.FieldDefinition{`0,System.String},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates a not in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringNin(System.Linq.Expressions.Expression{System.Func{`0,System.String}},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Creates a not in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.StringNin(System.Linq.Expressions.Expression{System.Func{`0,System.String}},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Creates a not in filter for a string field.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="values">The values.</param>
+            <returns>A not in filter.</returns>
         </member>
         <member name="M:MongoDB.Driver.FilterDefinitionBuilder`1.Text(System.String,MongoDB.Driver.TextSearchOptions)">
             <summary>
@@ -6233,6 +7004,24 @@
             </summary>
             <returns>The fluent aggregate interface.</returns>
         </member>
+        <member name="M:MongoDB.Driver.IAggregateFluent`1.Densify(MongoDB.Driver.FieldDefinition{`0},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{MongoDB.Driver.FieldDefinition{`0}})">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The fields to partition by.</param>
+            <returns>The fluent aggregate interface.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.IAggregateFluent`1.Densify(MongoDB.Driver.FieldDefinition{`0},MongoDB.Driver.DensifyRange,MongoDB.Driver.FieldDefinition{`0}[])">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The fields to partition by.</param>
+            <returns>The fluent aggregate interface.</returns>
+        </member>
         <member name="M:MongoDB.Driver.IAggregateFluent`1.Facet``1(System.Collections.Generic.IEnumerable{MongoDB.Driver.AggregateFacet{`0}},MongoDB.Driver.AggregateFacetOptions{``0})">
             <summary>
             Appends a $facet stage to the pipeline.
@@ -6562,6 +7351,32 @@
             <param name="output">The output projection.</param>
             <param name="options">The options (optional).</param>
             <returns>The fluent aggregate interface.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.IAggregateFluentExtensions.Densify``1(MongoDB.Driver.IAggregateFluent{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="aggregate">The aggregate.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>
+            The fluent aggregate interface.
+            </returns>
+        </member>
+        <member name="M:MongoDB.Driver.IAggregateFluentExtensions.Densify``1(MongoDB.Driver.IAggregateFluent{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},MongoDB.Driver.DensifyRange,System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="aggregate">The aggregate.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>
+            The fluent aggregate interface.
+            </returns>
         </member>
         <member name="M:MongoDB.Driver.IAggregateFluentExtensions.Facet``1(MongoDB.Driver.IAggregateFluent{``0},System.Collections.Generic.IEnumerable{MongoDB.Driver.AggregateFacet{``0}})">
             <summary>
@@ -7283,6 +8098,9 @@
             <summary>
             Limits the number of documents.
             </summary>
+            <remarks>
+            Limit of zero or null is equivalent to setting no limit.
+            </remarks>
             <param name="limit">The limit.</param>
             <returns>The fluent find interface.</returns>
         </member>
@@ -7380,6 +8198,26 @@
             <param name="find">The fluent find.</param>
             <param name="field">The field.</param>
             <returns>The fluent find interface.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.IFindFluentExtensions.Any``2(MongoDB.Driver.IFindFluent{``0,``1},System.Threading.CancellationToken)">
+            <summary>
+            Determine if there are any results.
+            </summary>
+            <typeparam name="TDocument">The type of the document.</typeparam>
+            <typeparam name="TProjection">The type of the projection (same as TDocument if there is no projection).</typeparam>
+            <param name="find">The fluent find.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>True if there is at least one document.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.IFindFluentExtensions.AnyAsync``2(MongoDB.Driver.IFindFluent{``0,``1},System.Threading.CancellationToken)">
+            <summary>
+            Determine if there are any results.
+            </summary>
+            <typeparam name="TDocument">The type of the document.</typeparam>
+            <typeparam name="TProjection">The type of the projection (same as TDocument if there is no projection).</typeparam>
+            <param name="find">The fluent find.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A Task whose result is true if there is at least one document.</returns>
         </member>
         <member name="M:MongoDB.Driver.IFindFluentExtensions.First``2(MongoDB.Driver.IFindFluent{``0,``1},System.Threading.CancellationToken)">
             <summary>
@@ -8013,114 +8851,114 @@
             </returns>
         </member>
         <member name="M:MongoDB.Driver.IMongoCollection`1.CountDocuments(MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.CountOptions,System.Threading.CancellationToken)">
-            <summary>
-            Counts the number of documents in the collection.
-            For a fast estimate of the total documents in a collection see <see cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCount(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
-            </summary>
-            <remarks>
-            Note: when migrating from Count to CountDocuments the following query operations must be replaced:
+             <summary>
+             Counts the number of documents in the collection.
+             For a fast estimate of the total documents in a collection see <see cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCount(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
+             </summary>
+             <remarks>
+             Note: when migrating from Count to CountDocuments the following query operations must be replaced:
             
-            <code>
-            +-------------+--------------------------------+
-            | Operator    | Replacement                    |
-            +=============+================================+
-            | $where      |  $expr                         |
-            +-------------+--------------------------------+
-            | $near       |  $geoWithin with $center       |
-            +-------------+--------------------------------+
-            | $nearSphere |  $geoWithin with $centerSphere |
-            +-------------+--------------------------------+
-            </code>
-            </remarks>
-            <param name="filter">The filter.</param>
-            <param name="options">The options.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>
-            The number of documents in the collection.
-            </returns>
+             <code>
+             +-------------+--------------------------------+
+             | Operator    | Replacement                    |
+             +=============+================================+
+             | $where      |  $expr                         |
+             +-------------+--------------------------------+
+             | $near       |  $geoWithin with $center       |
+             +-------------+--------------------------------+
+             | $nearSphere |  $geoWithin with $centerSphere |
+             +-------------+--------------------------------+
+             </code>
+             </remarks>
+             <param name="filter">The filter.</param>
+             <param name="options">The options.</param>
+             <param name="cancellationToken">The cancellation token.</param>
+             <returns>
+             The number of documents in the collection.
+             </returns>
         </member>
         <member name="M:MongoDB.Driver.IMongoCollection`1.CountDocuments(MongoDB.Driver.IClientSessionHandle,MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.CountOptions,System.Threading.CancellationToken)">
-            <summary>
-            Counts the number of documents in the collection.
-            For a fast estimate of the total documents in a collection see <see cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCount(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
-            </summary>
-            <remarks>
-            Note: when migrating from Count to CountDocuments the following query operations must be replaced:
+             <summary>
+             Counts the number of documents in the collection.
+             For a fast estimate of the total documents in a collection see <see cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCount(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
+             </summary>
+             <remarks>
+             Note: when migrating from Count to CountDocuments the following query operations must be replaced:
             
-            <code>
-            +-------------+--------------------------------+
-            | Operator    | Replacement                    |
-            +=============+================================+
-            | $where      |  $expr                         |
-            +-------------+--------------------------------+
-            | $near       |  $geoWithin with $center       |
-            +-------------+--------------------------------+
-            | $nearSphere |  $geoWithin with $centerSphere |
-            +-------------+--------------------------------+
-            </code>
-            </remarks>
-            <param name="session">The session.</param>
-            <param name="filter">The filter.</param>
-            <param name="options">The options.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>
-            The number of documents in the collection.
-            </returns>
+             <code>
+             +-------------+--------------------------------+
+             | Operator    | Replacement                    |
+             +=============+================================+
+             | $where      |  $expr                         |
+             +-------------+--------------------------------+
+             | $near       |  $geoWithin with $center       |
+             +-------------+--------------------------------+
+             | $nearSphere |  $geoWithin with $centerSphere |
+             +-------------+--------------------------------+
+             </code>
+             </remarks>
+             <param name="session">The session.</param>
+             <param name="filter">The filter.</param>
+             <param name="options">The options.</param>
+             <param name="cancellationToken">The cancellation token.</param>
+             <returns>
+             The number of documents in the collection.
+             </returns>
         </member>
         <member name="M:MongoDB.Driver.IMongoCollection`1.CountDocumentsAsync(MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.CountOptions,System.Threading.CancellationToken)">
-            <summary>
-            Counts the number of documents in the collection.
-            For a fast estimate of the total documents in a collection see <seea cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCountAsync(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
-            </summary>
-            <remarks>
-            Note: when migrating from CountAsync to CountDocumentsAsync the following query operations must be replaced:
+             <summary>
+             Counts the number of documents in the collection.
+             For a fast estimate of the total documents in a collection see <seea cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCountAsync(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
+             </summary>
+             <remarks>
+             Note: when migrating from CountAsync to CountDocumentsAsync the following query operations must be replaced:
             
-            <code>
-            +-------------+--------------------------------+
-            | Operator    | Replacement                    |
-            +=============+================================+
-            | $where      |  $expr                         |
-            +-------------+--------------------------------+
-            | $near       |  $geoWithin with $center       |
-            +-------------+--------------------------------+
-            | $nearSphere |  $geoWithin with $centerSphere |
-            +-------------+--------------------------------+
-            </code>
-            </remarks>
-            <param name="filter">The filter.</param>
-            <param name="options">The options.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>
-            The number of documents in the collection.
-            </returns>
+             <code>
+             +-------------+--------------------------------+
+             | Operator    | Replacement                    |
+             +=============+================================+
+             | $where      |  $expr                         |
+             +-------------+--------------------------------+
+             | $near       |  $geoWithin with $center       |
+             +-------------+--------------------------------+
+             | $nearSphere |  $geoWithin with $centerSphere |
+             +-------------+--------------------------------+
+             </code>
+             </remarks>
+             <param name="filter">The filter.</param>
+             <param name="options">The options.</param>
+             <param name="cancellationToken">The cancellation token.</param>
+             <returns>
+             The number of documents in the collection.
+             </returns>
         </member>
         <member name="M:MongoDB.Driver.IMongoCollection`1.CountDocumentsAsync(MongoDB.Driver.IClientSessionHandle,MongoDB.Driver.FilterDefinition{`0},MongoDB.Driver.CountOptions,System.Threading.CancellationToken)">
-            <summary>
-            Counts the number of documents in the collection.
-            For a fast estimate of the total documents in a collection see <see cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCountAsync(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
-            </summary>
-            <remarks>
-            Note: when migrating from CountAsync to CountDocumentsAsync the following query operations must be replaced:
+             <summary>
+             Counts the number of documents in the collection.
+             For a fast estimate of the total documents in a collection see <see cref="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCountAsync(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)"/>.
+             </summary>
+             <remarks>
+             Note: when migrating from CountAsync to CountDocumentsAsync the following query operations must be replaced:
             
-            <code>
-            +-------------+--------------------------------+
-            | Operator    | Replacement                    |
-            +=============+================================+
-            | $where      |  $expr                         |
-            +-------------+--------------------------------+
-            | $near       |  $geoWithin with $center       |
-            +-------------+--------------------------------+
-            | $nearSphere |  $geoWithin with $centerSphere |
-            +-------------+--------------------------------+
-            </code>
-            </remarks>
-            <param name="session">The session.</param>
-            <param name="filter">The filter.</param>
-            <param name="options">The options.</param>
-            <param name="cancellationToken">The cancellation token.</param>
-            <returns>
-            The number of documents in the collection.
-            </returns>
+             <code>
+             +-------------+--------------------------------+
+             | Operator    | Replacement                    |
+             +=============+================================+
+             | $where      |  $expr                         |
+             +-------------+--------------------------------+
+             | $near       |  $geoWithin with $center       |
+             +-------------+--------------------------------+
+             | $nearSphere |  $geoWithin with $centerSphere |
+             +-------------+--------------------------------+
+             </code>
+             </remarks>
+             <param name="session">The session.</param>
+             <param name="filter">The filter.</param>
+             <param name="options">The options.</param>
+             <param name="cancellationToken">The cancellation token.</param>
+             <returns>
+             The number of documents in the collection.
+             </returns>
         </member>
         <member name="M:MongoDB.Driver.IMongoCollection`1.DeleteMany(MongoDB.Driver.FilterDefinition{`0},System.Threading.CancellationToken)">
             <summary>
@@ -8313,6 +9151,12 @@
             <returns>
             An estimate of the number of documents in the collection.
             </returns>
+            <remarks>
+            Due to an oversight in versions 5.0.0-5.0.8 of MongoDB, the count command, which estimatedDocumentCount uses
+            in its implementation, was not included in v1 of the Stable API. If you are using the Stable API with
+            estimatedDocumentCount, you must upgrade to server version 5.0.9+ or set strict: false when configuring
+            ServerApi to avoid encountering errors.
+            </remarks>
         </member>
         <member name="M:MongoDB.Driver.IMongoCollection`1.EstimatedDocumentCountAsync(MongoDB.Driver.EstimatedDocumentCountOptions,System.Threading.CancellationToken)">
             <summary>
@@ -10611,12 +11455,29 @@
             <param name="name">The name of the collection to drop.</param>
             <param name="cancellationToken">The cancellation token.</param>
         </member>
+        <member name="M:MongoDB.Driver.IMongoDatabase.DropCollection(System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <summary>
+            Drops the collection with the specified name.
+            </summary>
+            <param name="name">The name of the collection to drop.</param>
+            <param name="options">The options.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+        </member>
         <member name="M:MongoDB.Driver.IMongoDatabase.DropCollection(MongoDB.Driver.IClientSessionHandle,System.String,System.Threading.CancellationToken)">
             <summary>
             Drops the collection with the specified name.
             </summary>
             <param name="session">The session.</param>
             <param name="name">The name of the collection to drop.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+        </member>
+        <member name="M:MongoDB.Driver.IMongoDatabase.DropCollection(MongoDB.Driver.IClientSessionHandle,System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <summary>
+            Drops the collection with the specified name.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="name">The name of the collection to drop.</param>
+            <param name="options">The options.</param>
             <param name="cancellationToken">The cancellation token.</param>
         </member>
         <member name="M:MongoDB.Driver.IMongoDatabase.DropCollectionAsync(System.String,System.Threading.CancellationToken)">
@@ -10627,12 +11488,33 @@
             <param name="cancellationToken">The cancellation token.</param>
             <returns>A task.</returns>
         </member>
+        <member name="M:MongoDB.Driver.IMongoDatabase.DropCollectionAsync(System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <summary>
+            Drops the collection with the specified name.
+            </summary>
+            <param name="name">The name of the collection to drop.</param>
+            <param name="options">The options.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task.</returns>
+        </member>
         <member name="M:MongoDB.Driver.IMongoDatabase.DropCollectionAsync(MongoDB.Driver.IClientSessionHandle,System.String,System.Threading.CancellationToken)">
             <summary>
             Drops the collection with the specified name.
             </summary>
             <param name="session">The session.</param>
             <param name="name">The name of the collection to drop.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>
+            A task.
+            </returns>
+        </member>
+        <member name="M:MongoDB.Driver.IMongoDatabase.DropCollectionAsync(MongoDB.Driver.IClientSessionHandle,System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <summary>
+            Drops the collection with the specified name.
+            </summary>
+            <param name="session">The session.</param>
+            <param name="name">The name of the collection to drop.</param>
+            <param name="options">The options.</param>
             <param name="cancellationToken">The cancellation token.</param>
             <returns>
             A task.
@@ -12996,6 +13878,17 @@
             <param name="window">The window boundaries.</param>
             <returns>The last of the selected values.</returns>
         </member>
+        <member name="M:MongoDB.Driver.Linq.ISetWindowFieldsPartitionExtensions.Locf``2(MongoDB.Driver.ISetWindowFieldsPartition{``0},System.Func{``0,``1},MongoDB.Driver.SetWindowFieldsWindow)">
+            <summary>
+            Returns the last observation carried forward.
+            </summary>
+            <typeparam name="TInput">The type of the input documents in the partition.</typeparam>
+            <typeparam name="TValue">The type of the selected values.</typeparam>
+            <param name="partition">The partition.</param>
+            <param name="selector">The selector that selects a value from the input document.</param>
+            <param name="window">The window boundaries.</param>
+            <returns>The last observation carried forward.</returns>
+        </member>
         <member name="M:MongoDB.Driver.Linq.ISetWindowFieldsPartitionExtensions.Max``2(MongoDB.Driver.ISetWindowFieldsPartition{``0},System.Func{``0,``1},MongoDB.Driver.SetWindowFieldsWindow)">
             <summary>
             Returns the maximum value.
@@ -13480,6 +14373,164 @@
             Enumerable Extensions for MongoDB.
             </summary>
         </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.AllElements``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Represents all elements in an array (corresponds to the server's "$[]" update operator).
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A source of values.</param>
+            <returns>Only meant to be used in Update specifications.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.AllMatchingElements``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            Represents all matching elements in an array when using an array filter (corresponds to the server's "$[identifier]" update operator).
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A source of values.</param>
+            <param name="identifier">The name of the identifier in the corresponding array filter.</param>
+            <returns>Only meant to be used in Update specifications.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.Bottom``2(System.Collections.Generic.IEnumerable{``0},MongoDB.Driver.SortDefinition{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the bottom result.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="sortBy">The sort order.</param>
+            <param name="selector">The selector.</param>
+            <returns>The bottom result.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.BottomN``2(System.Collections.Generic.IEnumerable{``0},MongoDB.Driver.SortDefinition{``0},System.Func{``0,``1},System.Int32)">
+            <summary>
+            Returns the bottom n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="sortBy">The sort order.</param>
+            <param name="selector">The selector.</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The bottom n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.BottomN``3(System.Collections.Generic.IEnumerable{``0},MongoDB.Driver.SortDefinition{``0},System.Func{``0,``2},``1,System.Func{``1,System.Int32})">
+            <summary>
+            Returns the bottom n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TKey">The key type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="sortBy">The sort order.</param>
+            <param name="selector">The selector.</param>
+            <param name="key">The key (needed to infer the key type and to determine the key serializer).</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The bottom n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.FirstMatchingElement``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Represents the first matching element in an array used in a query (corresponds to the server's "$" update operator).
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A source of values.</param>
+            <returns>Only meant to be used in Update specifications.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.FirstN``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Int32)">
+            <summary>
+            Returns the first n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The first n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.FirstN``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``2},``1,System.Func{``1,System.Int32})">
+            <summary>
+            Returns the first n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TKey">The key type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="key">The key (needed to infer the key type and to determine the key serializer).</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The first n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.LastN``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Int32)">
+            <summary>
+            Returns the last n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The last n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.LastN``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``2},``1,System.Func{``1,System.Int32})">
+            <summary>
+            Returns the last n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TKey">The key type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="key">The key (needed to infer the key type and to determine the key serializer).</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The last n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.MaxN``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Int32)">
+            <summary>
+            Returns the max n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The max n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.MaxN``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``2},``1,System.Func{``1,System.Int32})">
+            <summary>
+            Returns the max n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TKey">The key type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="key">The key (needed to infer the key type and to determine the key serializer).</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The max n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.MinN``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Int32)">
+            <summary>
+            Returns the min n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The min n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.MinN``3(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``2},``1,System.Func{``1,System.Int32})">
+            <summary>
+            Returns the min n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TKey">The key type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="selector">The selector.</param>
+            <param name="key">The key (needed to infer the key type and to determine the key serializer).</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The min n results.</returns>
+        </member>
         <member name="M:MongoDB.Driver.Linq.MongoEnumerable.StandardDeviationPopulation(System.Collections.Generic.IEnumerable{System.Int32})">
             <summary>
             Computes the population standard deviation of a sequence of values.
@@ -13880,6 +14931,53 @@
             The population standard deviation of the sequence of values.
             </returns>
         </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.Top``2(System.Collections.Generic.IEnumerable{``0},MongoDB.Driver.SortDefinition{``0},System.Func{``0,``1})">
+            <summary>
+            Returns the top n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="sortBy">The sort order.</param>
+            <param name="selector">The selector.</param>
+            <returns>The top n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.TopN``2(System.Collections.Generic.IEnumerable{``0},MongoDB.Driver.SortDefinition{``0},System.Func{``0,``1},System.Int32)">
+            <summary>
+            Returns the top n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="sortBy">The sort order.</param>
+            <param name="selector">The selector.</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The top n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.TopN``3(System.Collections.Generic.IEnumerable{``0},MongoDB.Driver.SortDefinition{``0},System.Func{``0,``2},``1,System.Func{``1,System.Int32})">
+            <summary>
+            Returns the top n results.
+            </summary>
+            <typeparam name="TSource">The source type.</typeparam>
+            <typeparam name="TKey">The key type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="sortBy">The sort order.</param>
+            <param name="selector">The selector.</param>
+            <param name="key">The key (needed to infer the key type and to determine the key serializer).</param>
+            <param name="n">The number of results to return.</param>
+            <returns>The top n results.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoEnumerable.Where``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},System.Int32)">
+            <summary>
+            Filters a sequence of values based on a predicate and limits the number of results.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">The source values.</param>
+            <param name="predicate">The predicate.</param>
+            <param name="limit">The limit.</param>
+            <returns>The filtered results.</returns>
+        </member>
         <member name="T:MongoDB.Driver.Linq.MongoQueryable">
             <summary>
             Extension for <see cref="T:MongoDB.Driver.Linq.IMongoQueryable" />.
@@ -13907,6 +15005,17 @@
             <returns>
             true if any elements in the source sequence pass the test in the specified predicate; otherwise, false.
             </returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoQueryable.AppendStage``2(MongoDB.Driver.Linq.IMongoQueryable{``0},MongoDB.Driver.PipelineStageDefinition{``0,``1},MongoDB.Bson.Serialization.IBsonSerializer{``1})">
+            <summary>
+            Appends an arbitrary stage to the LINQ pipeline.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <typeparam name="TResult">The type of the result values returned by the appended stage.</typeparam>
+            <param name="source">A sequence of values.</param>
+            <param name="stage">The stage to append.</param>
+            <param name="resultSerializer">The result serializer.</param>
+            <returns>The queryable with a new stage appended.</returns>
         </member>
         <member name="M:MongoDB.Driver.Linq.MongoQueryable.AverageAsync(MongoDB.Driver.Linq.IMongoQueryable{System.Decimal},System.Threading.CancellationToken)">
             <summary>
@@ -14140,6 +15249,28 @@
             <returns>
             The number of elements in the sequence that satisfies the condition in the predicate function.
             </returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoQueryable.Densify``1(MongoDB.Driver.Linq.IMongoQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+            <summary>
+            Adds a $densify stage to the LINQ pipeline.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A sequence of values.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>The densified sequence of values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.MongoQueryable.Densify``1(MongoDB.Driver.Linq.IMongoQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},MongoDB.Driver.DensifyRange,System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+            <summary>
+            Adds a $densify stage to the LINQ pipeline.
+            </summary>
+            <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+            <param name="source">A sequence of values.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>The densified sequence of values.</returns>
         </member>
         <member name="M:MongoDB.Driver.Linq.MongoQueryable.Distinct``1(MongoDB.Driver.Linq.IMongoQueryable{``0})">
             <summary>
@@ -15627,6 +16758,38 @@
             This static class holds methods that can be used to express MongoDB specific operations in LINQ queries.
             </summary>
         </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.AnyStringIn(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Returns true if any value in s is present in values (corresponds to the $in filter operator).
+            </summary>
+            <param name="s">The values to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if any value in s is present in values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.AnyStringIn(System.Collections.Generic.IEnumerable{System.String},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Returns true if any value in s is present in values (corresponds to the $in filter operator).
+            </summary>
+            <param name="s">The values to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if any value in s is present in values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.AnyStringNin(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Returns true if any value in s is not present in values (corresponds to the $nin filter operator).
+            </summary>
+            <param name="s">The values to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if any value in s is not present in values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.AnyStringNin(System.Collections.Generic.IEnumerable{System.String},MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Returns true if any value in s is not present in values (corresponds to the $nin filter operator).
+            </summary>
+            <param name="s">The values to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if any value in s is not present in values.</returns>
+        </member>
         <member name="M:MongoDB.Driver.Linq.StringExtensions.IndexOfBytes(System.String,System.String)">
             <summary>
             Searches a string for an occurrence of a substring and returns the UTF-8 byte index (zero-based) of the first occurrence.
@@ -15653,6 +16816,38 @@
             <param name="startIndex">The start index.</param>
             <param name="count">The count.</param>
             <returns>The byte index of the first occurrence, or -1 if not found.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.StringIn(System.String,System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Returns true if s is present in values (corresponds to the $in filter operator).
+            </summary>
+            <param name="s">The value to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if s is present in values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.StringIn(System.String,MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Returns true if s is present in values (corresponds to the $in filter operator).
+            </summary>
+            <param name="s">The value to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if s is present in values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.StringNin(System.String,System.Collections.Generic.IEnumerable{MongoDB.Driver.StringOrRegularExpression})">
+            <summary>
+            Returns true if s is not present in values (corresponds to the $nin filter operator).
+            </summary>
+            <param name="s">The value to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if s is not present in values.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.Linq.StringExtensions.StringNin(System.String,MongoDB.Driver.StringOrRegularExpression[])">
+            <summary>
+            Returns true if s is not present in values (corresponds to the $nin filter operator).
+            </summary>
+            <param name="s">The value to test.</param>
+            <param name="values">The values to test against.</param>
+            <returns>True if s is not present in values.</returns>
         </member>
         <member name="M:MongoDB.Driver.Linq.StringExtensions.StrLenBytes(System.String)">
             <summary>
@@ -17382,10 +18577,22 @@
         <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollection(MongoDB.Driver.IClientSessionHandle,System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollection(System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollection(MongoDB.Driver.IClientSessionHandle,System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollectionAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollectionAsync(MongoDB.Driver.IClientSessionHandle,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollectionAsync(System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:MongoDB.Driver.MongoDatabaseBase.DropCollectionAsync(MongoDB.Driver.IClientSessionHandle,System.String,MongoDB.Driver.DropCollectionOptions,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:MongoDB.Driver.MongoDatabaseBase.GetCollection``1(System.String,MongoDB.Driver.MongoCollectionSettings)">
@@ -19365,6 +20572,62 @@
             A new pipeline with an additional stage.
             </returns>
         </member>
+        <member name="M:MongoDB.Driver.PipelineDefinitionBuilder.Densify``2(MongoDB.Driver.PipelineDefinition{``0,``1},MongoDB.Driver.FieldDefinition{``1},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{MongoDB.Driver.FieldDefinition{``1}})">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <typeparam name="TOutput">The type of the output documents.</typeparam>
+            <param name="pipeline">The pipeline.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>
+            A new pipeline with an additional stage.
+            </returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineDefinitionBuilder.Densify``2(MongoDB.Driver.PipelineDefinition{``0,``1},MongoDB.Driver.FieldDefinition{``1},MongoDB.Driver.DensifyRange,MongoDB.Driver.FieldDefinition{``1}[])">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <typeparam name="TOutput">The type of the output documents.</typeparam>
+            <param name="pipeline">The pipeline.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>
+            A new pipeline with an additional stage.
+            </returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineDefinitionBuilder.Densify``2(MongoDB.Driver.PipelineDefinition{``0,``1},System.Linq.Expressions.Expression{System.Func{``1,System.Object}},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{System.Linq.Expressions.Expression{System.Func{``1,System.Object}}})">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <typeparam name="TOutput">The type of the output documents.</typeparam>
+            <param name="pipeline">The pipeline.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>
+            A new pipeline with an additional stage.
+            </returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineDefinitionBuilder.Densify``2(MongoDB.Driver.PipelineDefinition{``0,``1},System.Linq.Expressions.Expression{System.Func{``1,System.Object}},MongoDB.Driver.DensifyRange,System.Linq.Expressions.Expression{System.Func{``1,System.Object}}[])">
+            <summary>
+            Appends a $densify stage to the pipeline.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <typeparam name="TOutput">The type of the output documents.</typeparam>
+            <param name="pipeline">The pipeline.</param>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>
+            A new pipeline with an additional stage.
+            </returns>
+        </member>
         <member name="M:MongoDB.Driver.PipelineDefinitionBuilder.Facet``3(MongoDB.Driver.PipelineDefinition{``0,``1},System.Collections.Generic.IEnumerable{MongoDB.Driver.AggregateFacet{``1}},MongoDB.Driver.AggregateFacetOptions{``2})">
             <summary>
             Appends a $facet stage to the pipeline.
@@ -20490,6 +21753,46 @@
             Creates a $count stage.
             </summary>
             <typeparam name="TInput">The type of the input documents.</typeparam>
+            <returns>The stage.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineStageDefinitionBuilder.Densify``1(MongoDB.Driver.FieldDefinition{``0},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{MongoDB.Driver.FieldDefinition{``0}})">
+            <summary>
+            Creates a $densify stage.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>The stage.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineStageDefinitionBuilder.Densify``1(MongoDB.Driver.FieldDefinition{``0},MongoDB.Driver.DensifyRange,MongoDB.Driver.FieldDefinition{``0}[])">
+            <summary>
+            Creates a $densify stage.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>The stage.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineStageDefinitionBuilder.Densify``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},MongoDB.Driver.DensifyRange,System.Collections.Generic.IEnumerable{System.Linq.Expressions.Expression{System.Func{``0,System.Object}}})">
+            <summary>
+            Creates a $densify stage.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
+            <returns>The stage.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.PipelineStageDefinitionBuilder.Densify``1(System.Linq.Expressions.Expression{System.Func{``0,System.Object}},MongoDB.Driver.DensifyRange,System.Linq.Expressions.Expression{System.Func{``0,System.Object}}[])">
+            <summary>
+            Creates a $densify stage.
+            </summary>
+            <typeparam name="TInput">The type of the input documents.</typeparam>
+            <param name="field">The field.</param>
+            <param name="range">The range.</param>
+            <param name="partitionByFields">The partition by fields.</param>
             <returns>The stage.</returns>
         </member>
         <member name="M:MongoDB.Driver.PipelineStageDefinitionBuilder.Facet``2(System.Collections.Generic.IEnumerable{MongoDB.Driver.AggregateFacet{``0}},MongoDB.Driver.AggregateFacetOptions{``1})">
@@ -22380,6 +23683,59 @@
             Returns a string representation of the settings.
             </summary>
             <returns>A string representation of the settings.</returns>
+        </member>
+        <member name="T:MongoDB.Driver.StringOrRegularExpression">
+            <summary>
+            Represents a value that is either a string or a BsonRegularExpression.
+            </summary>
+        </member>
+        <member name="M:MongoDB.Driver.StringOrRegularExpression.op_Implicit(System.String)~MongoDB.Driver.StringOrRegularExpression">
+            <summary>
+            Implicit conversion from string to StringOrRegularExpression.
+            </summary>
+            <param name="value">A StringOrRegularExpression.</param>
+            <returns>A StringOrRegularExpression.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.StringOrRegularExpression.op_Implicit(MongoDB.Bson.BsonRegularExpression)~MongoDB.Driver.StringOrRegularExpression">
+            <summary>
+            Implicit conversion from BsonRegularExpression to StringOrRegularExpression.
+            </summary>
+            <param name="value">A StringOrRegularExpression.</param>
+            <returns>A StringOrRegularExpression.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.StringOrRegularExpression.op_Implicit(System.Text.RegularExpressions.Regex)~MongoDB.Driver.StringOrRegularExpression">
+            <summary>
+            Implicit conversion from Regex to StringOrRegularExpression.
+            </summary>
+            <param name="value">A StringOrRegularExpression.</param>
+            <returns>A StringOrRegularExpression.</returns>
+        </member>
+        <member name="M:MongoDB.Driver.StringOrRegularExpression.#ctor(System.String)">
+            <summary>
+            Initializes an instance of a StringOrRegularExpression.
+            </summary>
+            <param name="value">A string value.</param>
+        </member>
+        <member name="M:MongoDB.Driver.StringOrRegularExpression.#ctor(MongoDB.Bson.BsonRegularExpression)">
+            <summary>
+            Initializes an instance of a StringOrRegularExpression.
+            </summary>
+            <param name="value">A BsonRegularExpression value.</param>
+        </member>
+        <member name="P:MongoDB.Driver.StringOrRegularExpression.RegularExpression">
+            <summary>
+            Gets the BsonRegularExpression value (returns null if value is not a BsonRegularExpression).
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.StringOrRegularExpression.String">
+            <summary>
+            Gets the string value (returns null if value is not a string).
+            </summary>
+        </member>
+        <member name="P:MongoDB.Driver.StringOrRegularExpression.Type">
+            <summary>
+            Gets the type of the value.
+            </summary>
         </member>
         <member name="T:MongoDB.Driver.TextSearchOptions">
             <summary>

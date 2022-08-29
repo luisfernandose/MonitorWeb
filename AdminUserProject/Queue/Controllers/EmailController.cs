@@ -20,7 +20,7 @@ namespace Queue.Controllers
         }
 
         #region Register
-        public async Task<bool> SendInvitation(string email, string login, string pass)
+        public async Task<bool> SendInvitation(List<string> email, string login, string pass)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Queue.Controllers
             }
             return true;
         }
-        private AlternateView SetEmailBody(string email, string login, string pass)
+        private AlternateView SetEmailBody(List<string> email, string login, string pass)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Queue.Controllers
 
                 var html = System.IO.File.ReadAllText(plantilla);
 
-                html = html.Replace("{{user}}", email);
+                html = html.Replace("{{user}}", email[0]);
                 html = html.Replace("{{login}}", login);
                 html = html.Replace("{{pass}}", pass);
 
@@ -59,11 +59,11 @@ namespace Queue.Controllers
         #endregion
 
         #region Forgot
-        public async void SendForgot(string email, string callback)
+        public async void SendForgot(List<string> email, string callback)
         {
             await SendMail(email, SetForgotEmailBody(email, callback), ConfigurationManager.AppSettings["EmailSubjectForgot"]);
         }
-        private AlternateView SetForgotEmailBody(string email, string callback)
+        private AlternateView SetForgotEmailBody(List<string> email, string callback)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Queue.Controllers
 
                 var html = System.IO.File.ReadAllText(plantilla);
 
-                html = html.Replace("{{user}}", email);
+                html = html.Replace("{{user}}", email[0]);
                 html = html.Replace("{{callback}}", callback);
 
                 AlternateView av = AlternateView.CreateAlternateViewFromString(html, null, "text/html");
@@ -90,12 +90,12 @@ namespace Queue.Controllers
         #endregion
 
         #region Alerts
-        public async void SendAlert(string email, int type, List<string> users)
+        public async void SendAlert(List<string> email, int type, List<string> users)
         {
-            await SendMail(email, SeetAlertEmail(email, type, users), ConfigurationManager.AppSettings["EmailSubjec"]);
+            await SendMail(email, SeetAlertEmail(email, type, users), "Alertas MonitorTracker");
         }
 
-        private AlternateView SeetAlertEmail(string email, int type, List<string> users)
+        private AlternateView SeetAlertEmail(List<string> email, int type, List<string> users)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace Queue.Controllers
 
         #endregion
 
-        private async Task<bool> SendMail(string toAddress, AlternateView emailbody, string Subject)
+        private async Task<bool> SendMail(List<string> toAddress, AlternateView emailbody, string Subject)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace Queue.Controllers
                 message.IsBodyHtml = true;
 
                 //message.To.Add(email);
-                foreach (var m in toAddress.Split(','))
+                foreach (var m in toAddress)
                 {
                     message.To.Add(m);
                 };
